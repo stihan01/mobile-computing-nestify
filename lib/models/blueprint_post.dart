@@ -1,26 +1,33 @@
 class BlueprintPost {
   late String _id;
-  String _title;
-  String _description;
+  late String _title;
+  late String _material;
 
-  BlueprintPost([this._title = "", this._description = ""]) {
+  late String _instruction;
+
+  BlueprintPost([title = "", material = "", instructions = ""]) {
     _id = DateTime.now().millisecondsSinceEpoch.toString();
+    _title = title;
+    _material = material;
+    _instruction = instructions;
   }
 
   BlueprintPost.fromJson(Map<String, dynamic> json)
       : _id = json['id'] as String,
         _title = json['title'],
-        _description = json['description'];
+        _material = json['material'];
 
   Map<String, dynamic> toJson() => {
         "id": _id,
         "title": _title,
-        "description": _description,
+        "material": _material,
+        "instruction": _instruction
       };
 
   String get title => _title;
   String get id => _id;
-  String get description => _description;
+  String get material => _material;
+  String get instruction => _instruction;
 
   // TODO, update value in DB.
   set title(String newValue) {
@@ -28,6 +35,10 @@ class BlueprintPost {
   }
 
   set description(String newValue) {
-    _description = newValue;
+    _material = newValue;
+  }
+
+  set instructions(String newValue) {
+    _instruction = newValue;
   }
 }
