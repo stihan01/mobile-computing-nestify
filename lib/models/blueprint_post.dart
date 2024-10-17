@@ -34,11 +34,11 @@ class BlueprintPost {
     _title = newValue;
   }
 
-  set description(String newValue) {
+  set material(String newValue) {
     _material = newValue;
   }
 
-  set instructions(String newValue) {
+  set instruction(String newValue) {
     _instruction = newValue;
   }
 }
