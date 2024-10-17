@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nestify/screens/add_blue_print_screen.dart';
 
 void main() {
   runApp(const MainApp());
@@ -9,12 +10,16 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
+    return MaterialApp(
+        title: "Nestify",
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(
+              seedColor: Colors.red, brightness: Brightness.light),
+          useMaterial3: true,
+          inputDecorationTheme: const InputDecorationTheme(
+            border: OutlineInputBorder(),
+          ),
         ),
-      ),
-    );
+        home: const AddBluePrintScreen());
   }
 }
