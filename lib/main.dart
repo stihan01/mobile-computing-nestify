@@ -20,6 +20,6 @@ class MainApp extends StatelessWidget {
             border: OutlineInputBorder(),
           ),
         ),
-        home: const AddBluePrintScreen());
+        home: const AddBlueprintScreen());
   }
 }
