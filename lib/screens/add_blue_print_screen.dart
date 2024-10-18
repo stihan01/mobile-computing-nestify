@@ -39,19 +39,33 @@ class BlueprintFormState extends State<BlueprintForm> {
   final BlueprintPost blueprint = BlueprintPost();
   @override
   Widget build(BuildContext context) {
-    debugPrint("Rebuilding form");
     final formContent = [
       Center(
         child: Text(
             widget.isEdit ? "Editing blueprint post" : "Upload blueprint post",
             style: Theme.of(context).textTheme.titleLarge),
       ),
-      blueprint.images.length == 0
-          ? const SizedBox.shrink()
-          : SizedBox(
-              width: 300,
-              height: 250,
-              child: Image.file(File(blueprint.images[0].path))),
+      GridView.count(
+          primary: false,
+          physics: const NeverScrollableScrollPhysics(),
+          //  padding: const EdgeInsets.all(8),
+
+          shrinkWrap: true,
+          crossAxisSpacing: 8,
+          mainAxisSpacing: 8,
+          crossAxisCount: 2,
+          children: blueprint.images
+              .map(
+                (file) => ImageBox(
+                  file: file,
+                  onDelete: (value) {
+                    setState(() {
+                      blueprint.images.remove(value);
+                    });
+                  },
+                ),
+              )
+              .toList()),
       ImageCaptureButton(
         onImageSelected: (xFile) {
           setState(() {
@@ -65,12 +79,13 @@ class BlueprintFormState extends State<BlueprintForm> {
       Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
         saveDraftButton(),
         publishButton(),
-      ])
+      ]),
+      const SizedBox(height: 20)
     ];
 
     // Build a Form widget using the _formKey created above.
     return Padding(
-      padding: const EdgeInsets.only(left: 32, right: 32, bottom: 32, top: 16),
+      padding: const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 0),
       child: Form(
           key: _formKey,
           child: ListView.separated(
@@ -147,17 +162,52 @@ class BlueprintFormState extends State<BlueprintForm> {
   }
 }
 
+class ImageBox extends StatelessWidget {
+  const ImageBox({super.key, required this.file, required this.onDelete});
+
+  final XFile file;
+  final Function(XFile) onDelete;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(children: [
+      Container(
+        decoration: BoxDecoration(border: Border.all()),
+        height: 300,
+        width: 200,
+        child: Image.file(
+          File(file.path),
+          fit: BoxFit.cover,
+        ),
+      ),
+      Positioned(
+          left: 135,
+          top: -10,
+          child: IconButton(
+              onPressed: () {
+                onDelete(file);
+              },
+              color: Colors.red,
+              icon: const Icon(Icons.delete)))
+    ]);
+  }
+}
+
 class ImageCaptureButton extends StatelessWidget {
   const ImageCaptureButton({super.key, required this.onImageSelected});
 
   final Function(XFile) onImageSelected;
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-        onPressed: () async {
-          await _pickImageFromGallery();
-        },
-        icon: const Icon(Icons.add_a_photo));
+    return SizedBox(
+      width: 48,
+      height: 48,
+      child: IconButton(
+          onPressed: () async {
+            await _pickImageFromGallery();
+          },
+          icon: const Icon(Icons.add_a_photo)),
+    );
   }
 
   Future<void> _pickImageFromGallery() async {
