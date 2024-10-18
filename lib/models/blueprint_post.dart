@@ -1,45 +1,29 @@
+import 'package:image_picker/image_picker.dart';
+
 class BlueprintPost {
   late String _id;
-  late String _title;
-  late String _material;
+  late String title;
+  late String material;
+  late String instruction;
 
-  late String _instruction;
+  List<XFile> images = [];
 
-  BlueprintPost([title = "", material = "", instructions = ""]) {
+  BlueprintPost([this.title = "", this.material = "", this.instruction = ""]) {
     _id = DateTime.now().millisecondsSinceEpoch.toString();
-    _title = title;
-    _material = material;
-    _instruction = instructions;
   }
 
   BlueprintPost.fromJson(Map<String, dynamic> json)
       : _id = json['id'] as String,
-        _title = json['title'],
-        _material = json['material'],
-        _instruction = json['instruction'];
+        title = json['title'],
+        material = json['material'],
+        instruction = json['instruction'];
 
   Map<String, dynamic> toJson() => {
         "id": _id,
-        "title": _title,
-        "material": _material,
-        "instruction": _instruction
+        "title": title,
+        "material": material,
+        "instruction": instruction
       };
 
-  String get title => _title;
-  String get id => _id;
-  String get material => _material;
-  String get instruction => _instruction;
-
-  // TODO, update value in DB.
-  set title(String newValue) {
-    _title = newValue;
-  }
-
-  set material(String newValue) {
-    _material = newValue;
-  }
-
-  set instruction(String newValue) {
-    _instruction = newValue;
-  }
+  get id => _id;
 }
