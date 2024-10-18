@@ -15,7 +15,8 @@ class BlueprintPost {
   BlueprintPost.fromJson(Map<String, dynamic> json)
       : _id = json['id'] as String,
         _title = json['title'],
-        _material = json['material'];
+        _material = json['material'],
+        _instruction = json['instruction'];
 
   Map<String, dynamic> toJson() => {
         "id": _id,
