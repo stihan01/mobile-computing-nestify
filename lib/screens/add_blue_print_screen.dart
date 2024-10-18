@@ -35,43 +35,64 @@ class BlueprintFormState extends State<BlueprintForm> {
   // Note: This is a `GlobalKey<FormState>`,
   final _formKey = GlobalKey<FormState>();
   final BlueprintPost blueprint = BlueprintPost();
-
   @override
   Widget build(BuildContext context) {
+    final formContent = [
+      Center(
+        child: Text(
+            widget.isEdit ? "Editing blueprint post" : "Upload blueprint post",
+            style: Theme.of(context).textTheme.titleLarge),
+      ),
+      titleFormField(),
+      materialFormField(),
+      instructionFormField(),
+      Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+        saveDraftButton(),
+        publishButton(),
+      ])
+    ];
+
     // Build a Form widget using the _formKey created above.
     return Padding(
-      padding: const EdgeInsets.only(left: 32, right: 32, bottom: 16, top: 16),
+      padding: const EdgeInsets.only(left: 32, right: 32, bottom: 32, top: 16),
       child: Form(
-        key: _formKey,
-        child: Column(
-          children: <Widget>[
-            Center(
-              child: Text("Upload blueprint post",
-                  style: Theme.of(context).textTheme.titleLarge),
+          key: _formKey,
+          child: ListView.separated(
+            itemCount: formContent.length,
+            itemBuilder: (context, index) {
+              return formContent[index];
+            },
+            separatorBuilder: (context, index) => const SizedBox(
+              height: 8,
             ),
-            // Add TextFormFields and ElevatedButton here.
-            titleFormField(),
-            materialFormField(),
-            instructionFormField(),
-            ElevatedButton(
-              // TODO change in the future
-              onPressed: () {
-                // Validate returns true if the form is valid, or false otherwise.
-                if (_formKey.currentState!.validate()) {
-                  // If the form is valid, display a snackbar. In the real world,
-                  // you'd often call a server or save the information in a database.
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text("Processing"),
-                    ),
-                  );
-                }
-              },
-              child: const Text('Submit'),
+          )),
+    );
+  }
+
+  OutlinedButton saveDraftButton() {
+    return OutlinedButton(
+      // TODO implement onPressed
+      onPressed: () {},
+      child: const Text("Save draft"),
+    );
+  }
+
+  FilledButton publishButton() {
+    return FilledButton(
+      // TODO implement onPressed
+      onPressed: () {
+        // Validate returns true if the form is valid, or false otherwise.
+        if (_formKey.currentState!.validate()) {
+          // If the form is valid, display a snackbar. In the real world,
+          // you'd often call a server or save the information in a database.
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("Processing"),
             ),
-          ],
-        ),
-      ),
+          );
+        }
+      },
+      child: const Text('Publish'),
     );
   }
 
