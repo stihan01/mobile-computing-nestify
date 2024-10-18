@@ -1,6 +1,8 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:nestify/models/blueprint_post.dart';
 import 'package:nestify/widgets/custom_text_form_field.dart';
+import 'package:image_picker/image_picker.dart';
 
 class AddBlueprintScreen extends StatelessWidget {
   const AddBlueprintScreen({
@@ -37,11 +39,25 @@ class BlueprintFormState extends State<BlueprintForm> {
   final BlueprintPost blueprint = BlueprintPost();
   @override
   Widget build(BuildContext context) {
+    debugPrint("Rebuilding form");
     final formContent = [
       Center(
         child: Text(
             widget.isEdit ? "Editing blueprint post" : "Upload blueprint post",
             style: Theme.of(context).textTheme.titleLarge),
+      ),
+      blueprint.images.length == 0
+          ? const SizedBox.shrink()
+          : SizedBox(
+              width: 300,
+              height: 250,
+              child: Image.file(File(blueprint.images[0].path))),
+      ImageCaptureButton(
+        onImageSelected: (xFile) {
+          setState(() {
+            blueprint.images.add(xFile);
+          });
+        },
       ),
       titleFormField(),
       materialFormField(),
@@ -128,5 +144,30 @@ class BlueprintFormState extends State<BlueprintForm> {
         label: const Text("Instructions"),
         hintText: "Describe how to build your creation",
         errorText: "Please enter instructions");
+  }
+}
+
+class ImageCaptureButton extends StatelessWidget {
+  const ImageCaptureButton({super.key, required this.onImageSelected});
+
+  final Function(XFile) onImageSelected;
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+        onPressed: () async {
+          await _pickImageFromGallery();
+        },
+        icon: const Icon(Icons.add_a_photo));
+  }
+
+  Future<void> _pickImageFromGallery() async {
+    final XFile? returnedImage =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+
+    if (returnedImage == null) {
+      return;
+    }
+
+    onImageSelected(returnedImage);
   }
 }
