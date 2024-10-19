@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:nestify/widgets/tabBox.dart';
+import 'package:nestify/widgets/commentSection.dart';
 import 'package:go_router/go_router.dart';
 
 class DetailPage extends StatelessWidget {
@@ -6,33 +8,47 @@ class DetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Details Screen')),
-      body: Column(
-        children: [
-          const TabBar(tabs: [
-                Tab(icon: Icon(Icons.directions_car)),
-                Tab(icon: Icon(Icons.directions_transit)),
-                Tab(icon: Icon(Icons.directions_bike)),
-              ]),
-              const TabBarView(
-            children: [
-              Icon(Icons.directions_car),
-              Icon(Icons.directions_transit),
-              Icon(Icons.directions_bike),
-            ],
+    TextEditingController commentController = TextEditingController();
+    return DefaultTabController(
+      length: 2, // We have 2 tabs
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text("Hanna's bird of paradise hotel"),
+           leading: IconButton(
+            icon: const Icon(Icons.arrow_back), // Back icon
+            onPressed: () {
+              () => context.go('/details'); // Go back to the previous screen
+            },
           ),
-          Row(
-            children: [
-              ElevatedButton(onPressed: () => context.go('/'), child: Text('Go back to the Home screen')),
-            ],
-          ),
-          ElevatedButton(
-            onPressed: () => context.go('/'),
-            child: const Text('Go back to the Home screen'),
-          ),
-          
-        ],
+        ),
+
+        body: ListView( // Wrap everything in ListView for overall scrollability
+          padding: const EdgeInsets.all(16.0),
+
+          children: [
+            // Image
+            Container(
+              width: double.infinity, // Make the container take full width
+              height: 300, // Set a specific height for the image
+              color: Colors.blue,
+            ),
+            
+            // Spacing
+            const SizedBox(height: 16),
+
+            // Box with Tabs
+            const TabBox(),
+            
+            // Spacing
+            const SizedBox(height: 16),
+
+            // Comment Section
+            CommentSection(commentController: commentController,),
+
+            // Spacing
+            const SizedBox(height: 20),
+          ],
+        ),
       ),
     );
   }
