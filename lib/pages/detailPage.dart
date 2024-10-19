@@ -17,7 +17,7 @@ class DetailPage extends StatelessWidget {
            leading: IconButton(
             icon: const Icon(Icons.arrow_back), // Back icon
             onPressed: () {
-              () => context.go('/details'); // Go back to the previous screen
+              () => context.go('/'); // Go back to home
             },
           ),
         ),
