@@ -1,16 +1,14 @@
 import 'package:image_picker/image_picker.dart';
 
 class BlueprintPost {
-  late String _id;
-  late String? title;
-  late String? material;
-  late String? instruction;
-  late String? category;
+  String _id = DateTime.now().millisecondsSinceEpoch.toString();
+  String? title;
+  String? material;
+  String? instruction;
+  String? category;
   List<XFile> images = [];
 
-  BlueprintPost([this.title, this.material, this.instruction, this.category]) {
-    _id = DateTime.now().millisecondsSinceEpoch.toString();
-  }
+  BlueprintPost([this.title, this.material, this.instruction, this.category]);
 
   BlueprintPost.fromJson(Map<String, dynamic> json)
       : _id = json['post_id'] as String,
