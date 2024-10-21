@@ -16,9 +16,7 @@ class DetailPage extends StatelessWidget {
           title: const Text("Hanna's bird of paradise hotel"),
            leading: IconButton(
             icon: const Icon(Icons.arrow_back), // Back icon
-            onPressed: () {
-              () => context.go('/'); // Go back to home
-            },
+            onPressed: () => context.pop(), // Go back to home
           ),
         ),
 
