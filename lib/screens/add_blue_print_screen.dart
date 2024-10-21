@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:nestify/models/blueprint_post.dart';
+import 'package:nestify/screens/category_dropdown_menu.dart';
 import 'package:nestify/widgets/custom_text_form_field.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -18,9 +19,10 @@ class AddBlueprintScreen extends StatelessWidget {
 }
 
 class BlueprintForm extends StatefulWidget {
-  const BlueprintForm({super.key, this.blueprint});
+  const BlueprintForm({super.key, this.post});
 
-  final BlueprintPost? blueprint;
+  // If blueprint object is provided, the form changes to editing, else it creates a new object
+  final BlueprintPost? post;
 
   @override
   BlueprintFormState createState() {
@@ -42,8 +44,8 @@ class BlueprintFormState extends State<BlueprintForm> {
   @override
   void initState() {
     super.initState();
-    isEdit = widget.blueprint == null ? false : true;
-    blueprint = !isEdit ? BlueprintPost() : widget.blueprint!;
+    isEdit = widget.post == null ? false : true;
+    blueprint = !isEdit ? BlueprintPost() : widget.post!;
   }
 
   @override
@@ -56,6 +58,11 @@ class BlueprintFormState extends State<BlueprintForm> {
       imageGrid(),
       cameraButton(),
       titleFormField(),
+      CategoryDropdownMenu(
+        onSelected: (category) {
+          blueprint.category = category;
+        },
+      ),
       materialFormField(),
       instructionFormField(),
       Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
@@ -134,13 +141,13 @@ class BlueprintFormState extends State<BlueprintForm> {
           // If the form is valid, display a snackbar. In the real world,
           // you'd often call a server or save the information in a database.
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text("Processing"),
+            SnackBar(
+              content: Text(blueprint.toJson().toString()),
             ),
           );
         }
       },
-      child: const Text('Publish'),
+      child: Text(isEdit ? "Update" : 'Publish'),
     );
   }
 
