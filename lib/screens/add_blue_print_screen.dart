@@ -12,15 +12,15 @@ class AddBlueprintScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const SafeArea(
-      child: Scaffold(body: BlueprintForm(isEdit: false)),
+      child: Scaffold(body: BlueprintForm()),
     );
   }
 }
 
 class BlueprintForm extends StatefulWidget {
-  const BlueprintForm({super.key, required this.isEdit});
+  const BlueprintForm({super.key, this.blueprint});
 
-  final bool isEdit;
+  final BlueprintPost? blueprint;
 
   @override
   BlueprintFormState createState() {
@@ -36,43 +36,25 @@ class BlueprintFormState extends State<BlueprintForm> {
   //
   // Note: This is a `GlobalKey<FormState>`,
   final _formKey = GlobalKey<FormState>();
-  final BlueprintPost blueprint = BlueprintPost();
+  late final bool isEdit;
+  late final BlueprintPost blueprint;
+
+  @override
+  void initState() {
+    super.initState();
+    isEdit = widget.blueprint == null ? false : true;
+    blueprint = !isEdit ? BlueprintPost() : widget.blueprint!;
+  }
+
   @override
   Widget build(BuildContext context) {
     final formContent = [
       Center(
-        child: Text(
-            widget.isEdit ? "Editing blueprint post" : "Upload blueprint post",
+        child: Text(isEdit ? "Editing blueprint post" : "Upload blueprint post",
             style: Theme.of(context).textTheme.titleLarge),
       ),
-      GridView.count(
-          primary: false,
-          physics: const NeverScrollableScrollPhysics(),
-          //  padding: const EdgeInsets.all(8),
-
-          shrinkWrap: true,
-          crossAxisSpacing: 8,
-          mainAxisSpacing: 8,
-          crossAxisCount: 2,
-          children: blueprint.images
-              .map(
-                (file) => ImageBox(
-                  file: file,
-                  onDelete: (value) {
-                    setState(() {
-                      blueprint.images.remove(value);
-                    });
-                  },
-                ),
-              )
-              .toList()),
-      ImageCaptureButton(
-        onImageSelected: (xFile) {
-          setState(() {
-            blueprint.images.add(xFile);
-          });
-        },
-      ),
+      imageGrid(),
+      cameraButton(),
       titleFormField(),
       materialFormField(),
       instructionFormField(),
@@ -93,11 +75,46 @@ class BlueprintFormState extends State<BlueprintForm> {
             itemBuilder: (context, index) {
               return formContent[index];
             },
+            // Adds padding between each widget vertically
             separatorBuilder: (context, index) => const SizedBox(
               height: 8,
             ),
           )),
     );
+  }
+
+  ImageCaptureButton cameraButton() {
+    return ImageCaptureButton(
+      onImageSelected: (xFile) {
+        setState(() {
+          blueprint.images.add(xFile);
+        });
+      },
+    );
+  }
+
+  GridView imageGrid() {
+    return GridView.count(
+        primary: false,
+        physics: const NeverScrollableScrollPhysics(),
+        //  padding: const EdgeInsets.all(8),
+
+        shrinkWrap: true,
+        crossAxisSpacing: 8,
+        mainAxisSpacing: 8,
+        crossAxisCount: 2,
+        children: blueprint.images
+            .map(
+              (file) => ImageBox(
+                file: file,
+                onDelete: (value) {
+                  setState(() {
+                    blueprint.images.remove(value);
+                  });
+                },
+              ),
+            )
+            .toList());
   }
 
   OutlinedButton saveDraftButton() {
@@ -129,7 +146,7 @@ class BlueprintFormState extends State<BlueprintForm> {
 
   CustomTextFormField titleFormField() {
     return CustomTextFormField(
-        initialValue: widget.isEdit ? blueprint.title : null,
+        initialValue: isEdit ? blueprint.title : null,
         onChanged: (value) {
           blueprint.title = value;
         },
@@ -141,7 +158,7 @@ class BlueprintFormState extends State<BlueprintForm> {
 
   CustomTextFormField materialFormField() {
     return CustomTextFormField(
-        initialValue: widget.isEdit ? blueprint.material : null,
+        initialValue: isEdit ? blueprint.material : null,
         onChanged: (value) {
           blueprint.material = value;
         },
@@ -152,7 +169,7 @@ class BlueprintFormState extends State<BlueprintForm> {
 
   CustomTextFormField instructionFormField() {
     return CustomTextFormField(
-        initialValue: widget.isEdit ? blueprint.instruction : null,
+        initialValue: isEdit ? blueprint.instruction : null,
         onChanged: (value) {
           blueprint.instruction = value;
         },
