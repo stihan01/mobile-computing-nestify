@@ -47,6 +47,7 @@ class BlueprintFormState extends State<BlueprintForm> {
       cameraButton(),
       titleFormField(),
       CategoryDropdownMenu(
+        category: blueprint.category,
         onSelected: (category) {
           blueprint.category = category;
         },
