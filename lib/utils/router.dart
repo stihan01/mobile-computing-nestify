@@ -3,11 +3,15 @@ import 'package:go_router/go_router.dart';
 import '../pages/homePage.dart';
 import '../pages/detailPage.dart';
 import '../pages/profilePage.dart';
+import '../pages/searchPage.dart';
 
 // private navigators
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _shellNavigatorHomeKey = GlobalKey<NavigatorState>(debugLabel: 'homepage');
+final _shellNavigatorSearchKey = GlobalKey<NavigatorState>(debugLabel: 'searchpage');
+final _shellNavigatorAddKey = GlobalKey<NavigatorState>(debugLabel: 'Addpage');
 final _shellNavigatorProfileKey = GlobalKey<NavigatorState>(debugLabel: 'profilepage');
+
 
 // the one and only GoRouter instance
 final goRouter = GoRouter(
@@ -43,7 +47,47 @@ final goRouter = GoRouter(
             ),
           ],
         ),
-        // second branch Profile
+        // second branch Search
+        StatefulShellBranch(
+          navigatorKey: _shellNavigatorSearchKey,
+          routes: [
+            // top route inside branch
+            GoRoute(
+              path: '/search',
+              pageBuilder: (context, state) => const NoTransitionPage(
+                child: SearchPage(),
+              ),
+              // routes: [
+              //   // child route
+              //   GoRoute(
+              //     path: 'details',
+              //     builder: (context, state) =>
+              //         const DetailsScreen(label: 'B'),
+              //   ),
+              // ],
+            ),
+          ],
+        ),
+        StatefulShellBranch(
+          navigatorKey: _shellNavigatorAddKey,
+          routes: [
+            // top route inside branch
+            GoRoute(
+              path: '/add',
+              pageBuilder: (context, state) => const NoTransitionPage(
+                child: SearchPage(),
+              ),
+              // routes: [
+              //   // child route
+              //   GoRoute(
+              //     path: 'details',
+              //     builder: (context, state) =>
+              //         const DetailsScreen(label: 'B'),
+              //   ),
+              // ],
+            ),
+          ],
+        ),
         StatefulShellBranch(
           navigatorKey: _shellNavigatorProfileKey,
           routes: [
