@@ -49,12 +49,12 @@ class TabBox extends StatelessWidget {
                     return Column(
                       children: [
                         Image.network(
-                          'https://via.placeholder.com/100',
+                          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSSSJnWD9t8MD7US_LayX11WejXM4plJRVrgA&s',
                           height: 100,
                           width: 100,
                         ),
                         SizedBox(height: 8), // Space between image and text
-                        Text('Object ${index + 1}'),
+                        Text('Remake ${index + 1}'),
                       ],
                     );
                   }),

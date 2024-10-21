@@ -27,10 +27,11 @@ class DetailPage extends StatelessWidget {
 
           children: [
             // Image
-            Container(
-              width: double.infinity, // Make the container take full width
-              height: 300, // Set a specific height for the image
-              color: Colors.blue,
+            Image.network(
+              'https://s42814.pcdn.co/wp-content/uploads/2020/04/House_One___Birdhouse___Drawing.png', // Replace with actual birdhouse image URL
+              height: 400,
+              width: 100,
+              fit: BoxFit.cover, // Optional: to cover the box size proportionally
             ),
             
             // Spacing
