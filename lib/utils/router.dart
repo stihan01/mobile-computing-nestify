@@ -94,10 +94,24 @@ class ScaffoldWithNestedNavigation extends StatelessWidget {
       body: navigationShell,
       bottomNavigationBar: NavigationBar(
         selectedIndex: navigationShell.currentIndex,
-        destinations: const [
-          NavigationDestination(label: 'Section A', icon: Icon(Icons.home)),
-          NavigationDestination(label: 'Section B', icon: Icon(Icons.settings)),
-        ],
+        destinations: const <Widget>[
+        NavigationDestination(
+          icon: Icon(Icons.location_on),
+          label: "Home",
+        ),
+        NavigationDestination(
+          icon: Icon(Icons.search),
+          label: "Search",
+        ),
+        NavigationDestination(
+          icon: Icon(Icons.add_circle),
+          label: "Add",
+        ),
+        NavigationDestination(
+          icon: Icon(Icons.account_circle),
+          label: "Profile",
+        ),
+      ],
         onDestinationSelected: _goBranch,
       ),
     );
