@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'utils/router.dart';
 
 void main() {
   runApp(const MainApp());
@@ -11,17 +12,17 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
-      routerConfig: goRouter,);
-        title: "Nestify",
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(
-              seedColor: Colors.red, brightness: Brightness.light),
-          useMaterial3: true,
-          inputDecorationTheme: const InputDecorationTheme(
-            border: OutlineInputBorder(),
-          ),
+      routerConfig: goRouter,
+      title: "Nestify",
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+            seedColor: Colors.red, brightness: Brightness.light),
+        useMaterial3: true,
+        inputDecorationTheme: const InputDecorationTheme(
+          border: OutlineInputBorder(),
         ),
-        home: const AddBlueprintScreen());
+      ),
+    );
   }
 }
 

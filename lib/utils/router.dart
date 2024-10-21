@@ -4,6 +4,7 @@ import '../pages/homePage.dart';
 import '../pages/detailPage.dart';
 import '../pages/profilePage.dart';
 import '../pages/searchPage.dart';
+import '../screens/add_blue_print_screen.dart';
 
 // private navigators
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -75,7 +76,7 @@ final goRouter = GoRouter(
             GoRoute(
               path: '/add',
               pageBuilder: (context, state) => const NoTransitionPage(
-                child: SearchPage(),
+                child: AddBlueprintScreen(),
               ),
               // routes: [
               //   // child route
