@@ -23,7 +23,13 @@ class CustomTextFormField extends StatefulWidget {
 }
 
 class _CustomTextFormFieldState extends State<CustomTextFormField> {
-  TextEditingController textController = TextEditingController();
+  late TextEditingController textController; //= TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    textController = TextEditingController(text: widget.initialValue);
+  }
 
   @override
   void dispose() {
@@ -34,7 +40,6 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      initialValue: widget.initialValue,
       controller: textController,
       maxLength: widget.maxLength,
       decoration: InputDecoration(
