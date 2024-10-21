@@ -62,33 +62,73 @@ class CommentSection extends StatelessWidget {
         ListView(
           shrinkWrap: true, // Make the ListView shrink to fit
           physics: const NeverScrollableScrollPhysics(), // Prevent inner scrolling
-          children: const [
+          children: [
             Padding(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: Text(
-                'John: "I love how simple the instructions were! The birdhouse turned out great, and the birds seem to love it."',
-                style: TextStyle(fontSize: 16),
+              padding: EdgeInsets.only(bottom: 10),
+              child: RichText(
+                text: TextSpan(
+                  style: TextStyle(fontSize: 16, color: Colors.black), // Default text style
+                  children: [
+                    TextSpan(
+                      text: 'John: ', // Username part
+                      style: TextStyle(fontWeight: FontWeight.bold), // Bold style for username
+                    ),
+                    TextSpan(
+                      text: '"I love how simple the instructions were! The birdhouse turned out great, and the birds seem to love it."', // Comment part
+                    ),
+                  ],
+                ),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: Text(
-                'Emily: "I added a small perch in front of the birdhouse entrance, and it made a huge difference. Highly recommend this extra step!"',
-                style: TextStyle(fontSize: 16),
+              padding: EdgeInsets.only(bottom: 10),
+              child: RichText(
+                text: TextSpan(
+                  style: TextStyle(fontSize: 16, color: Colors.black),
+                  children: [
+                    TextSpan(
+                      text: 'Emily: ',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    TextSpan(
+                      text: '"I added a small perch in front of the birdhouse entrance, and it made a huge difference. Highly recommend this extra step!"',
+                    ),
+                  ],
+                ),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: Text(
-                'Michael: "Great project! I struggled a bit with the roof fitting perfectly, but a little sanding helped."',
-                style: TextStyle(fontSize: 16),
+              padding: EdgeInsets.only(bottom: 10),
+              child: RichText(
+                text: TextSpan(
+                  style: TextStyle(fontSize: 16, color: Colors.black),
+                  children: [
+                    TextSpan(
+                      text: 'Michael: ',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    TextSpan(
+                      text: '"Great project! I struggled a bit with the roof fitting perfectly, but a little sanding helped."',
+                    ),
+                  ],
+                ),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: Text(
-                'Sarah: "My kids enjoyed painting the birdhouse after building it. It’s been a fun family project!"',
-                style: TextStyle(fontSize: 16),
+              padding: EdgeInsets.only(bottom: 10),
+              child: RichText(
+                text: TextSpan(
+                  style: TextStyle(fontSize: 16, color: Colors.black),
+                  children: [
+                    TextSpan(
+                      text: 'Sarah: ',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    TextSpan(
+                      text: '"My kids enjoyed painting the birdhouse after building it. It’s been a fun family project!"',
+                    ),
+                  ],
+                ),
               ),
             ),
           ],

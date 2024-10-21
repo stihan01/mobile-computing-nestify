@@ -27,7 +27,7 @@ class TabBox extends StatelessWidget {
             ],
           ),
           // The TabBarView must have a fixed height
-          Container(
+          SizedBox(
             height: 300, // Set a fixed height for TabBarView
             child: TabBarView(
               children: [
