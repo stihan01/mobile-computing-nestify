@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
 import 'utils/router.dart';
+// firebase imports
+import 'package:firebase_core/firebase_core.dart';
+import 'package:nestify/firebase_options.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   runApp(const MainApp());
 }
 
@@ -25,4 +34,3 @@ class MainApp extends StatelessWidget {
     );
   }
 }
-
