@@ -70,9 +70,9 @@ class ProfilePage extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(
         top: 0,
-        right: 20,
+        right: 16,
         bottom: 10,
-        left: 20,
+        left: 16,
       ),
       
       child: Card(
