@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'utils/router.dart';
+import 'package:provider/provider.dart';
+import 'models/model.dart';
 
 void main() {
-  runApp(const MainApp());
+  runApp(ChangeNotifierProvider(
+    create: (context) => Model(),
+    child: const MainApp(),
+  ));
 }
 
 class MainApp extends StatelessWidget {

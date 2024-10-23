@@ -20,6 +20,7 @@ class HomePage extends StatelessWidget {
             image: 'assets/images/buzzhotel.jpg',
             title: "Hanna's Buzz Hotel",
             description: "A bug hotel specifically made for bees",
+            favorite: false,
           ),
         ],
       )),

@@ -4,12 +4,13 @@ class PreviewCard extends StatefulWidget {
   final String image;
   final String title;
   final String description;
-  final bool favorite = false;
+  final bool favorite;
 
   const PreviewCard(
       {required this.image,
       required this.title,
       required this.description,
+      required this.favorite,
       super.key});
 
   @override
