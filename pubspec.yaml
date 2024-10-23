@@ -7,7 +7,10 @@ environment:
   sdk: ^3.5.2
 
 dependencies:
+  cloud_firestore: ^5.4.4
+  firebase_auth: ^5.3.1
   firebase_core: ^3.6.0
+  firebase_ui_auth: ^1.16.0
   flutter:
     sdk: flutter
   go_router: ^14.3.0
