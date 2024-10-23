@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:image_picker/image_picker.dart';
 
 class BlueprintPost {
@@ -7,6 +9,7 @@ class BlueprintPost {
   String? instruction;
   String? category;
   List<XFile> images = [];
+  bool isFavorite = false;
 
   BlueprintPost([this.title, this.material, this.instruction, this.category]);
 
