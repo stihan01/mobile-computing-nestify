@@ -14,13 +14,13 @@ class TabBox extends StatelessWidget {
             color: Colors.grey.withOpacity(0.5),
             spreadRadius: 3,
             blurRadius: 7,
-            offset: Offset(0, 3),
+            offset: const Offset(0, 3),
           ),
         ],
       ),
       child: Column(
         children: [
-          TabBar(
+          const TabBar(
             tabs: [
               Tab(text: "Details"),
               Tab(text: "Remakes"),
@@ -32,8 +32,8 @@ class TabBox extends StatelessWidget {
             child: TabBarView(
               children: [
                 // First Tab: Just an Icon
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
                   child: Text(
                     "This build is good for birds of paradise. I'm a full-time student and it took 4 weeks on and off building."
                   ),
@@ -44,7 +44,7 @@ class TabBox extends StatelessWidget {
                   crossAxisSpacing: 10, // Space between columns
                   mainAxisSpacing: 10, // Space between rows
                   padding: const EdgeInsets.all(16.0),
-                  physics: BouncingScrollPhysics(), // Enable scrolling
+                  physics: const BouncingScrollPhysics(), // Enable scrolling
                   children: List.generate(6, (index) {
                     return Column(
                       children: [
@@ -53,7 +53,7 @@ class TabBox extends StatelessWidget {
                           height: 100,
                           width: 100,
                         ),
-                        SizedBox(height: 8), // Space between image and text
+                        const SizedBox(height: 8), // Space between image and text
                         Text('Object ${index + 1}'),
                       ],
                     );

@@ -11,7 +11,7 @@ class CommentSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Comment Section Title
-        Text(
+        const Text(
           'Comments',
           style: TextStyle(
             fontSize: 20,
@@ -64,9 +64,9 @@ class CommentSection extends StatelessWidget {
           physics: const NeverScrollableScrollPhysics(), // Prevent inner scrolling
           children: [
             Padding(
-              padding: EdgeInsets.only(bottom: 10),
+              padding: const EdgeInsets.only(bottom: 10),
               child: RichText(
-                text: TextSpan(
+                text: const TextSpan(
                   style: TextStyle(fontSize: 16, color: Colors.black), // Default text style
                   children: [
                     TextSpan(
@@ -81,9 +81,9 @@ class CommentSection extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(bottom: 10),
+              padding: const EdgeInsets.only(bottom: 10),
               child: RichText(
-                text: TextSpan(
+                text: const TextSpan(
                   style: TextStyle(fontSize: 16, color: Colors.black),
                   children: [
                     TextSpan(
@@ -98,9 +98,9 @@ class CommentSection extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(bottom: 10),
+              padding: const EdgeInsets.only(bottom: 10),
               child: RichText(
-                text: TextSpan(
+                text: const TextSpan(
                   style: TextStyle(fontSize: 16, color: Colors.black),
                   children: [
                     TextSpan(
@@ -115,9 +115,9 @@ class CommentSection extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(bottom: 10),
+              padding: const EdgeInsets.only(bottom: 10),
               child: RichText(
-                text: TextSpan(
+                text: const TextSpan(
                   style: TextStyle(fontSize: 16, color: Colors.black),
                   children: [
                     TextSpan(
