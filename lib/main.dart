@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import '/utils/router.dart';
+import 'utils/router.dart';
 
 void main() {
   runApp(const MainApp());
 }
-
-//Test line
 
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
@@ -14,7 +12,17 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
-      routerConfig: router,
+      routerConfig: goRouter,
+      title: "Nestify",
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+            seedColor: Colors.red, brightness: Brightness.light),
+        useMaterial3: true,
+        inputDecorationTheme: const InputDecorationTheme(
+          border: OutlineInputBorder(),
+        ),
+      ),
     );
   }
 }
+
