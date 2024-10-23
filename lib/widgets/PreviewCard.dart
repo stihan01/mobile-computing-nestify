@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:nestify/models/blueprint_post.dart';
+import 'package:provider/provider.dart';
+import '../models/model.dart';
 
 class PreviewCard extends StatefulWidget {
-  final String image;
-  final String title;
-  final String description;
-  final bool favorite = false;
+  final BlueprintPost post;
+  final String placeholderImage = 'assets/images/buzzhotel.jpg';
 
   const PreviewCard(
-      {required this.image,
-      required this.title,
-      required this.description,
+      {required this.post,
       super.key});
 
   @override
@@ -33,7 +32,7 @@ class _PreviewCardState extends State<PreviewCard> {
               height: 200,
               width: 350,
               child: Image.asset(
-                widget.image,
+                widget.placeholderImage, //TODO: change to actual image
                 fit: BoxFit.cover,
               ),
             ),
@@ -49,11 +48,11 @@ class _PreviewCardState extends State<PreviewCard> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            widget.title,
+                            widget.post.title ?? 'Title',
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
                           Text(
-                            widget.description,
+                            widget.post.category ?? 'Category',
                             style: Theme.of(context).textTheme.bodyMedium,
                           ),
                         ],
@@ -64,13 +63,13 @@ class _PreviewCardState extends State<PreviewCard> {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             IconButton(
-                              icon: widget.favorite
+                              icon: widget.post.isFavorite
                                   ? const Icon(Icons.favorite)
                                   : const Icon(Icons.favorite_outline),
                               onPressed: () {
-                                if (widget.favorite) {
+                                if (widget.post.isFavorite) {
                                   //TODO
-                                }
+                                }                              
                               },
                             )
                           ],
