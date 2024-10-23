@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'utils/router.dart';
+import 'package:provider/provider.dart';
+import 'models/model.dart';
 // firebase imports
 import 'package:firebase_core/firebase_core.dart';
 import 'package:nestify/firebase_options.dart';
@@ -11,7 +13,10 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  runApp(const MainApp());
+  runApp(ChangeNotifierProvider(
+    create: (context) => Model(),
+    child: const MainApp(),
+  ));
 }
 
 class MainApp extends StatelessWidget {
