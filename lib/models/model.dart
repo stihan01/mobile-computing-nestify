@@ -24,6 +24,7 @@ class Model extends ChangeNotifier{
     favorites.add(_blueprintList[0]);
     favorites.add(_blueprintList[1]);
     favorites.add(_blueprintList[2]);
+    notifyListeners();
   }
 
   void addFavorite(BlueprintPost post) {

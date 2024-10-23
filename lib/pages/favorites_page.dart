@@ -3,18 +3,21 @@ import 'package:go_router/go_router.dart';
 import 'package:nestify/widgets/PreviewCard.dart';
 import 'package:provider/provider.dart';
 import '../models/model.dart';
-import '../models/blueprint_post.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+class FavoritesPage extends StatelessWidget {
+  const FavoritesPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Home Screen')),
-      body: Center(
-        child: _ItemList(),
-      )
+      appBar: AppBar(
+          title: const Text("Favorites"),
+           leading: IconButton(
+            icon: const Icon(Icons.arrow_back), // Back icon
+            onPressed: () => context.pop(), // Go back
+          ),
+        ),
+      body: _ItemList(),
     );
   }
 }
@@ -29,14 +32,11 @@ class _ItemListState extends State<_ItemList> {
   @override
   Widget build(BuildContext context) {
      return Consumer<Model>(builder: (context, model, child) {
-      var posts = model.blueprintList;
-      print('Blueprint List: ${posts.length} items'); // Debug print
-      if (posts.isEmpty) {
-        return Center(child: Text('No posts available'));
-      }
+      var favorites = model.favorites;
+
       return ListView.builder(
-        itemBuilder: (context, index) => PreviewCard(post:posts[index]),
-        itemCount: posts.length,
+        itemBuilder: (context, index) => PreviewCard(post:favorites[index]),
+        itemCount: favorites.length,
       );
     });
   }
