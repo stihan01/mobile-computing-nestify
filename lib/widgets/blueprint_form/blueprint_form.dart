@@ -4,6 +4,7 @@ import 'package:nestify/widgets/blueprint_form/widgets/image_box.dart';
 import 'package:nestify/widgets/blueprint_form/widgets/image_capture_button.dart';
 import 'package:nestify/widgets/custom_text_form_field.dart';
 import 'package:nestify/widgets/blueprint_form/widgets/category_dropdown_menu.dart';
+import 'dart:io';
 
 class BlueprintForm extends StatefulWidget {
   const BlueprintForm({super.key, this.post});
@@ -81,9 +82,9 @@ class BlueprintFormState extends State<BlueprintForm> {
 
   ImageCaptureButton cameraButton() {
     return ImageCaptureButton(
-      onImageSelected: (xFile) {
+      onImageSelected: (file) {
         setState(() {
-          blueprint.images.add(xFile);
+          blueprint.images.add(file);
         });
       },
     );

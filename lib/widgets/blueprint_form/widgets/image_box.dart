@@ -5,8 +5,8 @@ import 'package:image_picker/image_picker.dart';
 class ImageBox extends StatelessWidget {
   const ImageBox({super.key, required this.file, required this.onDelete});
 
-  final XFile file;
-  final Function(XFile) onDelete;
+  final File file;
+  final Function(File) onDelete;
 
   @override
   Widget build(BuildContext context) {

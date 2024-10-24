@@ -1,6 +1,4 @@
-import 'dart:ffi';
-
-import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 class BlueprintPost {
   String _id = DateTime.now().millisecondsSinceEpoch.toString();
@@ -8,17 +6,23 @@ class BlueprintPost {
   String? material;
   String? instruction;
   String? category;
-  List<XFile> images = [];
-  bool isFavorite = false;
+  List<File> images = [];
+  bool isFavorite;
 
-  BlueprintPost([this.title, this.material, this.instruction, this.category]);
+  BlueprintPost(
+      [this.title,
+      this.material,
+      this.instruction,
+      this.category,
+      this.isFavorite = false]);
 
   BlueprintPost.fromJson(Map<String, dynamic> json)
       : _id = json['post_id'] as String,
         title = json['title'],
         material = json['material'],
         instruction = json['instruction'],
-        category = json['category'];
+        category = json['category'],
+        isFavorite = json['isFavorite'];
 
   Map<String, dynamic> toJson() => {
         "post_id": _id,
@@ -26,6 +30,7 @@ class BlueprintPost {
         "material": material,
         "instruction": instruction,
         'category': category,
+        'isFavorite': isFavorite,
       };
 
   get id => _id;
