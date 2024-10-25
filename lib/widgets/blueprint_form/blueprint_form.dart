@@ -7,6 +7,7 @@ import 'package:nestify/widgets/custom_text_form_field.dart';
 import 'package:nestify/widgets/blueprint_form/widgets/category_dropdown_menu.dart';
 import 'dart:io';
 import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
 
 class BlueprintForm extends StatefulWidget {
   const BlueprintForm({super.key, this.post});
@@ -29,16 +30,42 @@ class BlueprintFormState extends State<BlueprintForm> {
   // Note: This is a `GlobalKey<FormState>`,
   final _formKey = GlobalKey<FormState>();
   late final PostModel postModel;
+  late TextEditingController titleTextController;
+  late TextEditingController materialTextController;
+  late TextEditingController instructionTextController;
+  late List<TextEditingController> controllers;
 
   @override
   void initState() {
-    super.initState();
     postModel = Provider.of<PostModel>(context, listen: false);
     postModel.post = widget.post;
+    // Controllers
+    titleTextController = TextEditingController(text: postModel.title);
+    materialTextController = TextEditingController(text: postModel.material);
+    instructionTextController =
+        TextEditingController(text: postModel.instruction);
+
+    controllers = [
+      titleTextController,
+      materialTextController,
+      instructionTextController
+    ];
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    for (var controller in controllers) {
+      controller.dispose();
+    }
+
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    context.watch<PostModel>();
     final formContent = [
       Center(
         child: Text(
@@ -51,9 +78,9 @@ class BlueprintFormState extends State<BlueprintForm> {
       cameraButton(),
       titleFormField(),
       CategoryDropdownMenu(
-        category: postModel.post.category,
+        category: postModel.category,
         onSelected: (category) {
-          postModel.post.category = category;
+          postModel.category = category;
         },
       ),
       materialFormField(),
@@ -119,7 +146,7 @@ class BlueprintFormState extends State<BlueprintForm> {
             ),
             onDelete: () {
               setState(() {
-                postModel.imgUrls.remove(value);
+                postModel.removeImgUrl(value);
               });
             },
           ),
@@ -128,8 +155,6 @@ class BlueprintFormState extends State<BlueprintForm> {
     return GridView.count(
         primary: false,
         physics: const NeverScrollableScrollPhysics(),
-        //  padding: const EdgeInsets.all(8),
-
         shrinkWrap: true,
         crossAxisSpacing: 8,
         mainAxisSpacing: 8,
@@ -140,24 +165,34 @@ class BlueprintFormState extends State<BlueprintForm> {
   OutlinedButton saveDraftButton() {
     return OutlinedButton(
       // TODO implement onPressed
-      onPressed: () {},
+      onPressed: () {
+        setState(() {});
+      },
       child: const Text("Save draft"),
     );
   }
 
   FilledButton publishButton() {
     return FilledButton(
-      // TODO implement onPressed
       onPressed: () {
         // Validate returns true if the form is valid, or false otherwise.
         if (_formKey.currentState!.validate()) {
-          // If the form is valid, display a snackbar. In the real world,
-          // you'd often call a server or save the information in a database.
+          postModel.title = titleTextController.text;
+          postModel.material = materialTextController.text;
+          postModel.instruction = instructionTextController.text;
+          titleTextController.clear();
+
+          for (var controller in controllers) {
+            controller.clear();
+          }
+          postModel.uploadBlueprint();
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(postModel.post.toJson().toString()),
+            const SnackBar(
+              content: Text("Uploading to firestore..."),
             ),
           );
+
+          setState(() {});
         }
       },
       child: Text(postModel.isEdit ? "Update" : 'Publish'),
@@ -165,11 +200,9 @@ class BlueprintFormState extends State<BlueprintForm> {
   }
 
   CustomTextFormField titleFormField() {
+    debugPrint("Recalling titleform");
     return CustomTextFormField(
-        initialValue: postModel.isEdit ? postModel.post.title : null,
-        onChanged: (value) {
-          postModel.post.title = value;
-        },
+        textController: titleTextController,
         maxLength: 60,
         label: const Text("Title"),
         hintText: "Title of your creation",
@@ -178,10 +211,7 @@ class BlueprintFormState extends State<BlueprintForm> {
 
   CustomTextFormField materialFormField() {
     return CustomTextFormField(
-        initialValue: postModel.isEdit ? postModel.post.material : null,
-        onChanged: (value) {
-          postModel.post.material = value;
-        },
+        textController: materialTextController,
         label: const Text("Material"),
         hintText: "Recommended material",
         errorText: "Please enter materials");
@@ -189,10 +219,7 @@ class BlueprintFormState extends State<BlueprintForm> {
 
   CustomTextFormField instructionFormField() {
     return CustomTextFormField(
-        initialValue: postModel.isEdit ? postModel.post.instruction : null,
-        onChanged: (value) {
-          postModel.post.instruction = value;
-        },
+        textController: instructionTextController,
         label: const Text("Instructions"),
         hintText: "Describe how to build your creation",
         errorText: "Please enter instructions");

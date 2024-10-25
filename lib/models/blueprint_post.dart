@@ -8,11 +8,12 @@ class BlueprintPost {
   String? material;
   String? instruction;
   String? category;
+  bool isFavorite;
+
   List<File> images = [];
 
   /// imageUrl : filepath. Filepath is used for deleting in fire storage
-  Map<String, String> imageUrls = {};
-  bool isFavorite;
+  Map<String, dynamic> imageUrls = {};
 
   BlueprintPost(
       [this.title,
@@ -34,7 +35,7 @@ class BlueprintPost {
   Map<String, dynamic> toJson() => {
         'user_id': _userId,
         "post_id": _id,
-        'imagesUrls': imageUrls,
+        'imageUrls': imageUrls,
         "title": title,
         "material": material,
         "instruction": instruction,
