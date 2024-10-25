@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:nestify/auth_gate.dart';
+import 'package:nestify/providers/post_model.dart';
 import 'utils/router.dart';
 import 'package:provider/provider.dart';
 import 'models/model.dart';
@@ -13,8 +15,11 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  runApp(ChangeNotifierProvider(
-    create: (context) => Model(),
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: (context) => Model()),
+      ChangeNotifierProvider(create: (context) => PostModel())
+    ],
     child: const MainApp(),
   ));
 }
