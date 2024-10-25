@@ -8,7 +8,6 @@ import 'dart:io';
 class FirestoreDb {
   static final FirebaseFirestore _db = FirebaseFirestore.instance;
   static final FirebaseAuth auth = FirebaseAuth.instance;
-  //static final FirebaseStorage _storage = FirebaseStorage(storageBucket:"gs://nestify-cc1e3.appspot.com" );
   static final _storageRef = FirebaseStorage.instance.ref();
 
   static final userID = auth.currentUser!.uid;
@@ -16,30 +15,44 @@ class FirestoreDb {
   // collections
   static const blueprintPosts = "blueprints";
 
-  static Future<void> uploadBlueprint(BlueprintPost post) async {
-    final Map<String, dynamic> jsonData = post.toJson();
-    List<String> downloadUrls = [];
+  static Future<List<BlueprintPost>> getCurrentUserBlueprints() async {
+    List<BlueprintPost> posts = [];
 
-    if (post.images.isNotEmpty) {
-      for (File img in post.images) {
-        await _uploadImage(img, post.id).then((String result) {
-          downloadUrls.add(result);
-        });
-      }
-
-      jsonData['images'] = downloadUrls;
+    try {
+      posts = await _db
+          .collection(blueprintPosts)
+          .where('user_id', isEqualTo: userID)
+          .get()
+          .then((query) {
+        return query.docs.map((docSnapShot) {
+          return BlueprintPost.fromJson(docSnapShot.data());
+        }).toList();
+      });
+    } catch (error) {
+      debugPrint("Error fetching user blueprints: Error: $error");
     }
-
-    debugPrint(jsonData.toString());
-
-    await _db.collection(blueprintPosts).doc(post.id).set(jsonData);
+    return posts;
   }
 
-  static Future<String> _uploadImage(File file, String postID) async {
-    String filePath = "$userID/$blueprintPosts/$postID/${file.path}.png";
-    await _storageRef.child(filePath).putFile(file);
+  static Future<void> uploadBlueprint(
+    BlueprintPost post,
+  ) async {
+    await _db.collection(blueprintPosts).doc(post.id).set(post.toJson());
+  }
 
+  static Future<Map<String, String>> uploadImage(
+      File file, String postID) async {
+    String filePath = "$userID/$blueprintPosts/$postID/${DateTime.now()}.png";
+    await _storageRef.child(filePath).putFile(file);
     String downloadURL = await _storageRef.child(filePath).getDownloadURL();
-    return downloadURL;
+    return {downloadURL: filePath};
+  }
+
+  static Future<void> deleteImage(String filePath) async {
+    try {
+      await _storageRef.child(filePath).delete();
+    } catch (error) {
+      debugPrint("Image deletion failed: $error");
+    }
   }
 }
