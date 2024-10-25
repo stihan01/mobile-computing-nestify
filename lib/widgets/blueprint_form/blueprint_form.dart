@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:nestify/models/blueprint_post.dart';
+import 'package:nestify/providers/post_model.dart';
 import 'package:nestify/widgets/blueprint_form/widgets/image_box.dart';
 import 'package:nestify/widgets/blueprint_form/widgets/image_capture_button.dart';
 import 'package:nestify/widgets/custom_text_form_field.dart';
 import 'package:nestify/widgets/blueprint_form/widgets/category_dropdown_menu.dart';
 import 'dart:io';
+import 'package:provider/provider.dart';
 
 class BlueprintForm extends StatefulWidget {
   const BlueprintForm({super.key, this.post});
 
   // If blueprint object is provided, the form changes to editing, else it creates a new object
-  // TODO, add callback if buttons have to act different
   final BlueprintPost? post;
 
   @override
@@ -27,30 +28,32 @@ class BlueprintFormState extends State<BlueprintForm> {
   //
   // Note: This is a `GlobalKey<FormState>`,
   final _formKey = GlobalKey<FormState>();
-  late final bool isEdit;
-  late final BlueprintPost blueprint;
+  late final PostModel postModel;
 
   @override
   void initState() {
     super.initState();
-    isEdit = widget.post == null ? false : true;
-    blueprint = !isEdit ? BlueprintPost() : widget.post!;
+    postModel = Provider.of<PostModel>(context, listen: false);
+    postModel.post = widget.post;
   }
 
   @override
   Widget build(BuildContext context) {
     final formContent = [
       Center(
-        child: Text(isEdit ? "Editing blueprint post" : "Upload blueprint post",
+        child: Text(
+            postModel.isEdit
+                ? "Editing blueprint post"
+                : "Upload blueprint post",
             style: Theme.of(context).textTheme.titleLarge),
       ),
       imageGrid(),
       cameraButton(),
       titleFormField(),
       CategoryDropdownMenu(
-        category: blueprint.category,
+        category: postModel.post.category,
         onSelected: (category) {
-          blueprint.category = category;
+          postModel.post.category = category;
         },
       ),
       materialFormField(),
@@ -84,13 +87,44 @@ class BlueprintFormState extends State<BlueprintForm> {
     return ImageCaptureButton(
       onImageSelected: (file) {
         setState(() {
-          blueprint.images.add(file);
+          postModel.images.add(file);
         });
       },
     );
   }
 
   GridView imageGrid() {
+    List<ImageBox> fromImages = postModel.images
+        .map(
+          (value) => ImageBox(
+            image: Image.file(
+              File(value.path),
+              fit: BoxFit.cover,
+            ),
+            onDelete: () {
+              setState(() {
+                postModel.images.remove(value);
+              });
+            },
+          ),
+        )
+        .toList();
+
+    List<ImageBox> fromUrl = postModel.imgUrls
+        .map(
+          (value) => ImageBox(
+            image: Image.network(
+              value,
+              fit: BoxFit.cover,
+            ),
+            onDelete: () {
+              setState(() {
+                postModel.imgUrls.remove(value);
+              });
+            },
+          ),
+        )
+        .toList();
     return GridView.count(
         primary: false,
         physics: const NeverScrollableScrollPhysics(),
@@ -100,18 +134,7 @@ class BlueprintFormState extends State<BlueprintForm> {
         crossAxisSpacing: 8,
         mainAxisSpacing: 8,
         crossAxisCount: 2,
-        children: blueprint.images
-            .map(
-              (file) => ImageBox(
-                file: file,
-                onDelete: (value) {
-                  setState(() {
-                    blueprint.images.remove(value);
-                  });
-                },
-              ),
-            )
-            .toList());
+        children: [fromUrl, fromImages].expand((element) => element).toList());
   }
 
   OutlinedButton saveDraftButton() {
@@ -132,20 +155,20 @@ class BlueprintFormState extends State<BlueprintForm> {
           // you'd often call a server or save the information in a database.
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(blueprint.toJson().toString()),
+              content: Text(postModel.post.toJson().toString()),
             ),
           );
         }
       },
-      child: Text(isEdit ? "Update" : 'Publish'),
+      child: Text(postModel.isEdit ? "Update" : 'Publish'),
     );
   }
 
   CustomTextFormField titleFormField() {
     return CustomTextFormField(
-        initialValue: isEdit ? blueprint.title : null,
+        initialValue: postModel.isEdit ? postModel.post.title : null,
         onChanged: (value) {
-          blueprint.title = value;
+          postModel.post.title = value;
         },
         maxLength: 60,
         label: const Text("Title"),
@@ -155,9 +178,9 @@ class BlueprintFormState extends State<BlueprintForm> {
 
   CustomTextFormField materialFormField() {
     return CustomTextFormField(
-        initialValue: isEdit ? blueprint.material : null,
+        initialValue: postModel.isEdit ? postModel.post.material : null,
         onChanged: (value) {
-          blueprint.material = value;
+          postModel.post.material = value;
         },
         label: const Text("Material"),
         hintText: "Recommended material",
@@ -166,9 +189,9 @@ class BlueprintFormState extends State<BlueprintForm> {
 
   CustomTextFormField instructionFormField() {
     return CustomTextFormField(
-        initialValue: isEdit ? blueprint.instruction : null,
+        initialValue: postModel.isEdit ? postModel.post.instruction : null,
         onChanged: (value) {
-          blueprint.instruction = value;
+          postModel.post.instruction = value;
         },
         label: const Text("Instructions"),
         hintText: "Describe how to build your creation",
