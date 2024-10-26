@@ -8,6 +8,8 @@ import 'package:nestify/widgets/blueprint_form/widgets/category_dropdown_menu.da
 import 'dart:io';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
+import 'package:nestify/models/comment.dart';
+import 'package:nestify/apis/firestore_db.dart';
 
 class BlueprintForm extends StatefulWidget {
   const BlueprintForm({super.key, this.post});
@@ -166,6 +168,24 @@ class BlueprintFormState extends State<BlueprintForm> {
     return OutlinedButton(
       // TODO implement onPressed
       onPressed: () {
+        FirestoreDb.uploadComment(Comment(
+          userId: 'qAgiD3gyAqN8YKuQnrjHFvqVvb63',
+          postId: postModel.post.id,
+          comment: "I like bananas Woawww",
+        ));
+
+        FirestoreDb.uploadComment(Comment(
+          userId: 'qAgiD3gyAqN8YKuQnrjHFvqVvb63',
+          postId: postModel.post.id,
+          comment: "I like apples",
+        ));
+
+        FirestoreDb.uploadComment(Comment(
+          userId: '',
+          postId: postModel.post.id,
+          comment: "I AM A FAKE Woawww",
+        ));
+
         setState(() {});
       },
       child: const Text("Save draft"),

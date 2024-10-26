@@ -7,6 +7,8 @@ import 'models/model.dart';
 // firebase imports
 import 'package:firebase_core/firebase_core.dart';
 import 'package:nestify/firebase_options.dart';
+import 'package:nestify/apis/firestore_db.dart';
+import 'dart:developer';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,6 +31,11 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var postmodel = Provider.of<PostModel>(context);
+
+    FirestoreDb.getMyFavoriteBlueprints().then((onValue) {
+      log("${onValue.length}");
+    });
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       routerConfig: goRouter,
