@@ -80,12 +80,138 @@ class _SearchpageState extends State<SearchPage> {
   void show() {
     showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
       builder: (BuildContext context) {
         return Container(
-          height: 200,
-          child: Center(child: Text("this is a filter modal")),
+          height: 400,
+          width: double.infinity,
+          padding: const EdgeInsets.all(24),
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Filters',
+                        style: Theme.of(context).textTheme.titleLarge),
+                    TextButton(onPressed: () {}, child: Text("Reset"))
+                  ],
+                ),
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 8),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(bottom: 8),
+                        child: _CategoryFilterChips(),
+                      ),
+                      _MaterialFilterChips(),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: FilledButton(
+                    onPressed: () {},
+                    child: const Text('Apply Filters'),
+                  ),
+                ),
+              ]),
         );
       },
+    );
+  }
+}
+
+enum CategoryFilter { birdhouse, insecthotel }
+
+List<String> materials = ['Wood', 'Plastic', 'Metal', 'Paper', 'Cardboard'];
+
+extension CategoryFilterGetter on CategoryFilter {
+  String get label {
+    switch (this) {
+      case CategoryFilter.birdhouse:
+        return 'Birdhouse';
+      case CategoryFilter.insecthotel:
+        return 'Insect Hotel';
+    }
+  }
+}
+
+class _CategoryFilterChips extends StatefulWidget {
+  const _CategoryFilterChips({super.key});
+
+  @override
+  State<_CategoryFilterChips> createState() => _CategoryFilterChipsState();
+}
+
+class _CategoryFilterChipsState extends State<_CategoryFilterChips> {
+  Set<CategoryFilter> selectedCategories = {};
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Category:', style: Theme.of(context).textTheme.labelLarge),
+        Wrap(
+            spacing: 8.0,
+            children: CategoryFilter.values.map((CategoryFilter category) {
+              return FilterChip(
+                label: Text(category.label),
+                selected: selectedCategories.contains(category),
+                onSelected: (bool selected) {
+                  setState(() {
+                    if (selected) {
+                      selectedCategories.add(category);
+                    } else {
+                      selectedCategories.remove(category);
+                    }
+                  });
+                },
+              );
+            }).toList()),
+      ],
+    );
+  }
+}
+
+class _MaterialFilterChips extends StatefulWidget {
+  const _MaterialFilterChips({super.key});
+
+  @override
+  State<_MaterialFilterChips> createState() => _MaterialFilterChipsState();
+}
+
+class _MaterialFilterChipsState extends State<_MaterialFilterChips> {
+  Set<String> selectedMaterials = {};
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Materials:', style: Theme.of(context).textTheme.labelLarge),
+        Wrap(
+            spacing: 8.0,
+            children: materials.map((String material) {
+              return FilterChip(
+                label: Text(material),
+                selected: selectedMaterials.contains(material),
+                onSelected: (bool selected) {
+                  setState(() {
+                    if (selected) {
+                      selectedMaterials.add(material);
+                    } else {
+                      selectedMaterials.remove(material);
+                    }
+                  });
+                },
+              );
+            }).toList()),
+      ],
     );
   }
 }
