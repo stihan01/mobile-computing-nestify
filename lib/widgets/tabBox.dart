@@ -21,7 +21,6 @@ class TabBox extends StatelessWidget {
         ],
       ),
       child: Column(
-        // TODO Fix overflow by makign it scrollable
         children: [
           const TabBar(
             tabs: [
@@ -34,8 +33,8 @@ class TabBox extends StatelessWidget {
             height: 300, // Set a fixed height for TabBarView
             child: TabBarView(
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                ListView(
+                  //  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Description
                     Padding(
