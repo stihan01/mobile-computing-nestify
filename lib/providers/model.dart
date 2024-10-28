@@ -21,10 +21,6 @@ class Model extends ChangeNotifier {
     //   _blueprintList.add(BlueprintPost('DIY Coasters', 'Cork and paint', 'A simple coaster set for your home', 'Home Decor'));
     //   _blueprintList.add(BlueprintPost('DIY Painted Rocks', 'Rocks and paint', 'A simple painted rock set for your home', 'Home Decor'));
     //   _blueprintList.add(BlueprintPost('DIY Bath Bombs', 'Baking soda, citric acid, and essential oils', 'A simple bath bomb set for your home', 'Self Care'));
-
-    //  favorites.add(_blueprintList[0]);
-    //  favorites.add(_blueprintList[1]);
-    //  favorites.add(_blueprintList[2]);
   }
 
   Future<void> fetchBlueprints() async {
@@ -32,12 +28,18 @@ class Model extends ChangeNotifier {
       _blueprintList = posts;
     });
 
+    debugPrint("Fetchign");
     notifyListeners();
   }
 
   void addFavorite(BlueprintPost post) {
     _favorites.add(post);
     notifyListeners();
+  }
+
+  void updateBluePrint(BlueprintPost post) async {
+    await FirestoreDb.uploadBlueprint(post);
+    await fetchBlueprints();
   }
 
   void addBlueprint(blueprintPost) {

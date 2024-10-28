@@ -36,7 +36,9 @@ class MainApp extends StatelessWidget {
       routerConfig: goRouter,
       title: "Nestify",
       theme: themeMode(ColorScheme.fromSeed(
-          seedColor: Colors.red, brightness: Brightness.light)),
+          contrastLevel: 1,
+          seedColor: Colors.red,
+          brightness: Brightness.light)),
       darkTheme: themeMode(
         ColorScheme.fromSeed(
             seedColor: Colors.black, brightness: Brightness.dark),

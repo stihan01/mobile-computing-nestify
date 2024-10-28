@@ -1,10 +1,8 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:nestify/widgets/tabBox.dart';
+import 'package:nestify/pages/detail_page/widgets/tabBox.dart';
 import 'package:nestify/widgets/commentSection.dart';
-import 'package:go_router/go_router.dart';
 import 'package:nestify/models/blueprint_post.dart';
+import 'package:nestify/widgets/favorite_icon_button.dart';
 
 class DetailPage extends StatelessWidget {
   final BlueprintPost post;
@@ -18,7 +16,7 @@ class DetailPage extends StatelessWidget {
         ? []
         : post.imageUrls.keys.map((url) {
             return Image.network(
-              url, //TODO: change to actual image
+              url,
               height: 400,
               width: 100,
               fit: BoxFit
@@ -30,12 +28,8 @@ class DetailPage extends StatelessWidget {
       length: 2, // We have 2 tabs
       child: Scaffold(
         appBar: AppBar(
-          title: Text(post.title!),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back), // Back icon
-            onPressed: () => context.pop(), // Go back to home
-          ),
-        ),
+            title: Text(post.title!),
+            actions: [FavoriteIconButton(post: post)]),
         body: ListView(
           // Wrap everything in ListView for overall scrollability
           padding: const EdgeInsets.all(16.0),
@@ -44,7 +38,7 @@ class DetailPage extends StatelessWidget {
             // Image
             images.isEmpty
                 ? Image.asset(
-                    placeholderImage, //TODO: change to actual image
+                    placeholderImage,
                     height: 400,
                     width: 100,
                     fit: BoxFit

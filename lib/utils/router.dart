@@ -1,24 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../pages/homePage.dart';
-import '../pages/detailPage.dart';
+import '../pages/detail_page/detailPage.dart';
 import '../pages/profilePage.dart';
 import '../pages/searchPage.dart';
 import '../screens/add_blue_print_screen.dart';
 import 'package:nestify/models/blueprint_post.dart';
 
-
 // private navigators
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
-final _shellNavigatorHomeKey = GlobalKey<NavigatorState>(debugLabel: 'homepage');
-final _shellNavigatorDetailKey = GlobalKey<NavigatorState>(debugLabel: 'detailpage');
-final _shellNavigatorSearchKey = GlobalKey<NavigatorState>(debugLabel: 'searchpage');
+final _shellNavigatorHomeKey =
+    GlobalKey<NavigatorState>(debugLabel: 'homepage');
+final _shellNavigatorDetailKey =
+    GlobalKey<NavigatorState>(debugLabel: 'detailpage');
+final _shellNavigatorSearchKey =
+    GlobalKey<NavigatorState>(debugLabel: 'searchpage');
 final _shellNavigatorAddKey = GlobalKey<NavigatorState>(debugLabel: 'Addpage');
-final _shellNavigatorProfileKey = GlobalKey<NavigatorState>(debugLabel: 'profilepage');
+final _shellNavigatorProfileKey =
+    GlobalKey<NavigatorState>(debugLabel: 'profilepage');
 
 // the one and only GoRouter instance
 final goRouter = GoRouter(
-  
   initialLocation: '/',
   navigatorKey: _rootNavigatorKey,
   routes: [
@@ -26,8 +28,7 @@ final goRouter = GoRouter(
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) {
         // the UI shell
-        return ScaffoldWithNestedNavigation(
-            navigationShell: navigationShell);
+        return ScaffoldWithNestedNavigation(navigationShell: navigationShell);
       },
       branches: [
         // first branch Home
@@ -43,12 +44,14 @@ final goRouter = GoRouter(
               routes: [
                 // child route
                 GoRoute(
-                path: '/details',
-                builder: (context, state) {
-                  final post = state.extra as BlueprintPost; // Extracting the post from extra
-                  return DetailPage(post: post, key: _shellNavigatorDetailKey);
-                },
-              ),
+                  path: '/details',
+                  builder: (context, state) {
+                    final post = state.extra
+                        as BlueprintPost; // Extracting the post from extra
+                    return DetailPage(
+                        post: post, key: _shellNavigatorDetailKey);
+                  },
+                ),
               ],
             ),
           ],
@@ -119,7 +122,6 @@ final goRouter = GoRouter(
   ],
 );
 
-
 class ScaffoldWithNestedNavigation extends StatelessWidget {
   const ScaffoldWithNestedNavigation({
     Key? key,
@@ -145,23 +147,23 @@ class ScaffoldWithNestedNavigation extends StatelessWidget {
       bottomNavigationBar: NavigationBar(
         selectedIndex: navigationShell.currentIndex,
         destinations: const <Widget>[
-        NavigationDestination(
-          icon: Icon(Icons.location_on),
-          label: "Home",
-        ),
-        NavigationDestination(
-          icon: Icon(Icons.search),
-          label: "Search",
-        ),
-        NavigationDestination(
-          icon: Icon(Icons.add_circle),
-          label: "Add",
-        ),
-        NavigationDestination(
-          icon: Icon(Icons.account_circle),
-          label: "Profile",
-        ),
-      ],
+          NavigationDestination(
+            icon: Icon(Icons.location_on),
+            label: "Home",
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.search),
+            label: "Search",
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.add_circle),
+            label: "Add",
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.account_circle),
+            label: "Profile",
+          ),
+        ],
         onDestinationSelected: _goBranch,
       ),
     );

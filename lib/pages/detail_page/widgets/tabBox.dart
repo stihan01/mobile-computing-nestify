@@ -9,13 +9,15 @@ class TabBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.grey[200],
+        color: Theme.of(context)
+            .colorScheme
+            .surfaceContainerLow, //Colors.grey[200],
         borderRadius: BorderRadius.circular(10.0),
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 3,
-            blurRadius: 7,
+            spreadRadius: 1,
+            blurRadius: 2,
             offset: const Offset(0, 3),
           ),
         ],
