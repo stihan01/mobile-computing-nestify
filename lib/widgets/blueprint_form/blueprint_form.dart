@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:nestify/models/blueprint_post.dart';
+import 'package:nestify/providers/post_model.dart';
 import 'package:nestify/widgets/blueprint_form/widgets/image_box.dart';
 import 'package:nestify/widgets/blueprint_form/widgets/image_capture_button.dart';
 import 'package:nestify/widgets/custom_text_form_field.dart';
 import 'package:nestify/widgets/blueprint_form/widgets/category_dropdown_menu.dart';
+import 'dart:io';
+import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
+import 'package:nestify/models/comment.dart';
+import 'package:nestify/apis/firestore_db.dart';
 
 class BlueprintForm extends StatefulWidget {
   const BlueprintForm({super.key, this.post});
 
   // If blueprint object is provided, the form changes to editing, else it creates a new object
-  // TODO, add callback if buttons have to act different
   final BlueprintPost? post;
 
   @override
@@ -26,30 +31,58 @@ class BlueprintFormState extends State<BlueprintForm> {
   //
   // Note: This is a `GlobalKey<FormState>`,
   final _formKey = GlobalKey<FormState>();
-  late final bool isEdit;
-  late final BlueprintPost blueprint;
+  late final PostModel postModel;
+  late TextEditingController titleTextController;
+  late TextEditingController materialTextController;
+  late TextEditingController instructionTextController;
+  late List<TextEditingController> controllers;
 
   @override
   void initState() {
+    postModel = Provider.of<PostModel>(context, listen: false);
+    postModel.post = widget.post;
+    // Controllers
+    titleTextController = TextEditingController(text: postModel.title);
+    materialTextController = TextEditingController(text: postModel.material);
+    instructionTextController =
+        TextEditingController(text: postModel.instruction);
+
+    controllers = [
+      titleTextController,
+      materialTextController,
+      instructionTextController
+    ];
+
     super.initState();
-    isEdit = widget.post == null ? false : true;
-    blueprint = !isEdit ? BlueprintPost() : widget.post!;
+  }
+
+  @override
+  void dispose() {
+    for (var controller in controllers) {
+      controller.dispose();
+    }
+
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    context.watch<PostModel>();
     final formContent = [
       Center(
-        child: Text(isEdit ? "Editing blueprint post" : "Upload blueprint post",
+        child: Text(
+            postModel.isEdit
+                ? "Editing blueprint post"
+                : "Upload blueprint post",
             style: Theme.of(context).textTheme.titleLarge),
       ),
       imageGrid(),
       cameraButton(),
       titleFormField(),
       CategoryDropdownMenu(
-        category: blueprint.category,
+        category: postModel.category,
         onSelected: (category) {
-          blueprint.category = category;
+          postModel.category = category;
         },
       ),
       materialFormField(),
@@ -81,71 +114,115 @@ class BlueprintFormState extends State<BlueprintForm> {
 
   ImageCaptureButton cameraButton() {
     return ImageCaptureButton(
-      onImageSelected: (xFile) {
+      onImageSelected: (file) {
         setState(() {
-          blueprint.images.add(xFile);
+          postModel.images.add(file);
         });
       },
     );
   }
 
   GridView imageGrid() {
+    List<ImageBox> fromImages = postModel.images
+        .map(
+          (value) => ImageBox(
+            image: Image.file(
+              File(value.path),
+              fit: BoxFit.cover,
+            ),
+            onDelete: () {
+              setState(() {
+                postModel.images.remove(value);
+              });
+            },
+          ),
+        )
+        .toList();
+
+    List<ImageBox> fromUrl = postModel.imgUrls
+        .map(
+          (value) => ImageBox(
+            image: Image.network(
+              value,
+              fit: BoxFit.cover,
+            ),
+            onDelete: () {
+              setState(() {
+                postModel.removeImgUrl(value);
+              });
+            },
+          ),
+        )
+        .toList();
     return GridView.count(
         primary: false,
         physics: const NeverScrollableScrollPhysics(),
-        //  padding: const EdgeInsets.all(8),
-
         shrinkWrap: true,
         crossAxisSpacing: 8,
         mainAxisSpacing: 8,
         crossAxisCount: 2,
-        children: blueprint.images
-            .map(
-              (file) => ImageBox(
-                file: file,
-                onDelete: (value) {
-                  setState(() {
-                    blueprint.images.remove(value);
-                  });
-                },
-              ),
-            )
-            .toList());
+        children: [fromUrl, fromImages].expand((element) => element).toList());
   }
 
   OutlinedButton saveDraftButton() {
     return OutlinedButton(
       // TODO implement onPressed
-      onPressed: () {},
+      onPressed: () {
+        FirestoreDb.uploadComment(Comment(
+          userId: 'qAgiD3gyAqN8YKuQnrjHFvqVvb63',
+          postId: postModel.post.id,
+          comment: "I like bananas Woawww",
+        ));
+
+        FirestoreDb.uploadComment(Comment(
+          userId: 'qAgiD3gyAqN8YKuQnrjHFvqVvb63',
+          postId: postModel.post.id,
+          comment: "I like apples",
+        ));
+
+        FirestoreDb.uploadComment(Comment(
+          userId: '',
+          postId: postModel.post.id,
+          comment: "I AM A FAKE Woawww",
+        ));
+
+        setState(() {});
+      },
       child: const Text("Save draft"),
     );
   }
 
   FilledButton publishButton() {
     return FilledButton(
-      // TODO implement onPressed
       onPressed: () {
         // Validate returns true if the form is valid, or false otherwise.
         if (_formKey.currentState!.validate()) {
-          // If the form is valid, display a snackbar. In the real world,
-          // you'd often call a server or save the information in a database.
+          postModel.title = titleTextController.text;
+          postModel.material = materialTextController.text;
+          postModel.instruction = instructionTextController.text;
+          titleTextController.clear();
+
+          for (var controller in controllers) {
+            controller.clear();
+          }
+          postModel.uploadBlueprint();
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(blueprint.toJson().toString()),
+            const SnackBar(
+              content: Text("Uploading to firestore..."),
             ),
           );
+
+          setState(() {});
         }
       },
-      child: Text(isEdit ? "Update" : 'Publish'),
+      child: Text(postModel.isEdit ? "Update" : 'Publish'),
     );
   }
 
   CustomTextFormField titleFormField() {
+    debugPrint("Recalling titleform");
     return CustomTextFormField(
-        initialValue: isEdit ? blueprint.title : null,
-        onChanged: (value) {
-          blueprint.title = value;
-        },
+        textController: titleTextController,
         maxLength: 60,
         label: const Text("Title"),
         hintText: "Title of your creation",
@@ -154,10 +231,7 @@ class BlueprintFormState extends State<BlueprintForm> {
 
   CustomTextFormField materialFormField() {
     return CustomTextFormField(
-        initialValue: isEdit ? blueprint.material : null,
-        onChanged: (value) {
-          blueprint.material = value;
-        },
+        textController: materialTextController,
         label: const Text("Material"),
         hintText: "Recommended material",
         errorText: "Please enter materials");
@@ -165,10 +239,7 @@ class BlueprintFormState extends State<BlueprintForm> {
 
   CustomTextFormField instructionFormField() {
     return CustomTextFormField(
-        initialValue: isEdit ? blueprint.instruction : null,
-        onChanged: (value) {
-          blueprint.instruction = value;
-        },
+        textController: instructionTextController,
         label: const Text("Instructions"),
         hintText: "Describe how to build your creation",
         errorText: "Please enter instructions");

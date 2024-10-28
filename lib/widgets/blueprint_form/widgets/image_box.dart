@@ -1,12 +1,10 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 
 class ImageBox extends StatelessWidget {
-  const ImageBox({super.key, required this.file, required this.onDelete});
+  const ImageBox({super.key, required this.image, required this.onDelete});
 
-  final XFile file;
-  final Function(XFile) onDelete;
+  final Image image;
+  final Function onDelete;
 
   @override
   Widget build(BuildContext context) {
@@ -15,17 +13,14 @@ class ImageBox extends StatelessWidget {
         decoration: BoxDecoration(border: Border.all()),
         height: 300,
         width: 200,
-        child: Image.file(
-          File(file.path),
-          fit: BoxFit.cover,
-        ),
+        child: image,
       ),
       Positioned(
           left: 135,
           top: -10,
           child: IconButton(
               onPressed: () {
-                onDelete(file);
+                onDelete();
               },
               color: Colors.red,
               icon: const Icon(Icons.delete)))
