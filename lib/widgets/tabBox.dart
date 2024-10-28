@@ -34,14 +34,34 @@ class TabBox extends StatelessWidget {
             child: TabBarView(
               children: [
                 Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+
+                    // Description
                     Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text(post.instruction ?? "Instruction"),
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text("Description: ", style: TextStyle(fontWeight: FontWeight.bold),),
+                          Text(post.instruction ?? "Instruction"),
+                        ],
+                      )
                     ),
+
+                    // Spacing
+                    const SizedBox(height: 16),
+
+                    // Description
                     Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text(post.material ?? "Material"),
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text("Material: ", style: TextStyle(fontWeight: FontWeight.bold),),
+                          Text(post.material ?? "Material"),
+                        ],
+                      )
                     ),
                   ],
                 ),
