@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 class ImageCaptureButton extends StatelessWidget {
   const ImageCaptureButton({super.key, required this.onImageSelected});
 
-  final Function(XFile) onImageSelected;
+  final Function(File) onImageSelected;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -26,6 +27,6 @@ class ImageCaptureButton extends StatelessWidget {
       return;
     }
 
-    onImageSelected(returnedImage);
+    onImageSelected(File(returnedImage.path));
   }
 }
