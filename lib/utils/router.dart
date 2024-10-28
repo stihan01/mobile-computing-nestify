@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:firebase_auth/firebase_auth.dart' hide EmailAuthProvider;
 import '../pages/homePage.dart';
 import '../pages/detailPage.dart';
 import '../pages/profilePage.dart';
@@ -119,8 +120,29 @@ final goRouter = GoRouter(
               ),
     ),
   ],
+  redirect: (context, state) {
+    // Check if the user is authenticated
+    final FirebaseAuth auth = FirebaseAuth.instance;
+
+    final loggedIn = auth.currentUser != null;
+    final loggingIn = state.uri.toString() == '/login';
+    if (!loggedIn) return loggingIn ? null : '/login';
+
+    // if the user is logged in but still on the login page, send them to
+    // the home page
+    if (loggingIn) return '/';
+
+    // no need to redirect at all
+    return null;
+  },
+  refreshListenable: GoRouterRefreshStream(FirebaseAuth.instance.authStateChanges()),
 );
 
+class GoRouterRefreshStream extends ChangeNotifier {
+  GoRouterRefreshStream(Stream<dynamic> stream) {
+    stream.listen((_) => notifyListeners());
+  }
+}
 
 class ScaffoldWithNestedNavigation extends StatelessWidget {
   const ScaffoldWithNestedNavigation({
