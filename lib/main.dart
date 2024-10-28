@@ -35,14 +35,21 @@ class MainApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       routerConfig: goRouter,
       title: "Nestify",
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-            seedColor: Colors.red, brightness: Brightness.light),
+      theme: themeMode(ColorScheme.fromSeed(
+          seedColor: Colors.red, brightness: Brightness.light)),
+      darkTheme: themeMode(
+        ColorScheme.fromSeed(
+            seedColor: Colors.black, brightness: Brightness.dark),
+      ),
+    );
+  }
+
+  ThemeData themeMode(ColorScheme scheme) {
+    return ThemeData(
+        colorScheme: scheme,
         useMaterial3: true,
         inputDecorationTheme: const InputDecorationTheme(
           border: OutlineInputBorder(),
-        ),
-      ),
-    );
+        ));
   }
 }
