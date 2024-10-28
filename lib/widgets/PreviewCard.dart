@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nestify/models/blueprint_post.dart';
 import 'package:provider/provider.dart';
 import '../models/model.dart';
+import 'package:go_router/go_router.dart';
 
 class PreviewCard extends StatefulWidget {
   final BlueprintPost post;
@@ -24,9 +25,7 @@ class _PreviewCardState extends State<PreviewCard> {
         clipBehavior: Clip.hardEdge,
         child: InkWell(
           splashColor: Colors.blue.withAlpha(30),
-          onTap: () {
-            debugPrint('Card tapped.');
-          },
+          onTap: () => context.go('/details', extra: widget.post),
           child: Column(children: [
             Container(
               height: 200,
