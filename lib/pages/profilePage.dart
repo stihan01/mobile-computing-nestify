@@ -81,7 +81,7 @@ class ProfilePage extends StatelessWidget {
           trailing: const Icon(Icons.arrow_forward),
           onTap: () {
             // Handle tap here, e.g., navigate or perform some action
-            print('$title tapped');
+            debugPrint('$title tapped');
           },
         ),
       ),
