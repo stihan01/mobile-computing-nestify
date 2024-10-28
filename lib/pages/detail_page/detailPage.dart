@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nestify/pages/detail_page/widgets/tabBox.dart';
-import 'package:nestify/widgets/commentSection.dart';
+import 'package:nestify/pages/detail_page/widgets/commentSection.dart';
 import 'package:nestify/models/blueprint_post.dart';
 import 'package:nestify/widgets/favorite_icon_button.dart';
 
