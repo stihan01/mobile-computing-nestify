@@ -117,7 +117,11 @@ class FirestoreDb {
   static Future<void> uploadBlueprint(
     BlueprintPost post,
   ) async {
-    await _db.collection(blueprintCollection).doc(post.id).set(post.toJson());
+    try {
+      await _db.collection(blueprintCollection).doc(post.id).set(post.toJson());
+    } catch (error) {
+      debugPrint("Error uploading bluperint: $error");
+    }
   }
 
   static Future<Map<String, String>> uploadImage(
