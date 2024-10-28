@@ -8,9 +8,6 @@ import 'package:nestify/widgets/custom_text_form_field.dart';
 import 'package:nestify/widgets/blueprint_form/widgets/category_dropdown_menu.dart';
 import 'dart:io';
 import 'package:provider/provider.dart';
-import 'package:go_router/go_router.dart';
-import 'package:nestify/models/comment.dart';
-import 'package:nestify/apis/firestore_db.dart';
 
 class BlueprintForm extends StatefulWidget {
   const BlueprintForm({super.key, this.post});

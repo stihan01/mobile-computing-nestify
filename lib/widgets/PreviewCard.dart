@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nestify/models/blueprint_post.dart';
-import 'package:provider/provider.dart';
-import '../providers/model.dart';
+
 import 'package:go_router/go_router.dart';
 
 class PreviewCard extends StatefulWidget {
