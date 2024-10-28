@@ -7,14 +7,16 @@ import '../pages/profilePage.dart';
 import '../pages/searchPage.dart';
 import '../screens/add_blue_print_screen.dart';
 import '../auth_gate.dart';
+import 'package:nestify/models/blueprint_post.dart';
+
 
 // private navigators
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _shellNavigatorHomeKey = GlobalKey<NavigatorState>(debugLabel: 'homepage');
+final _shellNavigatorDetailKey = GlobalKey<NavigatorState>(debugLabel: 'detailpage');
 final _shellNavigatorSearchKey = GlobalKey<NavigatorState>(debugLabel: 'searchpage');
 final _shellNavigatorAddKey = GlobalKey<NavigatorState>(debugLabel: 'Addpage');
 final _shellNavigatorProfileKey = GlobalKey<NavigatorState>(debugLabel: 'profilepage');
-
 
 // the one and only GoRouter instance
 final goRouter = GoRouter(
@@ -42,10 +44,12 @@ final goRouter = GoRouter(
               routes: [
                 // child route
                 GoRoute(
-                  path: 'details',
-                  builder: (context, state) =>
-                      const DetailPage(),
-                ),
+                path: '/details',
+                builder: (context, state) {
+                  final post = state.extra as BlueprintPost; // Extracting the post from extra
+                  return DetailPage(post: post, key: _shellNavigatorDetailKey);
+                },
+              ),
               ],
             ),
           ],

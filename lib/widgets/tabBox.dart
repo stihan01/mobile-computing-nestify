@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:nestify/models/blueprint_post.dart';
 
 class TabBox extends StatelessWidget {
-  const TabBox({super.key});
+  final BlueprintPost post;
+  const TabBox({required this.post, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -31,13 +33,40 @@ class TabBox extends StatelessWidget {
             height: 300, // Set a fixed height for TabBarView
             child: TabBarView(
               children: [
-                // First Tab: Just an Icon
-                const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Text(
-                    "This build is good for birds of paradise. I'm a full-time student and it took 4 weeks on and off building."
-                  ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+
+                    // Description
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text("Description: ", style: TextStyle(fontWeight: FontWeight.bold),),
+                          Text(post.instruction ?? "Instruction"),
+                        ],
+                      )
+                    ),
+
+                    // Spacing
+                    const SizedBox(height: 16),
+
+                    // Description
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text("Material: ", style: TextStyle(fontWeight: FontWeight.bold),),
+                          Text(post.material ?? "Material"),
+                        ],
+                      )
+                    ),
+                  ],
                 ),
+                // First Tab: Just an Icon
+                
                 // Second Tab: GridView in 2 columns
                 GridView.count(
                   crossAxisCount: 2, // Number of columns

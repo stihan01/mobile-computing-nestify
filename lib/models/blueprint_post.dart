@@ -1,8 +1,12 @@
+import 'dart:ffi';
+import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class BlueprintPost {
-  String _userId = FirebaseAuth.instance.currentUser!.uid;
+  String _userId = FirebaseAuth.instance.currentUser == null
+      ? ""
+      : FirebaseAuth.instance.currentUser!.uid;
   String _id = DateTime.now().millisecondsSinceEpoch.toString();
   String? title;
   String? material;
