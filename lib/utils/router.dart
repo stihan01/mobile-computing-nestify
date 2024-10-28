@@ -5,6 +5,7 @@ import '../pages/detailPage.dart';
 import '../pages/profilePage.dart';
 import '../pages/searchPage.dart';
 import '../screens/add_blue_print_screen.dart';
+import '../auth_gate.dart';
 
 // private navigators
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -16,7 +17,7 @@ final _shellNavigatorProfileKey = GlobalKey<NavigatorState>(debugLabel: 'profile
 
 // the one and only GoRouter instance
 final goRouter = GoRouter(
-  initialLocation: '/',
+  initialLocation: '/login',
   navigatorKey: _rootNavigatorKey,
   routes: [
     // Stateful nested navigation based on:
@@ -110,6 +111,12 @@ final goRouter = GoRouter(
           ],
         ),
       ],
+    ),
+    GoRoute(
+      path: '/login',
+      pageBuilder: (context, state) => const NoTransitionPage(
+                child: AuthGate(),
+              ),
     ),
   ],
 );
