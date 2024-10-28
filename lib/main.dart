@@ -31,11 +31,6 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var postmodel = Provider.of<PostModel>(context);
-
-    FirestoreDb.getMyFavoriteBlueprints().then((onValue) {
-      log("${onValue.length}");
-    });
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       routerConfig: goRouter,
