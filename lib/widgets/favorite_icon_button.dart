@@ -27,7 +27,7 @@ class _FavoriteIconButtonState extends State<FavoriteIconButton> {
           widget.post.isFavorite = !widget.post.isFavorite;
 
           Provider.of<Model>(context, listen: false)
-              .updateBluePrint(widget.post);
+              .updateFavorites(widget.post);
         });
       },
     );

@@ -11,12 +11,13 @@ class FirestoreDb {
   //static final FirebaseAuth auth = FirebaseAuth.instance;
   static final _storageRef = FirebaseStorage.instance.ref();
 
-  // static final userID = auth.currentUser!.uid;
+  static final userID = _userId();
 
   // collections
   static const blueprintCollection = "blueprints";
   static const commentCollection = "comments";
-
+  static const favoritesCollection = "favorites";
+  static const docFavs = "users";
   static String _userId() {
     try {
       String user = FirebaseAuth.instance.currentUser!.uid;
@@ -64,7 +65,11 @@ class FirestoreDb {
     try {
       posts = await _db.collection(blueprintCollection).get().then((query) {
         return query.docs.map((docSnapShot) {
-          return BlueprintPost.fromJson(docSnapShot.data());
+          BlueprintPost post = BlueprintPost.fromJson(docSnapShot.data());
+          if (post.favoritedBy!.contains(userID)) {
+            post.isFavorite = true;
+          }
+          return post;
         }).toList();
       });
     } catch (error) {
@@ -75,17 +80,18 @@ class FirestoreDb {
 
   static Future<List<BlueprintPost>> getMyFavoriteBlueprints() async {
     List<BlueprintPost> posts = [];
-    String user = _userId();
 
     try {
       posts = await _db
           .collection(blueprintCollection)
-          .where('user_id', isEqualTo: user)
-          .where('isFavorite', isEqualTo: true)
+          .where('favorited', arrayContains: userID)
           .get()
           .then((query) {
         return query.docs.map((docSnapShot) {
-          return BlueprintPost.fromJson(docSnapShot.data());
+          BlueprintPost post = BlueprintPost.fromJson(docSnapShot.data());
+          post.isFavorite = true;
+          debugPrint("HERE");
+          return post;
         }).toList();
       });
     } catch (error) {
@@ -112,6 +118,23 @@ class FirestoreDb {
       debugPrint("Error fetching user blueprints: Error: $error");
     }
     return posts;
+  }
+
+  static Future<void> updateFavoritePosts(BlueprintPost post) async {
+    try {
+      if (post.isFavorite) {
+        await _db.collection(blueprintCollection).doc(post.id).update({
+          "favorited": FieldValue.arrayUnion([userID])
+        });
+
+        return;
+      }
+      await _db.collection(blueprintCollection).doc(post.id).update({
+        "favorited": FieldValue.arrayRemove([userID])
+      });
+    } catch (error) {
+      debugPrint("Error updating favorites: $error");
+    }
   }
 
   static Future<void> uploadBlueprint(
