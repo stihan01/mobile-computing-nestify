@@ -16,75 +16,78 @@ class PreviewCard extends StatefulWidget {
 class _PreviewCardState extends State<PreviewCard> {
   @override
   Widget build(BuildContext context) {
-    List<Image> images = widget.post.imageUrls.keys.isEmpty
+    List<dynamic> images = widget.post.imageUrls.keys.isEmpty
         ? []
         : widget.post.imageUrls.keys.map((url) {
-            return Image.network(
-              url,
-              //height: 200,
-              width: 350,
-              fit: BoxFit.cover,
+            return SizedBox(
+              width: MediaQuery.of(context).size.width,
+              child: Image.network(
+                url,
+                fit: BoxFit.fill,
+              ),
             );
           }).toList();
-    return SizedBox(
-      width: 350,
-      child: Card(
-        clipBehavior: Clip.hardEdge,
-        child: InkWell(
-          splashColor: Colors.blue.withAlpha(30),
-          onTap: () => context.go('/details', extra: widget.post),
-          child: Column(children: [
-            images.isEmpty
-                ? Image.asset(
-                    widget.placeholderImage, //TODO: change to actual image
-                    width: 350,
-                    fit: BoxFit
-                        .cover, // Optional: to cover the box size proportionally
-                  )
-                : images[0],
-            SizedBox(
-              height: 100,
-              width: 350,
-              child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            widget.post.title ?? 'Title',
-                            style: Theme.of(context).textTheme.titleMedium,
-                          ),
-                          Text(
-                            widget.post.category ?? 'Category',
-                            style: Theme.of(context).textTheme.bodyMedium,
-                          ),
-                        ],
-                      ),
-                      Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.end,
+    return Padding(
+      padding: const EdgeInsets.only(left: 16, right: 16),
+      child: SizedBox(
+        child: Card(
+          clipBehavior: Clip.hardEdge,
+          child: InkWell(
+            splashColor: Colors.blue.withAlpha(30),
+            onTap: () => context.go('/details', extra: widget.post),
+            child: Column(children: [
+              images.isEmpty
+                  ? Image.asset(
+                      widget.placeholderImage,
+                      width: MediaQuery.of(context).size.width,
+                      fit: BoxFit
+                          .cover, // Optional: to cover the box size proportionally
+                    )
+                  : images[0],
+              SizedBox(
+                height: 100,
+                width: 350,
+                child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            IconButton(
-                              icon: widget.post.isFavorite
-                                  ? const Icon(Icons.favorite)
-                                  : const Icon(Icons.favorite_outline),
-                              onPressed: () {
-                                if (widget.post.isFavorite) {
-                                  //TODO
-                                }
-                              },
-                            )
+                            Text(
+                              widget.post.title ?? 'Title',
+                              style: Theme.of(context).textTheme.titleMedium,
+                            ),
+                            Text(
+                              widget.post.category ?? 'Category',
+                              style: Theme.of(context).textTheme.bodyMedium,
+                            ),
                           ],
                         ),
-                      )
-                    ],
-                  )),
-            )
-          ]),
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              IconButton(
+                                icon: widget.post.isFavorite
+                                    ? const Icon(Icons.favorite)
+                                    : const Icon(Icons.favorite_outline),
+                                onPressed: () {
+                                  if (widget.post.isFavorite) {
+                                    //TODO
+                                  }
+                                },
+                              )
+                            ],
+                          ),
+                        )
+                      ],
+                    )),
+              )
+            ]),
+          ),
         ),
       ),
     );
