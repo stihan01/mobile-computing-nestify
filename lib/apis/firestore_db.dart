@@ -68,7 +68,6 @@ class FirestoreDb {
     try {
       posts = await _db.collection(blueprintCollection).get().then((query) {
         return query.docs.map((docSnapShot) {
-          debugPrint(docSnapShot.data().toString());
           return BlueprintPost.fromJson(docSnapShot.data());
         }).toList();
       });
