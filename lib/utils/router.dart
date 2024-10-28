@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:firebase_auth/firebase_auth.dart' hide EmailAuthProvider;
 import '../pages/homePage.dart';
 import '../pages/detailPage.dart';
 import '../pages/profilePage.dart';
 import '../pages/searchPage.dart';
 import '../screens/add_blue_print_screen.dart';
+import '../auth_gate.dart';
 import 'package:nestify/models/blueprint_post.dart';
 
 
@@ -18,8 +20,7 @@ final _shellNavigatorProfileKey = GlobalKey<NavigatorState>(debugLabel: 'profile
 
 // the one and only GoRouter instance
 final goRouter = GoRouter(
-  
-  initialLocation: '/',
+  initialLocation: '/login',
   navigatorKey: _rootNavigatorKey,
   routes: [
     // Stateful nested navigation based on:
@@ -116,9 +117,36 @@ final goRouter = GoRouter(
         ),
       ],
     ),
+    GoRoute(
+      path: '/login',
+      pageBuilder: (context, state) => const NoTransitionPage(
+                child: AuthGate(),
+              ),
+    ),
   ],
+  redirect: (context, state) {
+    // Check if the user is authenticated
+    final FirebaseAuth auth = FirebaseAuth.instance;
+
+    final loggedIn = auth.currentUser != null;
+    final loggingIn = state.uri.toString() == '/login';
+    if (!loggedIn) return loggingIn ? null : '/login';
+
+    // if the user is logged in but still on the login page, send them to
+    // the home page
+    if (loggingIn) return '/';
+
+    // no need to redirect at all
+    return null;
+  },
+  refreshListenable: GoRouterRefreshStream(FirebaseAuth.instance.authStateChanges()),
 );
 
+class GoRouterRefreshStream extends ChangeNotifier {
+  GoRouterRefreshStream(Stream<dynamic> stream) {
+    stream.listen((_) => notifyListeners());
+  }
+}
 
 class ScaffoldWithNestedNavigation extends StatelessWidget {
   const ScaffoldWithNestedNavigation({
@@ -146,7 +174,7 @@ class ScaffoldWithNestedNavigation extends StatelessWidget {
         selectedIndex: navigationShell.currentIndex,
         destinations: const <Widget>[
         NavigationDestination(
-          icon: Icon(Icons.location_on),
+          icon: Icon(Icons.home),
           label: "Home",
         ),
         NavigationDestination(
