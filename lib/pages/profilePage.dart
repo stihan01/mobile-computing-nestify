@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_ui_auth/firebase_ui_auth.dart' as firebase_ui;
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -47,6 +48,7 @@ class ProfilePage extends StatelessWidget {
                       Icons.favorite),
                   buildListTile("My Builds", "List of your own blueprints",
                       Icons.bungalow_outlined),
+                  const firebase_ui.SignOutButton(),
                 ],
               ),
             ),

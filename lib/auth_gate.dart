@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart' hide EmailAuthProvider;
 import 'package:firebase_ui_auth/firebase_ui_auth.dart' as firebase_ui;
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class AuthGate extends StatelessWidget {
   const AuthGate({super.key});
@@ -47,7 +48,7 @@ class AuthGate extends StatelessWidget {
           );
         }
         // TODO use go_router
-        return const TestScreen();
+        return Scaffold(body: Center(child: IconButton(onPressed: () => context.go('/'), icon: Icon(Icons.home))));
       },
     );
   }
