@@ -3,7 +3,7 @@ import 'package:nestify/auth_gate.dart';
 import 'package:nestify/providers/post_model.dart';
 import 'utils/router.dart';
 import 'package:provider/provider.dart';
-import 'models/model.dart';
+import 'providers/model.dart';
 // firebase imports
 import 'package:firebase_core/firebase_core.dart';
 import 'package:nestify/firebase_options.dart';

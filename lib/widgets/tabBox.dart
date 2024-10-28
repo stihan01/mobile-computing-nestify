@@ -21,6 +21,7 @@ class TabBox extends StatelessWidget {
         ],
       ),
       child: Column(
+        // TODO Fix overflow by makign it scrollable
         children: [
           const TabBar(
             tabs: [
@@ -36,37 +37,40 @@ class TabBox extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-
                     // Description
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text("Description: ", style: TextStyle(fontWeight: FontWeight.bold),),
-                          Text(post.instruction ?? "Instruction"),
-                        ],
-                      )
-                    ),
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              "Description: ",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            Text(post.instruction ?? "Instruction"),
+                          ],
+                        )),
 
                     // Spacing
                     const SizedBox(height: 16),
 
                     // Description
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text("Material: ", style: TextStyle(fontWeight: FontWeight.bold),),
-                          Text(post.material ?? "Material"),
-                        ],
-                      )
-                    ),
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              "Material: ",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            Text(post.material ?? "Material"),
+                          ],
+                        )),
                   ],
                 ),
                 // First Tab: Just an Icon
-                
+
                 // Second Tab: GridView in 2 columns
                 GridView.count(
                   crossAxisCount: 2, // Number of columns

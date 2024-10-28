@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:nestify/models/blueprint_post.dart';
 import 'package:provider/provider.dart';
-import '../models/model.dart';
+import '../providers/model.dart';
 import 'package:go_router/go_router.dart';
 
 class PreviewCard extends StatefulWidget {
   final BlueprintPost post;
   final String placeholderImage = 'assets/images/buzzhotel.jpg';
 
-  const PreviewCard(
-      {required this.post,
-      super.key});
+  const PreviewCard({required this.post, super.key});
 
   @override
   State<PreviewCard> createState() => _PreviewCardState();
@@ -19,6 +17,16 @@ class PreviewCard extends StatefulWidget {
 class _PreviewCardState extends State<PreviewCard> {
   @override
   Widget build(BuildContext context) {
+    List<Image> images = widget.post.imageUrls.keys.isEmpty
+        ? []
+        : widget.post.imageUrls.keys.map((url) {
+            return Image.network(
+              url,
+              //height: 200,
+              width: 350,
+              fit: BoxFit.cover,
+            );
+          }).toList();
     return SizedBox(
       width: 350,
       child: Card(
@@ -27,19 +35,19 @@ class _PreviewCardState extends State<PreviewCard> {
           splashColor: Colors.blue.withAlpha(30),
           onTap: () => context.go('/details', extra: widget.post),
           child: Column(children: [
-            Container(
-              height: 200,
-              width: 350,
-              child: Image.asset(
-                widget.placeholderImage, //TODO: change to actual image
-                fit: BoxFit.cover,
-              ),
-            ),
-            Container(
+            images.isEmpty
+                ? Image.asset(
+                    widget.placeholderImage, //TODO: change to actual image
+                    width: 350,
+                    fit: BoxFit
+                        .cover, // Optional: to cover the box size proportionally
+                  )
+                : images[0],
+            SizedBox(
               height: 100,
               width: 350,
               child: Padding(
-                  padding: EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(16),
                   child: Row(
                     mainAxisSize: MainAxisSize.max,
                     children: [
@@ -68,7 +76,7 @@ class _PreviewCardState extends State<PreviewCard> {
                               onPressed: () {
                                 if (widget.post.isFavorite) {
                                   //TODO
-                                }                              
+                                }
                               },
                             )
                           ],
