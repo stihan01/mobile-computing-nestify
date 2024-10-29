@@ -192,6 +192,7 @@ class BlueprintFormState extends State<BlueprintForm> {
             ),
           );
           Provider.of<Model>(context, listen: false).fetchBlueprints();
+          Provider.of<Model>(context, listen: false).fetchUsersPosts();
           setState(() {});
         }
       },
