@@ -6,8 +6,11 @@ class Model extends ChangeNotifier {
   List<BlueprintPost> _blueprintList = [];
   List<BlueprintPost> get blueprintList => _blueprintList;
 
-  final List<BlueprintPost> _favorites = [];
+  List<BlueprintPost> _favorites = [];
   List<BlueprintPost> get favorites => _favorites;
+
+  List<BlueprintPost> _usersPosts = [];
+  List<BlueprintPost> get usersPosts => _usersPosts;
 
   Model() {
     _setup();
@@ -15,6 +18,8 @@ class Model extends ChangeNotifier {
 
   void _setup() async {
     await fetchBlueprints();
+    await fetchFavorites();
+    await fetchUsersPosts();
   }
 
   Future<void> fetchBlueprints() async {
@@ -33,5 +38,19 @@ class Model extends ChangeNotifier {
 
   void updateFavorites(BlueprintPost post) async {
     await FirestoreDb.updateFavoritePosts(post);
+  }
+
+  Future<void> fetchFavorites() async {
+    await FirestoreDb.getMyFavoriteBlueprints().then((posts) {
+      _favorites = posts;
+    });
+    notifyListeners();
+  }
+
+  Future<void> fetchUsersPosts() async {
+    await FirestoreDb.getCurrentUserBlueprints().then((posts) {
+      _usersPosts = posts;
+    });
+    notifyListeners();
   }
 }
