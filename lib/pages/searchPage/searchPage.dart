@@ -71,7 +71,7 @@ class _SearchpageState extends State<SearchPage> {
   Widget _SearchResults() {
     return Consumer<Model>(
       builder: (context, model, child) {
-        var posts = model.blueprintList;
+        var posts = SearchModel().filterBlueprints();
         if (posts.isEmpty) {
           return Center(child: Text('No posts matches your search'));
         }
