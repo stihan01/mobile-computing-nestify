@@ -9,13 +9,15 @@ class TabBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.grey[200],
+        color: Theme.of(context)
+            .colorScheme
+            .surfaceContainerLow, //Colors.grey[200],
         borderRadius: BorderRadius.circular(10.0),
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 3,
-            blurRadius: 7,
+            spreadRadius: 1,
+            blurRadius: 2,
             offset: const Offset(0, 3),
           ),
         ],
@@ -33,40 +35,43 @@ class TabBox extends StatelessWidget {
             height: 300, // Set a fixed height for TabBarView
             child: TabBarView(
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                ListView(
+                  //  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-
                     // Description
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text("Description: ", style: TextStyle(fontWeight: FontWeight.bold),),
-                          Text(post.instruction ?? "Instruction"),
-                        ],
-                      )
-                    ),
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              "Description: ",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            Text(post.instruction ?? "Instruction"),
+                          ],
+                        )),
 
                     // Spacing
                     const SizedBox(height: 16),
 
                     // Description
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text("Material: ", style: TextStyle(fontWeight: FontWeight.bold),),
-                          Text(post.material ?? "Material"),
-                        ],
-                      )
-                    ),
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              "Material: ",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            Text(post.material ?? "Material"),
+                          ],
+                        )),
                   ],
                 ),
                 // First Tab: Just an Icon
-                
+
                 // Second Tab: GridView in 2 columns
                 GridView.count(
                   crossAxisCount: 2, // Number of columns

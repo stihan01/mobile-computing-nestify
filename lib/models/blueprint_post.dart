@@ -1,7 +1,6 @@
-import 'dart:ffi';
-import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 
 class BlueprintPost {
   String _userId = FirebaseAuth.instance.currentUser == null
@@ -12,9 +11,9 @@ class BlueprintPost {
   String? material;
   String? instruction;
   String? category;
-  bool isFavorite;
-
+  bool isFavorite = false;
   List<File> images = [];
+  List<dynamic>? favoritedBy;
 
   /// imageUrl : filepath. Filepath is used for deleting in fire storage
   Map<String, dynamic> imageUrls = {};
@@ -34,7 +33,9 @@ class BlueprintPost {
         material = json['material'],
         instruction = json['instruction'],
         category = json['category'],
-        isFavorite = json['isFavorite'];
+        favoritedBy = json['favorited'] {
+    favoritedBy ??= [];
+  }
 
   Map<String, dynamic> toJson() => {
         'user_id': _userId,
@@ -44,7 +45,6 @@ class BlueprintPost {
         "material": material,
         "instruction": instruction,
         'category': category,
-        'isFavorite': isFavorite,
       };
 
   get id => _id;

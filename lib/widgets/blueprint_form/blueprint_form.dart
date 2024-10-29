@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nestify/models/blueprint_post.dart';
+import 'package:nestify/providers/model.dart';
 import 'package:nestify/providers/post_model.dart';
 import 'package:nestify/widgets/blueprint_form/widgets/image_box.dart';
 import 'package:nestify/widgets/blueprint_form/widgets/image_capture_button.dart';
@@ -7,9 +8,6 @@ import 'package:nestify/widgets/custom_text_form_field.dart';
 import 'package:nestify/widgets/blueprint_form/widgets/category_dropdown_menu.dart';
 import 'dart:io';
 import 'package:provider/provider.dart';
-import 'package:go_router/go_router.dart';
-import 'package:nestify/models/comment.dart';
-import 'package:nestify/apis/firestore_db.dart';
 
 class BlueprintForm extends StatefulWidget {
   const BlueprintForm({super.key, this.post});
@@ -168,24 +166,6 @@ class BlueprintFormState extends State<BlueprintForm> {
     return OutlinedButton(
       // TODO implement onPressed
       onPressed: () {
-        FirestoreDb.uploadComment(Comment(
-          userId: 'qAgiD3gyAqN8YKuQnrjHFvqVvb63',
-          postId: postModel.post.id,
-          comment: "I like bananas Woawww",
-        ));
-
-        FirestoreDb.uploadComment(Comment(
-          userId: 'qAgiD3gyAqN8YKuQnrjHFvqVvb63',
-          postId: postModel.post.id,
-          comment: "I like apples",
-        ));
-
-        FirestoreDb.uploadComment(Comment(
-          userId: '',
-          postId: postModel.post.id,
-          comment: "I AM A FAKE Woawww",
-        ));
-
         setState(() {});
       },
       child: const Text("Save draft"),
@@ -194,7 +174,7 @@ class BlueprintFormState extends State<BlueprintForm> {
 
   FilledButton publishButton() {
     return FilledButton(
-      onPressed: () {
+      onPressed: () async {
         // Validate returns true if the form is valid, or false otherwise.
         if (_formKey.currentState!.validate()) {
           postModel.title = titleTextController.text;
@@ -205,13 +185,13 @@ class BlueprintFormState extends State<BlueprintForm> {
           for (var controller in controllers) {
             controller.clear();
           }
-          postModel.uploadBlueprint();
+          await postModel.uploadBlueprint();
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text("Uploading to firestore..."),
             ),
           );
-
+          Provider.of<Model>(context, listen: false).fetchBlueprints();
           setState(() {});
         }
       },

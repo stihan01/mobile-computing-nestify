@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart' hide EmailAuthProvider;
 import 'package:firebase_ui_auth/firebase_ui_auth.dart' as firebase_ui;
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class AuthGate extends StatelessWidget {
   const AuthGate({super.key});
@@ -46,49 +47,12 @@ class AuthGate extends StatelessWidget {
             }, */
           );
         }
-        // TODO use go_router
-        return const TestScreen();
+        return Scaffold(
+            body: Center(
+                child: IconButton(
+                    onPressed: () => context.go('/'),
+                    icon: const Icon(Icons.home))));
       },
-    );
-  }
-}
-
-// TODO Remove, was just for testing purposes
-class TestScreen extends StatelessWidget {
-  const TestScreen({super.key});
-  void inputData() {
-    final FirebaseAuth auth = FirebaseAuth.instance;
-
-    final User user = auth.currentUser!;
-    final uid = user.uid;
-    debugPrint("User is $uid");
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    inputData();
-    return Scaffold(
-      appBar: AppBar(
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.person),
-            onPressed: () {},
-          )
-        ],
-        automaticallyImplyLeading: false,
-      ),
-      body: Center(
-        child: Column(
-          children: [
-            //  Image.asset('dash.png'),
-            Text(
-              'Welcome!',
-              style: Theme.of(context).textTheme.displaySmall,
-            ),
-            const firebase_ui.SignOutButton(),
-          ],
-        ),
-      ),
     );
   }
 }

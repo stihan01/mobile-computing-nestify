@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:nestify/auth_gate.dart';
 import 'package:nestify/providers/post_model.dart';
 import 'utils/router.dart';
 import 'package:provider/provider.dart';
-import 'models/model.dart';
+import 'providers/model.dart';
 import 'models/searchModel.dart';
 // firebase imports
 import 'package:firebase_core/firebase_core.dart';
 import 'package:nestify/firebase_options.dart';
-import 'package:nestify/apis/firestore_db.dart';
-import 'dart:developer';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,14 +34,23 @@ class MainApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       routerConfig: goRouter,
       title: "Nestify",
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-            seedColor: Colors.red, brightness: Brightness.light),
+      theme: themeMode(ColorScheme.fromSeed(
+          contrastLevel: 1,
+          seedColor: Colors.red,
+          brightness: Brightness.light)),
+      darkTheme: themeMode(
+        ColorScheme.fromSeed(
+            seedColor: Colors.black, brightness: Brightness.dark),
+      ),
+    );
+  }
+
+  ThemeData themeMode(ColorScheme scheme) {
+    return ThemeData(
+        colorScheme: scheme,
         useMaterial3: true,
         inputDecorationTheme: const InputDecorationTheme(
           border: OutlineInputBorder(),
-        ),
-      ),
-    );
+        ));
   }
 }
