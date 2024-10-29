@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:nestify/models/searchModel.dart';
 import 'package:nestify/pages/searchPage/categoryFilterChips.dart';
 import 'package:nestify/pages/searchPage/materialFilterChips.dart';
+import 'package:go_router/go_router.dart';
 
 void filterModalBottomsheet(BuildContext context) {
   showModalBottomSheet(
@@ -47,7 +48,12 @@ void filterModalBottomsheet(BuildContext context) {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 child: FilledButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    var model =
+                        Provider.of<SearchModel>(context, listen: false);
+                    model.filterBlueprints();
+                    context.pop();
+                  },
                   child: const Text('Apply Filters'),
                 ),
               ),

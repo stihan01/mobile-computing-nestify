@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nestify/models/searchModel.dart';
-import 'package:nestify/models/model.dart';
 import 'package:provider/provider.dart';
 import 'package:nestify/pages/searchPage/filterModalBottomsheet.dart';
 import 'package:nestify/widgets/PreviewCard.dart';
@@ -16,19 +15,16 @@ class SearchPage extends StatefulWidget {
 class _SearchpageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
-    return Consumer2<SearchModel, Model>(
-      builder: (context, searchModel, model, child) {
+    return Consumer<SearchModel>(
+      builder: (context, searchModel, child) {
         return Scaffold(
           appBar: AppBar(title: const Text('Search Screen')),
           body: Center(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  _SearchBar(),
-                  Expanded(child: _SearchResults()),
-                ],
-              ),
+            child: Column(
+              children: [
+                _SearchBar(),
+                Expanded(child: _SearchResults()),
+              ],
             ),
           ),
         );
@@ -68,10 +64,22 @@ class _SearchpageState extends State<SearchPage> {
     });
   }
 
-  Widget _SearchResults() {
-    return Consumer<Model>(
+  void show() {
+    filterModalBottomsheet(context);
+  }
+}
+
+class _SearchResults extends StatefulWidget {
+  @override
+  State<_SearchResults> createState() => _SearchResultsState();
+}
+
+class _SearchResultsState extends State<_SearchResults> {
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<SearchModel>(
       builder: (context, model, child) {
-        var posts = SearchModel().filterBlueprints();
+        var posts = model.filteredList;
         if (posts.isEmpty) {
           return Center(child: Text('No posts matches your search'));
         }
@@ -86,9 +94,5 @@ class _SearchpageState extends State<SearchPage> {
         );
       },
     );
-  }
-
-  void show() {
-    filterModalBottomsheet(context);
   }
 }
