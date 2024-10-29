@@ -8,17 +8,13 @@ import 'package:nestify/models/comment.dart';
 
 class FirestoreDb {
   static final FirebaseFirestore _db = FirebaseFirestore.instance;
-  //static final FirebaseAuth auth = FirebaseAuth.instance;
   static final _storageRef = FirebaseStorage.instance.ref();
-
-  static final userID = _userId();
-
+  static final userID = userId();
   // collections
   static const blueprintCollection = "blueprints";
   static const commentCollection = "comments";
-  static const favoritesCollection = "favorites";
-  static const docFavs = "users";
-  static String _userId() {
+
+  static String userId() {
     try {
       String user = FirebaseAuth.instance.currentUser!.uid;
       debugPrint(user);
@@ -102,7 +98,7 @@ class FirestoreDb {
 
   static Future<List<BlueprintPost>> getCurrentUserBlueprints() async {
     List<BlueprintPost> posts = [];
-    String user = _userId();
+    String user = userID;
 
     try {
       posts = await _db
@@ -149,7 +145,7 @@ class FirestoreDb {
 
   static Future<Map<String, String>> uploadImage(
       File file, String postID) async {
-    String user = _userId();
+    String user = userID;
     String filePath =
         "$user()/$blueprintCollection/$postID/${DateTime.now()}.png";
     await _storageRef.child(filePath).putFile(file);
