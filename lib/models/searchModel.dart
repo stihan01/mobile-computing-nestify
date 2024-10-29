@@ -8,6 +8,7 @@ class SearchModel with ChangeNotifier {
   List<String> categories = ['Birdhouse', 'Insect hotel', 'Birdfeeder'];
   List<String> materials = ['Wood', 'Plastic', 'Metal', 'Paper', 'Cardboard'];
 
+//Categories and materials selected by the filterchips in the searchpage
   Set<String> get getSelectedCategories => selectedCategories;
   Set<String> get getSelectedMaterials => selectedMaterials;
 
