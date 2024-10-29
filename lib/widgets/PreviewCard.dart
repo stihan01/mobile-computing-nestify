@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nestify/models/blueprint_post.dart';
 import 'package:go_router/go_router.dart';
+import 'package:nestify/utils/router.dart';
 import 'package:nestify/widgets/favorite_icon_button.dart';
 
 class PreviewCard extends StatelessWidget {
@@ -29,7 +30,7 @@ class PreviewCard extends StatelessWidget {
           clipBehavior: Clip.hardEdge,
           child: InkWell(
             splashColor: Colors.blue.withAlpha(30),
-            onTap: () => context.go('/details', extra: post),
+            onTap: () => context.go('${GoRouterState.of(context).uri.toString()}/details', extra: post),
             child: Column(children: [
               images.isEmpty
                   ? Image.asset(

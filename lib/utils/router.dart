@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:firebase_auth/firebase_auth.dart' hide EmailAuthProvider;
+import 'package:nestify/pages/mybuilds_page.dart';
 import '../pages/homePage.dart';
 import '../pages/detail_page/detailPage.dart';
 import '../pages/profilePage.dart';
@@ -8,6 +9,7 @@ import '../pages/searchPage.dart';
 import '../screens/add_blue_print_screen.dart';
 import '../auth_gate.dart';
 import 'package:nestify/models/blueprint_post.dart';
+import 'package:nestify/pages/favorites_page.dart';
 
 // private navigators
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -39,7 +41,7 @@ final goRouter = GoRouter(
           routes: [
             // top route inside branch
             GoRoute(
-              path: '/',
+              path: '/home',
               pageBuilder: (context, state) => const NoTransitionPage(
                 child: HomePage(),
               ),
@@ -68,14 +70,18 @@ final goRouter = GoRouter(
               pageBuilder: (context, state) => const NoTransitionPage(
                 child: SearchPage(),
               ),
-              // routes: [
-              //   // child route
-              //   GoRoute(
-              //     path: 'details',
-              //     builder: (context, state) =>
-              //         const DetailsScreen(label: 'B'),
-              //   ),
-              // ],
+              routes: [
+                // child route
+                GoRoute(
+                  path: '/details',
+                  builder: (context, state) {
+                    final post = state.extra
+                        as BlueprintPost; // Extracting the post from extra
+                    return DetailPage(
+                        post: post, key: _shellNavigatorDetailKey);
+                  },
+                ),
+              ],
             ),
           ],
         ),
@@ -108,14 +114,43 @@ final goRouter = GoRouter(
               pageBuilder: (context, state) => const NoTransitionPage(
                 child: ProfilePage(),
               ),
-              // routes: [
-              //   // child route
-              //   GoRoute(
-              //     path: 'details',
-              //     builder: (context, state) =>
-              //         const DetailsScreen(label: 'B'),
-              //   ),
-              // ],
+              routes: [
+                // child route
+                GoRoute(
+                  path: 'favorites',
+                  builder: (context, state) =>
+                      const FavoritesPage(),
+                  routes: [
+                      // child route
+                      GoRoute(
+                        path: '/details',
+                        builder: (context, state) {
+                          final post = state.extra
+                              as BlueprintPost; // Extracting the post from extra
+                          return DetailPage(
+                              post: post, key: _shellNavigatorDetailKey);
+                        },
+                      ),
+                    ],
+                ),
+                GoRoute(
+                  path: 'mybuilds',
+                  builder: (context, state) =>
+                      const MybuildsPage(),
+                      routes: [
+                      // child route
+                      GoRoute(
+                        path: '/details',
+                        builder: (context, state) {
+                          final post = state.extra
+                              as BlueprintPost; // Extracting the post from extra
+                          return DetailPage(
+                              post: post, key: _shellNavigatorDetailKey);
+                        },
+                      ),
+                    ],
+                ),
+              ],
             ),
           ],
         ),
@@ -138,7 +173,7 @@ final goRouter = GoRouter(
 
     // if the user is logged in but still on the login page, send them to
     // the home page
-    if (loggingIn) return '/';
+    if (loggingIn) return '/home';
 
     // no need to redirect at all
     return null;

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart' as firebase_ui;
+import 'package:go_router/go_router.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -45,10 +46,14 @@ class ProfilePage extends StatelessWidget {
               child: ListView(
                 children: [
                   buildListTile("Favourites", "List of your favourite builds",
-                      Icons.favorite),
+                      Icons.favorite, context, '/profile/favorites'
+                      ),
                   buildListTile("My Builds", "List of your own blueprints",
-                      Icons.bungalow_outlined),
-                  const firebase_ui.SignOutButton(),
+                      Icons.bungalow_outlined, context, '/profile/mybuilds'
+                      ),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0), // Set horizontal and vertical padding
+                    child: firebase_ui.SignOutButton()) ,
                 ],
               ),
             ),
@@ -59,7 +64,7 @@ class ProfilePage extends StatelessWidget {
   }
 
   // Function to create a ListTile
-  Widget buildListTile(String title, String subtitle, IconData leadingIcon) {
+  Widget buildListTile(String title, String subtitle, IconData leadingIcon, BuildContext context, String route) {
     return Container(
       margin: const EdgeInsets.only(
         top: 0,
@@ -81,7 +86,7 @@ class ProfilePage extends StatelessWidget {
           trailing: const Icon(Icons.arrow_forward),
           onTap: () {
             // Handle tap here, e.g., navigate or perform some action
-            debugPrint('$title tapped');
+            context.go(route);
           },
         ),
       ),
