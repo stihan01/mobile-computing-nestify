@@ -20,8 +20,6 @@ class PostModel with ChangeNotifier {
   void _reset() {}
 
   set post(BlueprintPost? post) {
-    debugPrint("Resetting, post: $post");
-
     markedUrlDeletion = [];
     images = [];
     _imgUrls = [];
@@ -54,7 +52,7 @@ class PostModel with ChangeNotifier {
     markedUrlDeletion.add(url);
   }
 
-  void uploadBlueprint() async {
+  Future<void> uploadBlueprint() async {
     // Upload any image
     // Update contents
     _post.title = title;
@@ -84,7 +82,6 @@ class PostModel with ChangeNotifier {
     await FirestoreDb.uploadBlueprint(_post);
     // reset
     post = null;
-    debugPrint("cat1 in model: $category");
     notifyListeners();
   }
 }

@@ -17,7 +17,7 @@ class _CategoryDropdownMenuState extends State<CategoryDropdownMenu> {
   void initState() {
     super.initState();
     // TODO fix proper categories
-    categories = <String>['Cat 1', 'Cat 2', 'Cat 3'];
+    categories = <String>['Bird house', 'Insect hotel', 'Birdfeeder'];
     dropdownValue = widget.category;
   }
 

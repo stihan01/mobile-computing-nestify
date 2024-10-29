@@ -1,26 +1,23 @@
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:nestify/models/blueprint_post.dart';
 import 'dart:io';
-
 import 'package:nestify/models/comment.dart';
-import 'dart:developer' as dev;
 
 class FirestoreDb {
   static final FirebaseFirestore _db = FirebaseFirestore.instance;
   //static final FirebaseAuth auth = FirebaseAuth.instance;
   static final _storageRef = FirebaseStorage.instance.ref();
 
-  // static final userID = auth.currentUser!.uid;
+  static final userID = _userId();
 
   // collections
   static const blueprintCollection = "blueprints";
   static const commentCollection = "comments";
-
+  static const favoritesCollection = "favorites";
+  static const docFavs = "users";
   static String _userId() {
     try {
       String user = FirebaseAuth.instance.currentUser!.uid;
@@ -68,8 +65,11 @@ class FirestoreDb {
     try {
       posts = await _db.collection(blueprintCollection).get().then((query) {
         return query.docs.map((docSnapShot) {
-          debugPrint(docSnapShot.data().toString());
-          return BlueprintPost.fromJson(docSnapShot.data());
+          BlueprintPost post = BlueprintPost.fromJson(docSnapShot.data());
+          if (post.favoritedBy!.contains(userID)) {
+            post.isFavorite = true;
+          }
+          return post;
         }).toList();
       });
     } catch (error) {
@@ -80,17 +80,18 @@ class FirestoreDb {
 
   static Future<List<BlueprintPost>> getMyFavoriteBlueprints() async {
     List<BlueprintPost> posts = [];
-    String user = _userId();
 
     try {
       posts = await _db
           .collection(blueprintCollection)
-          .where('user_id', isEqualTo: user)
-          .where('isFavorite', isEqualTo: true)
+          .where('favorited', arrayContains: userID)
           .get()
           .then((query) {
         return query.docs.map((docSnapShot) {
-          return BlueprintPost.fromJson(docSnapShot.data());
+          BlueprintPost post = BlueprintPost.fromJson(docSnapShot.data());
+          post.isFavorite = true;
+          debugPrint("HERE");
+          return post;
         }).toList();
       });
     } catch (error) {
@@ -119,10 +120,31 @@ class FirestoreDb {
     return posts;
   }
 
+  static Future<void> updateFavoritePosts(BlueprintPost post) async {
+    try {
+      if (post.isFavorite) {
+        await _db.collection(blueprintCollection).doc(post.id).update({
+          "favorited": FieldValue.arrayUnion([userID])
+        });
+
+        return;
+      }
+      await _db.collection(blueprintCollection).doc(post.id).update({
+        "favorited": FieldValue.arrayRemove([userID])
+      });
+    } catch (error) {
+      debugPrint("Error updating favorites: $error");
+    }
+  }
+
   static Future<void> uploadBlueprint(
     BlueprintPost post,
   ) async {
-    await _db.collection(blueprintCollection).doc(post.id).set(post.toJson());
+    try {
+      await _db.collection(blueprintCollection).doc(post.id).set(post.toJson());
+    } catch (error) {
+      debugPrint("Error uploading bluperint: $error");
+    }
   }
 
   static Future<Map<String, String>> uploadImage(
