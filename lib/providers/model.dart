@@ -38,6 +38,8 @@ class Model extends ChangeNotifier {
 
   void updateFavorites(BlueprintPost post) async {
     await FirestoreDb.updateFavoritePosts(post);
+    fetchFavorites();
+    notifyListeners();
   }
 
   Future<void> fetchFavorites() async {

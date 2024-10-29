@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:firebase_auth/firebase_auth.dart' hide EmailAuthProvider;
+import 'package:nestify/pages/mybuilds_page.dart';
 import '../pages/homePage.dart';
 import '../pages/detail_page/detailPage.dart';
 import '../pages/profilePage.dart';
@@ -8,6 +9,7 @@ import '../pages/searchPage.dart';
 import '../screens/add_blue_print_screen.dart';
 import '../auth_gate.dart';
 import 'package:nestify/models/blueprint_post.dart';
+import 'package:nestify/pages/favorites_page.dart';
 
 // private navigators
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -108,14 +110,19 @@ final goRouter = GoRouter(
               pageBuilder: (context, state) => const NoTransitionPage(
                 child: ProfilePage(),
               ),
-              // routes: [
-              //   // child route
-              //   GoRoute(
-              //     path: 'details',
-              //     builder: (context, state) =>
-              //         const DetailsScreen(label: 'B'),
-              //   ),
-              // ],
+              routes: [
+                // child route
+                GoRoute(
+                  path: 'favorites',
+                  builder: (context, state) =>
+                      const FavoritesPage(),
+                ),
+                GoRoute(
+                  path: 'mybuilds',
+                  builder: (context, state) =>
+                      const MybuildsPage(),
+                ),
+              ],
             ),
           ],
         ),
