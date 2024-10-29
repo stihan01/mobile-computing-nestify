@@ -3,6 +3,7 @@ import 'package:nestify/pages/detail_page/widgets/tabBox.dart';
 import 'package:nestify/pages/detail_page/widgets/commentSection.dart';
 import 'package:nestify/models/blueprint_post.dart';
 import 'package:nestify/widgets/favorite_icon_button.dart';
+import 'package:go_router/go_router.dart';
 
 class DetailPage extends StatelessWidget {
   final BlueprintPost post;
@@ -29,7 +30,11 @@ class DetailPage extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
             title: Text(post.title!),
-            actions: [FavoriteIconButton(post: post)]),
+            actions: [FavoriteIconButton(post: post)],
+            leading: IconButton(
+          icon: const Icon(Icons.arrow_back), // Back icon
+          onPressed: () => context.pop(), ),// Go back
+        ),
         body: ListView(
           // Wrap everything in ListView for overall scrollability
           padding: const EdgeInsets.all(16.0),
