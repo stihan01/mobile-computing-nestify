@@ -64,10 +64,11 @@ final goRouter = GoRouter(
                 GoRoute(
                   path: '/details',
                   builder: (context, state) {
-                    final post = state.extra
-                        as BlueprintPost; // Extracting the post from extra
-                    return DetailPage(
-                        post: post, key: _shellNavigatorDetailKey);
+                    final map = state.extra as Map<String,dynamic>; // Extracting the post from extra
+                      return DetailPage(
+                          post: map['post'],
+                          onEdit: map['onEdit'], 
+                          key: _shellNavigatorDetailKey);
                   },
                   routes: [
                         GoRoute(
@@ -102,10 +103,11 @@ final goRouter = GoRouter(
                 GoRoute(
                   path: '/details',
                   builder: (context, state) {
-                    final post = state.extra
-                        as BlueprintPost; // Extracting the post from extra
-                    return DetailPage(
-                        post: post, key: _shellNavigatorDetailKey);
+                    final map = state.extra as Map<String,dynamic>; // Extracting the post from extra
+                      return DetailPage(
+                          post: map['post'],
+                          onEdit: map['onEdit'], 
+                          key: _shellNavigatorDetailKey);
                   },
                   routes: [
                         GoRoute(
@@ -164,10 +166,11 @@ final goRouter = GoRouter(
                     GoRoute(
                       path: '/details',
                       builder: (context, state) {
-                        final post = state.extra
-                            as BlueprintPost; // Extracting the post from extra
+                        final map = state.extra as Map<String,dynamic>; // Extracting the post from extra
                         return DetailPage(
-                            post: post, key: _shellNavigatorDetailKey);
+                            post: map['post'],
+                            onEdit: map['onEdit'], 
+                            key: _shellNavigatorDetailKey);
                             
                       },
                       routes: [
@@ -205,10 +208,11 @@ final goRouter = GoRouter(
                     GoRoute(
                       path: '/details',
                       builder: (context, state) {
-                        final post = state.extra
-                            as BlueprintPost; // Extracting the post from extra
+                        final map = state.extra as Map<String,dynamic>; // Extracting the post from extra
                         return DetailPage(
-                            post: post, key: _shellNavigatorDetailKey);
+                            post: map['post'],
+                            onEdit: map['onEdit'], 
+                            key: _shellNavigatorDetailKey);
                       },
                       routes: [
                         GoRoute(

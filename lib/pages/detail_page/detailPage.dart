@@ -11,8 +11,9 @@ import 'package:provider/provider.dart';
 
 class DetailPage extends StatefulWidget {
   final BlueprintPost post;
+  final Function() onEdit;
 
-  const DetailPage({required this.post, super.key});
+  const DetailPage({required this.post, required this.onEdit, super.key});
 
   @override
   State<DetailPage> createState() => _DetailPageState();

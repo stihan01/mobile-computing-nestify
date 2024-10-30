@@ -40,9 +40,8 @@ class _PreviewCardState extends State<PreviewCard> {
           clipBehavior: Clip.hardEdge,
           child: InkWell(
             splashColor: Colors.blue.withAlpha(30),
-            onTap: () => context.go(
-                '${GoRouterState.of(context).uri.toString()}/details',
-                extra: widget.post),
+            onTap: () => context.go('${GoRouterState.of(context).uri.toString()}/details',
+                extra: {'post': widget.post, 'onEdit': ()=> null}),
             child: Column(children: [
               images.isEmpty
                   ? Image.asset(
