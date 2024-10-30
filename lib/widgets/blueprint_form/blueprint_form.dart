@@ -67,13 +67,6 @@ class BlueprintFormState extends State<BlueprintForm> {
   Widget build(BuildContext context) {
     context.watch<PostModel>();
     final formContent = [
-      Center(
-        child: Text(
-            postModel.isEdit
-                ? "Editing blueprint post"
-                : "Upload blueprint post",
-            style: Theme.of(context).textTheme.titleLarge),
-      ),
       imageGrid(),
       cameraButton(),
       titleFormField(),
