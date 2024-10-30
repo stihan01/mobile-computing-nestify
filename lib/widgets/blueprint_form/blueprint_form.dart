@@ -168,23 +168,31 @@ class BlueprintFormState extends State<BlueprintForm> {
   FilledButton publishButton() {
     return FilledButton(
       onPressed: () {
+        var model = Provider.of<Model>(context, listen: false);
         // Validate returns true if the form is valid, or false otherwise.
         if (_formKey.currentState!.validate()) {
-          postModel.title = titleTextController.text;
-          postModel.material = materialTextController.text;
-          postModel.instruction = instructionTextController.text;
-          titleTextController.clear();
+          if (!postModel.isEdit) {
+            postModel.title = titleTextController.text;
+            postModel.material = materialTextController.text;
+            postModel.instruction = instructionTextController.text;
+            titleTextController.clear();
 
-          for (var controller in controllers) {
-            controller.clear();
+            for (var controller in controllers) {
+              controller.clear();
+            }
+            postModel.uploadBlueprint();
+            model.fetchBlueprints();
+          } else {
+            // TODO
           }
-          postModel.uploadBlueprint();
+
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text("Uploading to firestore..."),
+            SnackBar(
+              content: postModel.isEdit
+                  ? const Text("Blueprint updated")
+                  : const Text("Blueprint created"),
             ),
           );
-          Provider.of<Model>(context, listen: false).fetchBlueprints();
           // Provider.of<Model>(context, listen: false).fetchUsersPosts();
           setState(() {});
         }
