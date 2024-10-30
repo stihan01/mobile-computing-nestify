@@ -74,6 +74,7 @@ class FirestoreDb {
     return posts;
   }
 
+/*
   static Future<List<BlueprintPost>> getMyFavoriteBlueprints() async {
     List<BlueprintPost> posts = [];
 
@@ -94,7 +95,7 @@ class FirestoreDb {
     }
     return posts;
   }
-
+*/
 /*
   static Future<List<BlueprintPost>> getCurrentUserBlueprints() async {
     List<BlueprintPost> posts = [];

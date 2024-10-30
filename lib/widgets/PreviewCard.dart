@@ -19,7 +19,8 @@ class _PreviewCardState extends State<PreviewCard> {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint("Rebuilding with: ${widget.post.title}");
+    Provider.of<Model>(context);
+    debugPrint("IS ${widget.post.title} : ${widget.post.isFavorite}");
     List<dynamic> images = widget.post.imageUrls.keys.isEmpty
         ? []
         : widget.post.imageUrls.keys.map((url) {
