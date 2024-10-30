@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:nestify/models/blueprint_post.dart';
 import 'package:nestify/providers/model.dart';
 import 'package:nestify/providers/post_model.dart';
 import 'package:nestify/widgets/blueprint_form/widgets/image_box.dart';
@@ -11,12 +10,19 @@ import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 
 class BlueprintForm extends StatefulWidget {
-  const BlueprintForm({super.key, this.post, this.onEdit, this.postModel});
+  const BlueprintForm({
+    super.key,
+    this.onEdit,
+    required this.postModel,
+    required this.snackBarMessage,
+    //  required this.gridView,
+  });
 
   // If blueprint object is provided, the form changes to editing, else it creates a new object
-  final BlueprintPost? post;
   final Function()? onEdit;
-  final postModel;
+  final PostModel postModel;
+  final String snackBarMessage;
+//  final GridView gridView;
   @override
   BlueprintFormState createState() {
     return BlueprintFormState();
@@ -32,7 +38,7 @@ class BlueprintFormState extends State<BlueprintForm> {
   // Note: This is a `GlobalKey<FormState>`,
 
   final _formKey = GlobalKey<FormState>();
-  late final AddPostModel postModel;
+  // late final AddPostModel postModel;
   late TextEditingController titleTextController;
   late TextEditingController materialTextController;
   late TextEditingController instructionTextController;
@@ -40,14 +46,13 @@ class BlueprintFormState extends State<BlueprintForm> {
 
   @override
   void initState() {
-    postModel = Provider.of<AddPostModel>(context, listen: false);
-    postModel.post = widget.post;
     // Controllers
-    titleTextController = TextEditingController(text: postModel.post.title);
+    titleTextController =
+        TextEditingController(text: widget.postModel.post.title);
     materialTextController =
-        TextEditingController(text: postModel.post.material);
+        TextEditingController(text: widget.postModel.post.material);
     instructionTextController =
-        TextEditingController(text: postModel.post.instruction);
+        TextEditingController(text: widget.postModel.post.instruction);
 
     controllers = [
       titleTextController,
@@ -75,9 +80,9 @@ class BlueprintFormState extends State<BlueprintForm> {
       cameraButton(),
       titleFormField(),
       CategoryDropdownMenu(
-        category: postModel.category,
+        category: widget.postModel.category,
         onSelected: (category) {
-          postModel.category = category;
+          widget.postModel.category = category;
         },
       ),
       materialFormField(),
@@ -111,14 +116,15 @@ class BlueprintFormState extends State<BlueprintForm> {
     return ImageCaptureButton(
       onImageSelected: (file) {
         setState(() {
-          postModel.images.add(file);
+          widget.postModel.images.add(file);
         });
       },
     );
   }
 
   GridView imageGrid() {
-    List<ImageBox> fromImages = postModel.images
+    List<ImageBox> fromUrl = [];
+    List<ImageBox> fromImages = widget.postModel.images
         .map(
           (value) => ImageBox(
             image: Image.file(
@@ -127,28 +133,29 @@ class BlueprintFormState extends State<BlueprintForm> {
             ),
             onDelete: () {
               setState(() {
-                postModel.images.remove(value);
+                widget.postModel.images.remove(value);
               });
             },
           ),
         )
         .toList();
 
-    List<ImageBox> fromUrl = postModel.imgUrls
-        .map(
-          (value) => ImageBox(
-            image: Image.network(
-              value,
-              fit: BoxFit.cover,
-            ),
-            onDelete: () {
-              setState(() {
-                postModel.removeImgUrl(value);
-              });
-            },
-          ),
-        )
-        .toList();
+    for (String url in widget.postModel.imgUrls) {
+      fromUrl.add(ImageBox(
+        image: Image.network(
+          url,
+          fit: BoxFit.cover,
+        ),
+        onDelete: () {
+          setState(() {
+            widget.postModel.removeImgUrl(url);
+          });
+        },
+      ));
+    }
+
+    debugPrint(fromUrl.toString());
+
     return GridView.count(
         primary: false,
         physics: const NeverScrollableScrollPhysics(),
@@ -172,45 +179,38 @@ class BlueprintFormState extends State<BlueprintForm> {
 
   FilledButton publishButton() {
     return FilledButton(
-      onPressed: () {
+      onPressed: () async {
         var model = Provider.of<Model>(context, listen: false);
         // Validate returns true if the form is valid, or false otherwise.
         if (_formKey.currentState!.validate()) {
-          postModel.updatePostFields(
+          widget.postModel.updatePostFields(
             title: titleTextController.text,
             material: materialTextController.text,
             instruction: instructionTextController.text,
           );
 
-          if (postModel.isEdit) {
+          if (widget.postModel.isEdit) {
             if (widget.onEdit != null) {
               widget.onEdit!(); // Reload previewCard
+              context.pop();
             }
-            postModel.updateBlueprint();
-            context.pop();
-          } else {
-            postModel.uploadBlueprint();
           }
 
-          if (!postModel.isEdit) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(widget.snackBarMessage)),
+          );
+          await widget.postModel.updateBlueprint();
+
+          if (!widget.postModel.isEdit) {
             for (var controller in controllers) {
               controller.clear();
             }
-
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: postModel.isEdit
-                    ? const Text("Blueprint updated")
-                    : const Text("Blueprint created"),
-              ),
-            );
-            model.fetchBlueprints();
           }
 
-          // Provider.of<Model>(context, listen: false).fetchUsersPosts();
+          model.fetchBlueprints();
         }
       },
-      child: Text(postModel.isEdit ? "Update" : 'Publish'),
+      child: Text(widget.postModel.isEdit ? "Update" : 'Publish'),
     );
   }
 
