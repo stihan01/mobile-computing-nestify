@@ -47,6 +47,15 @@ final goRouter = GoRouter(
                 child: HomePage(),
               ),
               routes: [
+                GoRoute(
+                  path: '/edit',
+                  builder: (context, state) {
+                    final post = state.extra
+                        as BlueprintPost; // Extracting the post from extra
+                    return EditBlueprintScreen(
+                        post: post, key: _shellNavigatorDetailKey);
+                  },
+                ),
                 // child route
                 GoRoute(
                   path: '/details',
