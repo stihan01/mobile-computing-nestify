@@ -26,8 +26,6 @@ class Model extends ChangeNotifier {
     await FirestoreDb.fetchBlueprints().then((posts) {
       _blueprintList = posts;
     });
-
-    debugPrint("Fetchign");
     notifyListeners();
   }
 
@@ -52,6 +50,21 @@ class Model extends ChangeNotifier {
   Future<void> fetchUsersPosts() async {
     await FirestoreDb.getCurrentUserBlueprints().then((posts) {
       _usersPosts = posts;
+    });
+    notifyListeners();
+  }
+
+  bool isUserPostOwner(String owner) {
+    return FirestoreDb.userID == owner;
+  }
+
+  void deleteUserPost(BlueprintPost post) async {
+    await FirestoreDb.deleteUserBlueprint(post).then((onValue) {
+      debugPrint(onValue.toString());
+      if (onValue) {
+        _usersPosts.remove(post);
+        fetchBlueprints();
+      }
     });
     notifyListeners();
   }

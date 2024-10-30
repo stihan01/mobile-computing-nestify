@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:nestify/models/blueprint_post.dart';
 import 'package:go_router/go_router.dart';
-import 'package:nestify/utils/router.dart';
 import 'package:nestify/widgets/favorite_icon_button.dart';
+import 'package:nestify/providers/model.dart';
+import 'package:provider/provider.dart';
 
 class PreviewCard extends StatelessWidget {
   final BlueprintPost post;
   final String placeholderImage = 'assets/images/buzzhotel.jpg';
-
   const PreviewCard({required this.post, super.key});
 
   @override
@@ -17,6 +17,7 @@ class PreviewCard extends StatelessWidget {
         : post.imageUrls.keys.map((url) {
             return SizedBox(
               width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height - 400,
               child: Image.network(
                 url,
                 fit: BoxFit.fill,
@@ -30,19 +31,22 @@ class PreviewCard extends StatelessWidget {
           clipBehavior: Clip.hardEdge,
           child: InkWell(
             splashColor: Colors.blue.withAlpha(30),
-            onTap: () => context.go('${GoRouterState.of(context).uri.toString()}/details', extra: post),
+            onTap: () => context.go(
+                '${GoRouterState.of(context).uri.toString()}/details',
+                extra: post),
             child: Column(children: [
               images.isEmpty
                   ? Image.asset(
                       placeholderImage,
                       width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height - 400,
                       fit: BoxFit
                           .cover, // Optional: to cover the box size proportionally
                     )
                   : images[0],
               SizedBox(
                 height: 100,
-                width: 350,
+                width: MediaQuery.of(context).size.width,
                 child: Padding(
                     padding: const EdgeInsets.all(16),
                     child: Row(
@@ -66,7 +70,12 @@ class PreviewCard extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              FavoriteIconButton(post: post),
+                              Provider.of<Model>(context, listen: false)
+                                      .isUserPostOwner(post.owner)
+                                  ? OptionsMenu(
+                                      post: post,
+                                    )
+                                  : FavoriteIconButton(post: post),
                             ],
                           ),
                         )
@@ -74,6 +83,104 @@ class PreviewCard extends StatelessWidget {
                     )),
               )
             ]),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class OptionsMenu extends StatefulWidget {
+  const OptionsMenu({super.key, required this.post});
+
+  final BlueprintPost post;
+
+  @override
+  State<OptionsMenu> createState() => _OptionsMenuState();
+}
+
+class _OptionsMenuState extends State<OptionsMenu> {
+  final FocusNode _buttonFocusNode = FocusNode(debugLabel: 'Option Button');
+
+  @override
+  void dispose() {
+    _buttonFocusNode.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    Model model = Provider.of<Model>(context, listen: false);
+    return MenuAnchor(
+      childFocusNode: _buttonFocusNode,
+      menuChildren: <Widget>[
+        MenuItemButton(
+          onPressed: () {},
+          child: const Text('Edit'),
+        ),
+        MenuItemButton(
+          onPressed: () async {
+            await deletionDialog(context).then(
+              (onValue) {
+                if (onValue == null || !onValue) {
+                  return;
+                }
+                model.deleteUserPost(widget.post);
+              },
+            );
+          },
+          child: const Text('Delete'),
+        ),
+      ],
+      builder: (_, MenuController controller, Widget? child) {
+        return IconButton(
+          focusNode: _buttonFocusNode,
+          onPressed: () {
+            if (controller.isOpen) {
+              controller.close();
+            } else {
+              controller.open();
+            }
+          },
+          icon: const Icon(Icons.more_vert),
+        );
+      },
+    );
+  }
+
+  Future<bool?> deletionDialog(BuildContext context) {
+    return showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) => Dialog(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text('Delete blueprint: "${widget.post.title}"?',
+                  style: Theme.of(context).textTheme.titleLarge!),
+              const Text(
+                  "The blueprint will be permanently removed from your account."),
+              const SizedBox(height: 15),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context, false);
+                    },
+                    child: const Text('Close'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context, true);
+                    },
+                    child: const Text('Delete'),
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
       ),

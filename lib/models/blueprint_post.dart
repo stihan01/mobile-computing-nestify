@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 
 class BlueprintPost {
   String _userId = FirebaseAuth.instance.currentUser == null
@@ -48,4 +47,5 @@ class BlueprintPost {
       };
 
   get id => _id;
+  get owner => _userId;
 }

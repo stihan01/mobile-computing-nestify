@@ -86,7 +86,6 @@ class FirestoreDb {
         return query.docs.map((docSnapShot) {
           BlueprintPost post = BlueprintPost.fromJson(docSnapShot.data());
           post.isFavorite = true;
-          debugPrint("HERE");
           return post;
         }).toList();
       });
@@ -114,6 +113,26 @@ class FirestoreDb {
       debugPrint("Error fetching user blueprints: Error: $error");
     }
     return posts;
+  }
+
+  static Future<bool> deleteUserBlueprint(BlueprintPost post) async {
+    try {
+      await _db
+          .collection(blueprintCollection)
+          .where('user_id', isEqualTo: userID)
+          .where('post_id', isEqualTo: post.id)
+          .get()
+          .then((query) {
+        return query.docs.map((docSnapShot) {
+          docSnapShot.reference.delete();
+          // debugPrint("My post: ${docSnapShot.data()}");
+        }).toList();
+      });
+      return true;
+    } catch (error) {
+      debugPrint("Failed to delete post: $error");
+      return false;
+    }
   }
 
   static Future<void> updateFavoritePosts(BlueprintPost post) async {
