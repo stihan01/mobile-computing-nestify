@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:firebase_auth/firebase_auth.dart' hide EmailAuthProvider;
 import 'package:nestify/pages/mybuilds_page.dart';
+import 'package:nestify/screens/edit_blue_print_screen.dart';
 import '../pages/homePage.dart';
 import '../pages/detail_page/detailPage.dart';
 import '../pages/profilePage.dart';
@@ -22,6 +23,8 @@ final _shellNavigatorSearchKey =
 final _shellNavigatorAddKey = GlobalKey<NavigatorState>(debugLabel: 'Addpage');
 final _shellNavigatorProfileKey =
     GlobalKey<NavigatorState>(debugLabel: 'profilepage');
+final _shellNavigatorEditKey =
+GlobalKey<NavigatorState>(debugLabel: 'editpage');
 
 // the one and only GoRouter instance
 final goRouter = GoRouter(
@@ -46,15 +49,40 @@ final goRouter = GoRouter(
                 child: HomePage(),
               ),
               routes: [
+                GoRoute(
+                  path: '/edit',
+                  builder: (context, state) {
+                    final map = state.extra as Map<String,
+                        dynamic>; // Extracting the post from extra
+                    return EditBlueprintScreen(
+                        post: map['post'],
+                        onEdit: map['onEdit'],
+                        key: _shellNavigatorEditKey);
+                  },
+                ),
                 // child route
                 GoRoute(
                   path: '/details',
                   builder: (context, state) {
-                    final post = state.extra
-                        as BlueprintPost; // Extracting the post from extra
-                    return DetailPage(
-                        post: post, key: _shellNavigatorDetailKey);
+                    final map = state.extra as Map<String,dynamic>; // Extracting the post from extra
+                      return DetailPage(
+                          post: map['post'],
+                          onEdit: map['onEdit'], 
+                          key: _shellNavigatorDetailKey);
                   },
+                  routes: [
+                        GoRoute(
+                          path: '/edit',
+                          builder: (context, state) {
+                            final map = state.extra as Map<String,
+                                dynamic>; // Extracting the post from extra
+                            return EditBlueprintScreen(
+                                post: map['post'],
+                                onEdit: map['onEdit'],
+                                key: _shellNavigatorEditKey);
+                          },
+                        ),
+                      ],
                 ),
               ],
             ),
@@ -75,11 +103,25 @@ final goRouter = GoRouter(
                 GoRoute(
                   path: '/details',
                   builder: (context, state) {
-                    final post = state.extra
-                        as BlueprintPost; // Extracting the post from extra
-                    return DetailPage(
-                        post: post, key: _shellNavigatorDetailKey);
+                    final map = state.extra as Map<String,dynamic>; // Extracting the post from extra
+                      return DetailPage(
+                          post: map['post'],
+                          onEdit: map['onEdit'], 
+                          key: _shellNavigatorDetailKey);
                   },
+                  routes: [
+                        GoRoute(
+                          path: '/edit',
+                          builder: (context, state) {
+                            final map = state.extra as Map<String,
+                                dynamic>; // Extracting the post from extra
+                            return EditBlueprintScreen(
+                                post: map['post'],
+                                onEdit: map['onEdit'],
+                                key: _shellNavigatorEditKey);
+                          },
+                        ),
+                      ],
                 ),
               ],
             ),
@@ -118,37 +160,75 @@ final goRouter = GoRouter(
                 // child route
                 GoRoute(
                   path: 'favorites',
-                  builder: (context, state) =>
-                      const FavoritesPage(),
+                  builder: (context, state) => const FavoritesPage(),
                   routes: [
-                      // child route
-                      GoRoute(
-                        path: '/details',
-                        builder: (context, state) {
-                          final post = state.extra
-                              as BlueprintPost; // Extracting the post from extra
-                          return DetailPage(
-                              post: post, key: _shellNavigatorDetailKey);
-                        },
-                      ),
-                    ],
+                    // child route
+                    GoRoute(
+                      path: '/details',
+                      builder: (context, state) {
+                        final map = state.extra as Map<String,dynamic>; // Extracting the post from extra
+                        return DetailPage(
+                            post: map['post'],
+                            onEdit: map['onEdit'], 
+                            key: _shellNavigatorDetailKey);
+                            
+                      },
+                      routes: [
+                        GoRoute(
+                          path: '/edit',
+                          builder: (context, state) {
+                            final map = state.extra as Map<String,
+                                dynamic>; // Extracting the post from extra
+                            return EditBlueprintScreen(
+                                post: map['post'],
+                                onEdit: map['onEdit'],
+                                key: _shellNavigatorEditKey);
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
                 GoRoute(
                   path: 'mybuilds',
-                  builder: (context, state) =>
-                      const MybuildsPage(),
+                  builder: (context, state) => const MybuildsPage(),
+                  routes: [
+                    GoRoute(
+                      path: '/edit',
+                      builder: (context, state) {
+                        final map = state.extra as Map<String,
+                            dynamic>; // Extracting the post from extra
+                        return EditBlueprintScreen(
+                            post: map['post'],
+                            onEdit: map['onEdit'],
+                            key: _shellNavigatorEditKey);
+                      },
+                    ),
+                    // child route
+                    GoRoute(
+                      path: '/details',
+                      builder: (context, state) {
+                        final map = state.extra as Map<String,dynamic>; // Extracting the post from extra
+                        return DetailPage(
+                            post: map['post'],
+                            onEdit: map['onEdit'], 
+                            key: _shellNavigatorDetailKey);
+                      },
                       routes: [
-                      // child route
-                      GoRoute(
-                        path: '/details',
-                        builder: (context, state) {
-                          final post = state.extra
-                              as BlueprintPost; // Extracting the post from extra
-                          return DetailPage(
-                              post: post, key: _shellNavigatorDetailKey);
-                        },
-                      ),
-                    ],
+                        GoRoute(
+                          path: '/edit',
+                          builder: (context, state) {
+                            final map = state.extra as Map<String,
+                                dynamic>; // Extracting the post from extra
+                            return EditBlueprintScreen(
+                                post: map['post'],
+                                onEdit: map['onEdit'],
+                                key: _shellNavigatorEditKey);
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ],
             ),

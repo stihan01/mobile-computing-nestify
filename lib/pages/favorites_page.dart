@@ -32,6 +32,7 @@ class _ItemListState extends State<_ItemList> {
   Widget build(BuildContext context) {
     return Consumer<Model>(builder: (context, model, child) {
       var posts = model.favorites;
+      debugPrint("In fav page: ${posts.length} | ${model.favorites}");
       if (posts.isEmpty) {
         return const Center(child: Text('You do not have any favorites yet'));
       }

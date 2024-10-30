@@ -6,7 +6,7 @@ class Model extends ChangeNotifier {
   List<BlueprintPost> _blueprintList = [];
   List<BlueprintPost> get blueprintList => _blueprintList;
 
-  List<BlueprintPost> _favorites = [];
+  final List<BlueprintPost> _favorites = [];
   List<BlueprintPost> get favorites => _favorites;
 
   List<BlueprintPost> _usersPosts = [];
@@ -18,40 +18,40 @@ class Model extends ChangeNotifier {
 
   void _setup() async {
     await fetchBlueprints();
-    await fetchFavorites();
-    await fetchUsersPosts();
   }
 
   Future<void> fetchBlueprints() async {
     await FirestoreDb.fetchBlueprints().then((posts) {
+      _usersPosts = [];
+      for (var post in posts) {
+        if (isUserPostOwner(post.owner)) {
+          _usersPosts.add(post);
+        }
+        if (post.isFavorite) _favorites.add(post);
+      }
       _blueprintList = posts;
     });
 
-    debugPrint("Fetchign");
-    notifyListeners();
-  }
-
-  void addFavorite(BlueprintPost post) {
-    _favorites.add(post);
     notifyListeners();
   }
 
   void updateFavorites(BlueprintPost post) async {
     await FirestoreDb.updateFavoritePosts(post);
-    fetchFavorites();
+    post.isFavorite ? _favorites.add(post) : _favorites.remove(post);
     notifyListeners();
   }
 
-  Future<void> fetchFavorites() async {
-    await FirestoreDb.getMyFavoriteBlueprints().then((posts) {
-      _favorites = posts;
-    });
-    notifyListeners();
+  bool isUserPostOwner(String owner) {
+    return FirestoreDb.userID == owner;
   }
 
-  Future<void> fetchUsersPosts() async {
-    await FirestoreDb.getCurrentUserBlueprints().then((posts) {
-      _usersPosts = posts;
+  void deleteUserPost(BlueprintPost post) async {
+    await FirestoreDb.deleteUserBlueprint(post).then((onValue) {
+      debugPrint(onValue.toString());
+      if (onValue) {
+        _usersPosts.remove(post);
+        fetchBlueprints();
+      }
     });
     notifyListeners();
   }

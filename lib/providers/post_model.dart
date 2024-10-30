@@ -4,43 +4,30 @@ import 'dart:io';
 import 'package:nestify/apis/firestore_db.dart';
 
 class PostModel with ChangeNotifier {
-  bool isEdit = false;
   BlueprintPost _post = BlueprintPost();
   List<File> images = [];
   List<String> _imgUrls = [];
   List<String> markedUrlDeletion = [];
-
-  String? title;
-  String? material;
-  String? instruction;
   String? category;
+  bool isEdit = false;
 
   PostModel();
-
-  void _reset() {}
 
   set post(BlueprintPost? post) {
     markedUrlDeletion = [];
     images = [];
     _imgUrls = [];
     if (post == null) {
-      title = null;
-      material = null;
-      instruction = null;
-      category = null;
+      // category = null;
       isEdit = false;
-      _post = BlueprintPost(title, material, instruction, category);
+      _post = BlueprintPost();
       return;
     }
 
     // Else we are editing
     _post = post;
-
-    title = _post.title;
-    material = _post.material;
-    instruction = _post.instruction;
-    category = _post.category;
     isEdit = true;
+    category = _post.category;
     _imgUrls = _post.imageUrls.keys.toList();
   }
 
@@ -52,13 +39,27 @@ class PostModel with ChangeNotifier {
     markedUrlDeletion.add(url);
   }
 
-  Future<void> uploadBlueprint() async {
-    // Upload any image
-    // Update contents
+  Future<void> updateBlueprint() async {
+    await FirestoreDb.updateUserBlueprint(_post);
+    post = null;
+    notifyListeners();
+  }
+
+  void updatePostFields({
+    String? title,
+    String? material,
+    String? instruction,
+  }) {
+    debugPrint("Category is: $category");
     _post.title = title;
     _post.material = material;
     _post.instruction = instruction;
     _post.category = category;
+  }
+
+  Future<void> uploadBlueprint() async {
+    // Upload any image
+    // Update contents
 
     for (File file in images) {
       await FirestoreDb.uploadImage(file, _post.id).then((value) {

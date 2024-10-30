@@ -25,7 +25,7 @@ class _CategoryDropdownMenuState extends State<CategoryDropdownMenu> {
   Widget build(BuildContext context) {
     debugPrint("Changing to: $dropdownValue");
     return DropdownMenu(
-      width: 220,
+      width: MediaQuery.of(context).size.width - 32,
       label: const Text("Category"),
       initialSelection: dropdownValue,
       onSelected: (String? value) {

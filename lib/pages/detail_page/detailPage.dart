@@ -5,18 +5,29 @@ import 'package:nestify/models/blueprint_post.dart';
 import 'package:nestify/widgets/favorite_icon_button.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
+import 'package:nestify/providers/model.dart';
+import 'package:nestify/widgets/options_menu.dart';
+import 'package:provider/provider.dart';
 
-class DetailPage extends StatelessWidget {
+class DetailPage extends StatefulWidget {
   final BlueprintPost post;
+  final Function() onEdit;
+
+  const DetailPage({required this.post, required this.onEdit, super.key});
+
+  @override
+  State<DetailPage> createState() => _DetailPageState();
+}
+
+class _DetailPageState extends State<DetailPage> {
   final String placeholderImage = 'assets/images/buzzhotel.jpg';
-  const DetailPage({required this.post, super.key});
 
   @override
   Widget build(BuildContext context) {
     TextEditingController commentController = TextEditingController();
-    List<Image> images = post.imageUrls.keys.isEmpty
+    List<Image> images = widget.post.imageUrls.keys.isEmpty
         ? []
-        : post.imageUrls.keys.map((url) {
+        : widget.post.imageUrls.keys.map((url) {
             return Image.network(
               url,
               height: 400,
@@ -29,8 +40,19 @@ class DetailPage extends StatelessWidget {
       length: 2, // We have 2 tabs
       child: Scaffold(
         appBar: AppBar(
-            title: Text(post.title!),
-            actions: [FavoriteIconButton(post: post)],
+            title: Text(widget.post.title!),
+            actions: [Provider.of<Model>(context, listen: false)
+                          .isUserPostOwner(widget.post.owner)
+                      ? OptionsMenu(
+                          post: widget.post,
+                          onEdit: () {
+                            setState(() {});
+                          },
+                          onDelete: () {
+                            context.pop();
+                          },
+                        )
+                      : FavoriteIconButton(post: widget.post)],
             leading: IconButton(
           icon: const Icon(Icons.arrow_back), // Back icon
           onPressed: () => context.pop(), ),// Go back
@@ -59,7 +81,7 @@ class DetailPage extends StatelessWidget {
 
             // Box with Tabs
             TabBox(
-              post: post,
+              post: widget.post,
             ),
 
             // Spacing

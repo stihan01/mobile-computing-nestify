@@ -59,7 +59,7 @@ class CommentTextField extends StatelessWidget {
           //height: 0,
           width: double.infinity,
           decoration: BoxDecoration(
-            color: Colors.white,
+            //color: Colors.white,
             border: Border.all(color: Colors.grey),
             borderRadius: BorderRadius.circular(5),
           ),

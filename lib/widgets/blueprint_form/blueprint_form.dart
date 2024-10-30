@@ -8,13 +8,14 @@ import 'package:nestify/widgets/custom_text_form_field.dart';
 import 'package:nestify/widgets/blueprint_form/widgets/category_dropdown_menu.dart';
 import 'dart:io';
 import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
 
 class BlueprintForm extends StatefulWidget {
-  const BlueprintForm({super.key, this.post});
+  const BlueprintForm({super.key, this.post, this.onEdit});
 
   // If blueprint object is provided, the form changes to editing, else it creates a new object
   final BlueprintPost? post;
-
+  final Function()? onEdit;
   @override
   BlueprintFormState createState() {
     return BlueprintFormState();
@@ -40,10 +41,11 @@ class BlueprintFormState extends State<BlueprintForm> {
     postModel = Provider.of<PostModel>(context, listen: false);
     postModel.post = widget.post;
     // Controllers
-    titleTextController = TextEditingController(text: postModel.title);
-    materialTextController = TextEditingController(text: postModel.material);
+    titleTextController = TextEditingController(text: postModel.post.title);
+    materialTextController =
+        TextEditingController(text: postModel.post.material);
     instructionTextController =
-        TextEditingController(text: postModel.instruction);
+        TextEditingController(text: postModel.post.instruction);
 
     controllers = [
       titleTextController,
@@ -67,13 +69,6 @@ class BlueprintFormState extends State<BlueprintForm> {
   Widget build(BuildContext context) {
     context.watch<PostModel>();
     final formContent = [
-      Center(
-        child: Text(
-            postModel.isEdit
-                ? "Editing blueprint post"
-                : "Upload blueprint post",
-            style: Theme.of(context).textTheme.titleLarge),
-      ),
       imageGrid(),
       cameraButton(),
       titleFormField(),
@@ -166,7 +161,8 @@ class BlueprintFormState extends State<BlueprintForm> {
     return OutlinedButton(
       // TODO implement onPressed
       onPressed: () {
-        setState(() {});
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text("Not implemented")));
       },
       child: const Text("Save draft"),
     );
@@ -174,26 +170,42 @@ class BlueprintFormState extends State<BlueprintForm> {
 
   FilledButton publishButton() {
     return FilledButton(
-      onPressed: () async {
+      onPressed: () {
+        var model = Provider.of<Model>(context, listen: false);
         // Validate returns true if the form is valid, or false otherwise.
         if (_formKey.currentState!.validate()) {
-          postModel.title = titleTextController.text;
-          postModel.material = materialTextController.text;
-          postModel.instruction = instructionTextController.text;
-          titleTextController.clear();
-
-          for (var controller in controllers) {
-            controller.clear();
-          }
-          await postModel.uploadBlueprint();
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text("Uploading to firestore..."),
-            ),
+          postModel.updatePostFields(
+            title: titleTextController.text,
+            material: materialTextController.text,
+            instruction: instructionTextController.text,
           );
-          Provider.of<Model>(context, listen: false).fetchBlueprints();
-          Provider.of<Model>(context, listen: false).fetchUsersPosts();
-          setState(() {});
+
+          if (postModel.isEdit) {
+            if (widget.onEdit != null) {
+              widget.onEdit!(); // Reload previewCard
+            }
+            postModel.updateBlueprint();
+            context.pop();
+          } else {
+            postModel.uploadBlueprint();
+          }
+
+          if (!postModel.isEdit) {
+            for (var controller in controllers) {
+              controller.clear();
+            }
+
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: postModel.isEdit
+                    ? const Text("Blueprint updated")
+                    : const Text("Blueprint created"),
+              ),
+            );
+            model.fetchBlueprints();
+          }
+
+          // Provider.of<Model>(context, listen: false).fetchUsersPosts();
         }
       },
       child: Text(postModel.isEdit ? "Update" : 'Publish'),
@@ -201,7 +213,6 @@ class BlueprintFormState extends State<BlueprintForm> {
   }
 
   CustomTextFormField titleFormField() {
-    debugPrint("Recalling titleform");
     return CustomTextFormField(
         textController: titleTextController,
         maxLength: 60,

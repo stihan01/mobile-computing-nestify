@@ -8,17 +8,13 @@ import 'package:nestify/models/comment.dart';
 
 class FirestoreDb {
   static final FirebaseFirestore _db = FirebaseFirestore.instance;
-  //static final FirebaseAuth auth = FirebaseAuth.instance;
   static final _storageRef = FirebaseStorage.instance.ref();
-
-  static final userID = _userId();
-
+  static final userID = userId();
   // collections
   static const blueprintCollection = "blueprints";
   static const commentCollection = "comments";
-  static const favoritesCollection = "favorites";
-  static const docFavs = "users";
-  static String _userId() {
+
+  static String userId() {
     try {
       String user = FirebaseAuth.instance.currentUser!.uid;
       debugPrint(user);
@@ -78,46 +74,24 @@ class FirestoreDb {
     return posts;
   }
 
-  static Future<List<BlueprintPost>> getMyFavoriteBlueprints() async {
-    List<BlueprintPost> posts = [];
-
+  static Future<bool> deleteUserBlueprint(BlueprintPost post) async {
     try {
-      posts = await _db
+      await _db
           .collection(blueprintCollection)
-          .where('favorited', arrayContains: userID)
+          .where('user_id', isEqualTo: userID)
+          .where('post_id', isEqualTo: post.id)
           .get()
           .then((query) {
         return query.docs.map((docSnapShot) {
-          BlueprintPost post = BlueprintPost.fromJson(docSnapShot.data());
-          post.isFavorite = true;
-          debugPrint("HERE");
-          return post;
+          debugPrint(docSnapShot.data().toString());
+          docSnapShot.reference.delete();
         }).toList();
       });
+      return true;
     } catch (error) {
-      debugPrint("Error fetching user's favorite blueprints: Error: $error");
+      debugPrint("Failed to delete post: $error");
+      return false;
     }
-    return posts;
-  }
-
-  static Future<List<BlueprintPost>> getCurrentUserBlueprints() async {
-    List<BlueprintPost> posts = [];
-    String user = _userId();
-
-    try {
-      posts = await _db
-          .collection(blueprintCollection)
-          .where('user_id', isEqualTo: user)
-          .get()
-          .then((query) {
-        return query.docs.map((docSnapShot) {
-          return BlueprintPost.fromJson(docSnapShot.data());
-        }).toList();
-      });
-    } catch (error) {
-      debugPrint("Error fetching user blueprints: Error: $error");
-    }
-    return posts;
   }
 
   static Future<void> updateFavoritePosts(BlueprintPost post) async {
@@ -137,6 +111,25 @@ class FirestoreDb {
     }
   }
 
+  static Future<bool> updateUserBlueprint(BlueprintPost post) async {
+    try {
+      await _db
+          .collection(blueprintCollection)
+          .where('user_id', isEqualTo: userID)
+          .where('post_id', isEqualTo: post.id)
+          .get()
+          .then((query) {
+        query.docs.map((docSnapShot) {
+          docSnapShot.reference.update(post.toJson());
+        }).toList();
+      });
+      return true;
+    } catch (error) {
+      debugPrint("Failed to delete post: $error");
+      return false;
+    }
+  }
+
   static Future<void> uploadBlueprint(
     BlueprintPost post,
   ) async {
@@ -149,7 +142,7 @@ class FirestoreDb {
 
   static Future<Map<String, String>> uploadImage(
       File file, String postID) async {
-    String user = _userId();
+    String user = userID;
     String filePath =
         "$user()/$blueprintCollection/$postID/${DateTime.now()}.png";
     await _storageRef.child(filePath).putFile(file);
