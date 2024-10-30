@@ -40,10 +40,11 @@ class BlueprintFormState extends State<BlueprintForm> {
     postModel = Provider.of<PostModel>(context, listen: false);
     postModel.post = widget.post;
     // Controllers
-    titleTextController = TextEditingController(text: postModel.title);
-    materialTextController = TextEditingController(text: postModel.material);
+    titleTextController = TextEditingController(text: postModel.post.title);
+    materialTextController =
+        TextEditingController(text: postModel.post.material);
     instructionTextController =
-        TextEditingController(text: postModel.instruction);
+        TextEditingController(text: postModel.post.instruction);
 
     controllers = [
       titleTextController,
@@ -172,9 +173,12 @@ class BlueprintFormState extends State<BlueprintForm> {
         var model = Provider.of<Model>(context, listen: false);
         // Validate returns true if the form is valid, or false otherwise.
         if (_formKey.currentState!.validate()) {
-          postModel.title = titleTextController.text;
-          postModel.material = materialTextController.text;
-          postModel.instruction = instructionTextController.text;
+          postModel.updatePostFields(
+            title: titleTextController.text,
+            material: materialTextController.text,
+            instruction: instructionTextController.text,
+          );
+
           if (!postModel.isEdit) {
             for (var controller in controllers) {
               controller.clear();

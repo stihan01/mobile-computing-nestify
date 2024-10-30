@@ -4,16 +4,12 @@ import 'dart:io';
 import 'package:nestify/apis/firestore_db.dart';
 
 class PostModel with ChangeNotifier {
-  bool isEdit = false;
   BlueprintPost _post = BlueprintPost();
   List<File> images = [];
   List<String> _imgUrls = [];
   List<String> markedUrlDeletion = [];
-
-  String? title;
-  String? material;
-  String? instruction;
   String? category;
+  bool isEdit = false;
 
   PostModel();
 
@@ -22,21 +18,14 @@ class PostModel with ChangeNotifier {
     images = [];
     _imgUrls = [];
     if (post == null) {
-      title = null;
-      material = null;
-      instruction = null;
       category = null;
       isEdit = false;
-      _post = BlueprintPost(title, material, instruction, category);
+      _post = BlueprintPost(category);
       return;
     }
 
     // Else we are editing
     _post = post;
-
-    title = _post.title;
-    material = _post.material;
-    instruction = _post.instruction;
     category = _post.category;
     isEdit = true;
     _imgUrls = _post.imageUrls.keys.toList();
@@ -51,12 +40,12 @@ class PostModel with ChangeNotifier {
   }
 
   Future<void> updateBlueprint() async {
-    _updatePostFields();
     await FirestoreDb.updateUserBlueprint(_post);
     notifyListeners();
   }
 
-  void _updatePostFields() {
+  void updatePostFields(
+      {String? title, String? material, String? instruction}) {
     _post.title = title;
     _post.material = material;
     _post.instruction = instruction;
@@ -66,7 +55,6 @@ class PostModel with ChangeNotifier {
   Future<void> uploadBlueprint() async {
     // Upload any image
     // Update contents
-    _updatePostFields();
 
     for (File file in images) {
       await FirestoreDb.uploadImage(file, _post.id).then((value) {
