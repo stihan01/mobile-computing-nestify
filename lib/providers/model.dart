@@ -70,8 +70,6 @@ class Model extends ChangeNotifier {
       debugPrint(onValue.toString());
       if (onValue) {
         _usersPosts.remove(post);
-        // Ugly fix, different object references in _userposts and _blueprintlist
-        // just refetch to update. TODO Should do it properly
         fetchBlueprints();
       }
     });
