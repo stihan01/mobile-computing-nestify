@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nestify/models/blueprint_post.dart';
 import 'package:go_router/go_router.dart';
-import 'package:nestify/providers/model.dart';
+import 'package:nestify/models/model.dart';
 import 'package:provider/provider.dart';
 
 class OptionsMenu extends StatefulWidget {

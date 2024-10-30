@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:nestify/models/blueprint_post.dart';
+import 'package:nestify/providers/edit_post_model.dart';
 import 'package:nestify/widgets/blueprint_form/blueprint_form.dart';
+import 'package:provider/provider.dart';
+import 'package:nestify/providers/post_model.dart';
 
 class EditBlueprintScreen extends StatelessWidget {
   const EditBlueprintScreen(
@@ -9,14 +12,19 @@ class EditBlueprintScreen extends StatelessWidget {
   final Function() onEdit;
   @override
   Widget build(BuildContext context) {
+    PostModel model = Provider.of<EditPostModel>(context, listen: false);
+    model.post = post;
+
     return SafeArea(
       child: Scaffold(
           appBar: AppBar(
             title: const Text("Editing blueprint"),
           ),
           body: BlueprintForm(
-            post: post,
             onEdit: onEdit,
+            postModel: model,
+            snackBarMessage: "Blueprint updated",
+            //  imgUrls: ,
           )),
     );
   }
