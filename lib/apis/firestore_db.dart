@@ -74,49 +74,6 @@ class FirestoreDb {
     return posts;
   }
 
-/*
-  static Future<List<BlueprintPost>> getMyFavoriteBlueprints() async {
-    List<BlueprintPost> posts = [];
-
-    try {
-      posts = await _db
-          .collection(blueprintCollection)
-          .where('favorited', arrayContains: userID)
-          .get()
-          .then((query) {
-        return query.docs.map((docSnapShot) {
-          BlueprintPost post = BlueprintPost.fromJson(docSnapShot.data());
-          post.isFavorite = true;
-          return post;
-        }).toList();
-      });
-    } catch (error) {
-      debugPrint("Error fetching user's favorite blueprints: Error: $error");
-    }
-    return posts;
-  }
-*/
-/*
-  static Future<List<BlueprintPost>> getCurrentUserBlueprints() async {
-    List<BlueprintPost> posts = [];
-    String user = userID;
-
-    try {
-      posts = await _db
-          .collection(blueprintCollection)
-          .where('user_id', isEqualTo: user)
-          .get()
-          .then((query) {
-        return query.docs.map((docSnapShot) {
-          return BlueprintPost.fromJson(docSnapShot.data());
-        }).toList();
-      });
-    } catch (error) {
-      debugPrint("Error fetching user blueprints: Error: $error");
-    }
-    return posts;
-  }
-*/
   static Future<bool> deleteUserBlueprint(BlueprintPost post) async {
     try {
       await _db
