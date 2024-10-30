@@ -3,7 +3,9 @@ import 'package:nestify/models/blueprint_post.dart';
 import 'dart:io';
 import 'package:nestify/apis/firestore_db.dart';
 
-class PostModel with ChangeNotifier {
+abstract class PostModel {}
+
+class AddPostModel with ChangeNotifier {
   BlueprintPost _post = BlueprintPost();
   List<File> images = [];
   List<String> _imgUrls = [];
@@ -11,7 +13,7 @@ class PostModel with ChangeNotifier {
   String? category;
   bool isEdit = false;
 
-  PostModel();
+  AddPostModel();
 
   set post(BlueprintPost? post) {
     markedUrlDeletion = [];
@@ -40,7 +42,27 @@ class PostModel with ChangeNotifier {
   }
 
   Future<void> updateBlueprint() async {
+    // If a url was marked, delete
+    for (File file in images) {
+      await FirestoreDb.uploadImage(file, _post.id).then((value) {
+        _post.imageUrls.addAll(value);
+      });
+    }
+    images = [];
+
+    // If a url was marked, delete
+    for (String key in markedUrlDeletion) {
+      String? filePath = _post.imageUrls.remove(key);
+      if (filePath != null) {
+        try {
+          await FirestoreDb.deleteImage(filePath);
+        } catch (error) {
+          debugPrint("File dont exist: $error");
+        }
+      }
+    }
     await FirestoreDb.updateUserBlueprint(_post);
+
     post = null;
     notifyListeners();
   }
@@ -68,17 +90,6 @@ class PostModel with ChangeNotifier {
     }
     images = [];
 
-    // If a url was marked, delete
-    for (String key in markedUrlDeletion) {
-      String? filePath = _post.imageUrls.remove(key);
-      if (filePath != null) {
-        try {
-          await FirestoreDb.deleteImage(filePath);
-        } catch (error) {
-          debugPrint("File dont exist: $error");
-        }
-      }
-    }
     // Finally upload blueprint
     await FirestoreDb.uploadBlueprint(_post);
     // reset

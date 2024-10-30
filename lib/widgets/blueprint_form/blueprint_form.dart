@@ -11,11 +11,12 @@ import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 
 class BlueprintForm extends StatefulWidget {
-  const BlueprintForm({super.key, this.post, this.onEdit});
+  const BlueprintForm({super.key, this.post, this.onEdit, this.postModel});
 
   // If blueprint object is provided, the form changes to editing, else it creates a new object
   final BlueprintPost? post;
   final Function()? onEdit;
+  final postModel;
   @override
   BlueprintFormState createState() {
     return BlueprintFormState();
@@ -29,8 +30,9 @@ class BlueprintFormState extends State<BlueprintForm> {
   // and allows validation of the form.
   //
   // Note: This is a `GlobalKey<FormState>`,
+
   final _formKey = GlobalKey<FormState>();
-  late final PostModel postModel;
+  late final AddPostModel postModel;
   late TextEditingController titleTextController;
   late TextEditingController materialTextController;
   late TextEditingController instructionTextController;
@@ -38,7 +40,7 @@ class BlueprintFormState extends State<BlueprintForm> {
 
   @override
   void initState() {
-    postModel = Provider.of<PostModel>(context, listen: false);
+    postModel = Provider.of<AddPostModel>(context, listen: false);
     postModel.post = widget.post;
     // Controllers
     titleTextController = TextEditingController(text: postModel.post.title);
@@ -67,7 +69,7 @@ class BlueprintFormState extends State<BlueprintForm> {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<PostModel>();
+    context.watch<AddPostModel>();
     final formContent = [
       imageGrid(),
       cameraButton(),
