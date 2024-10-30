@@ -21,7 +21,7 @@ class _SearchpageState extends State<SearchPage> {
     return Consumer<SearchModel>(
       builder: (context, searchModel, child) {
         return Scaffold(
-          appBar: AppBar(title: const Text('Search Screen')),
+          appBar: AppBar(title: const Text('Search')),
           body: Center(
             child: Column(
               children: [
