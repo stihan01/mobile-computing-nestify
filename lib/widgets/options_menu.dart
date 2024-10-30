@@ -9,7 +9,11 @@ class OptionsMenu extends StatefulWidget {
       {super.key, required this.post, required this.onEdit, this.onDelete});
 
   final BlueprintPost post;
+
+  /// onEdit just to tell the caller widget to rebuild through a setState
   final Function() onEdit;
+
+  /// if in detailed view, maybe pop the context to go back to previous screen
   final Function()? onDelete;
   @override
   State<OptionsMenu> createState() => _OptionsMenuState();
