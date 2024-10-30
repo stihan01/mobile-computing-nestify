@@ -68,7 +68,7 @@ class _SearchpageState extends State<SearchPage> {
             return ListTile(
               title: Text(post.title ?? ''),
               onTap: () {
-                searchAndClose(controller, controller.text);
+                searchAndClose(controller, post.title ?? '');
               },
             );
           }).toList();
