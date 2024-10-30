@@ -6,7 +6,7 @@ import 'package:nestify/screens/edit_blue_print_screen.dart';
 import '../pages/homePage.dart';
 import '../pages/detail_page/detailPage.dart';
 import '../pages/profilePage.dart';
-import '../pages/searchPage.dart';
+import '../pages/searchPage/searchPage.dart';
 import '../screens/add_blue_print_screen.dart';
 import '../auth_gate.dart';
 import 'package:nestify/models/blueprint_post.dart';

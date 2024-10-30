@@ -4,6 +4,7 @@ import 'package:nestify/pages/detail_page/widgets/commentSection.dart';
 import 'package:nestify/models/blueprint_post.dart';
 import 'package:nestify/widgets/favorite_icon_button.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 
 class DetailPage extends StatelessWidget {
   final BlueprintPost post;
@@ -20,8 +21,7 @@ class DetailPage extends StatelessWidget {
               url,
               height: 400,
               width: 100,
-              fit: BoxFit
-                  .cover, // Optional: to cover the box size proportionally
+              fit: BoxFit.scaleDown, // Optional: to cover the box size proportionally
             );
           }).toList();
 
@@ -40,17 +40,20 @@ class DetailPage extends StatelessWidget {
           padding: const EdgeInsets.all(16.0),
 
           children: [
-            // Image
-            images.isEmpty
-                ? Image.asset(
+            ImageSlideshow(
+              height: 400,
+              width: 100,
+              children: images.isEmpty
+                ? [Image.asset(
                     placeholderImage,
                     height: 400,
                     width: 100,
                     fit: BoxFit
                         .cover, // Optional: to cover the box size proportionally
-                  )
-                : images[0],
-
+                  )]
+                : images,              
+            ),
+            
             // Spacing
             const SizedBox(height: 16),
 
