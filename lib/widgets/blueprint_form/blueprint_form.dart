@@ -159,7 +159,8 @@ class BlueprintFormState extends State<BlueprintForm> {
     return OutlinedButton(
       // TODO implement onPressed
       onPressed: () {
-        setState(() {});
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text("Not implemented")));
       },
       child: const Text("Save draft"),
     );
@@ -171,19 +172,16 @@ class BlueprintFormState extends State<BlueprintForm> {
         var model = Provider.of<Model>(context, listen: false);
         // Validate returns true if the form is valid, or false otherwise.
         if (_formKey.currentState!.validate()) {
+          postModel.title = titleTextController.text;
+          postModel.material = materialTextController.text;
+          postModel.instruction = instructionTextController.text;
           if (!postModel.isEdit) {
-            postModel.title = titleTextController.text;
-            postModel.material = materialTextController.text;
-            postModel.instruction = instructionTextController.text;
-            titleTextController.clear();
-
             for (var controller in controllers) {
               controller.clear();
             }
             postModel.uploadBlueprint();
-            model.fetchBlueprints();
           } else {
-            // TODO
+            postModel.updateBlueprint();
           }
 
           ScaffoldMessenger.of(context).showSnackBar(
@@ -193,6 +191,8 @@ class BlueprintFormState extends State<BlueprintForm> {
                   : const Text("Blueprint created"),
             ),
           );
+          model.fetchBlueprints();
+
           // Provider.of<Model>(context, listen: false).fetchUsersPosts();
           setState(() {});
         }
@@ -202,7 +202,6 @@ class BlueprintFormState extends State<BlueprintForm> {
   }
 
   CustomTextFormField titleFormField() {
-    debugPrint("Recalling titleform");
     return CustomTextFormField(
         textController: titleTextController,
         maxLength: 60,

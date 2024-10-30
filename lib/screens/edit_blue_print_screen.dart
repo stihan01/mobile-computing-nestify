@@ -10,7 +10,7 @@ class EditBlueprintScreen extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
           appBar: AppBar(
-            title: const Text("Edit blueprint post"),
+            title: const Text("Editing blueprint"),
           ),
           body: BlueprintForm(post: post)),
     );

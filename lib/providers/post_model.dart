@@ -17,8 +17,6 @@ class PostModel with ChangeNotifier {
 
   PostModel();
 
-  void _reset() {}
-
   set post(BlueprintPost? post) {
     markedUrlDeletion = [];
     images = [];
@@ -52,13 +50,23 @@ class PostModel with ChangeNotifier {
     markedUrlDeletion.add(url);
   }
 
-  Future<void> uploadBlueprint() async {
-    // Upload any image
-    // Update contents
+  Future<void> updateBlueprint() async {
+    _updatePostFields();
+    await FirestoreDb.updateUserBlueprint(_post);
+    notifyListeners();
+  }
+
+  void _updatePostFields() {
     _post.title = title;
     _post.material = material;
     _post.instruction = instruction;
     _post.category = category;
+  }
+
+  Future<void> uploadBlueprint() async {
+    // Upload any image
+    // Update contents
+    _updatePostFields();
 
     for (File file in images) {
       await FirestoreDb.uploadImage(file, _post.id).then((value) {
