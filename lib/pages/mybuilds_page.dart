@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nestify/widgets/PreviewCard.dart';
 import 'package:provider/provider.dart';
-import '../providers/model.dart';
+import '../models/model.dart';
 
 class MybuildsPage extends StatelessWidget {
   const MybuildsPage({super.key});
@@ -30,7 +30,7 @@ class _ItemList extends StatefulWidget {
 class _ItemListState extends State<_ItemList> {
   @override
   Widget build(BuildContext context) {
-     return Consumer<Model>(builder: (context, model, child) {
+    return Consumer<Model>(builder: (context, model, child) {
       var posts = model.usersPosts;
       if (posts.isEmpty) {
         return const Center(child: Text('You have not posted any builds yet'));

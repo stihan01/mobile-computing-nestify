@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nestify/models/blueprint_post.dart';
+import 'package:nestify/providers/edit_post_model.dart';
 import 'package:nestify/widgets/blueprint_form/blueprint_form.dart';
 import 'package:provider/provider.dart';
 import 'package:nestify/providers/post_model.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nestify/widgets/PreviewCard.dart';
 import 'package:provider/provider.dart';
-import '../providers/model.dart';
+import '../models/model.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:nestify/providers/add_post_model.dart';
 import 'package:nestify/widgets/blueprint_form/blueprint_form.dart';
 import 'package:provider/provider.dart';
-import 'package:nestify/providers/post_model.dart';
 
 class AddBlueprintScreen extends StatelessWidget {
   const AddBlueprintScreen({
