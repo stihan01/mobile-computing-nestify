@@ -86,9 +86,9 @@ class _SearchpageState extends State<SearchPage> {
           icon: Icon(Icons.search),
         ),
         IconButton(
-            onPressed: () => {
-                  controller.text = '',
-                },
+            onPressed: () {
+              controller.clear();
+            },
             icon: Icon(Icons.clear))
       ],
     );
