@@ -84,7 +84,12 @@ class _SearchpageState extends State<SearchPage> {
             FocusScope.of(context).unfocus();
           },
           icon: Icon(Icons.search),
-        )
+        ),
+        IconButton(
+            onPressed: () => {
+                  controller.text = '',
+                },
+            icon: Icon(Icons.clear))
       ],
     );
   }
