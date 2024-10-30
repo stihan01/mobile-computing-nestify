@@ -125,4 +125,11 @@ class SearchModel with ChangeNotifier {
     }
     return false;
   }
+
+  int filterNumber() {
+    if (selectedCategories.isEmpty && selectedMaterials.isEmpty) {
+      return 0;
+    }
+    return selectedCategories.length + selectedMaterials.length;
+  }
 }

@@ -8,11 +8,11 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Profile Screen')),
+      appBar: AppBar(title: const Text('Profile')),
       body: Center(
           child: Column(
         children: [
-          const Padding(
+          Padding(
             padding: EdgeInsets.all(16.0),
             child: Row(
               children: [
@@ -20,14 +20,25 @@ class ProfilePage extends StatelessWidget {
                 CircleAvatar(
                   radius: 50, // Adjust size by changing the radius
                   backgroundImage: AssetImage(
-                      'assets/img/cool-profile-pictures-63a5e8ee8cdcfab2f952bcd46a73e5c4-263720879.jpg'),
+                      'assets/images/profilepic.jpg'), // Set image path
                 ),
 
                 // Column med textrader som är aligned till vänster
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  Text("Emil Emilsson"),
-                  Text("Have more text here?")
-                ]),
+                Padding(
+                  padding: EdgeInsets.only(left: 16.0), // Set left padding
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("Birdie Robinson",
+                            style: Theme.of(context).textTheme.titleLarge),
+                        Text("Member since 2021-09-01",
+                            style: Theme.of(context).textTheme.bodyMedium),
+                        TextButton.icon(
+                            onPressed: () {},
+                            icon: Icon(Icons.edit),
+                            label: Text("Edit Profile")),
+                      ]),
+                ),
               ],
             ),
           ),
@@ -46,14 +57,14 @@ class ProfilePage extends StatelessWidget {
               child: ListView(
                 children: [
                   buildListTile("Favourites", "List of your favourite builds",
-                      Icons.favorite, context, '/profile/favorites'
-                      ),
+                      Icons.favorite, context, '/profile/favorites'),
                   buildListTile("My Builds", "List of your own blueprints",
-                      Icons.bungalow_outlined, context, '/profile/mybuilds'
-                      ),
+                      Icons.bungalow_outlined, context, '/profile/mybuilds'),
                   const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0), // Set horizontal and vertical padding
-                    child: firebase_ui.SignOutButton()) ,
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 16.0,
+                          vertical: 8.0), // Set horizontal and vertical padding
+                      child: firebase_ui.SignOutButton()),
                 ],
               ),
             ),
@@ -64,7 +75,8 @@ class ProfilePage extends StatelessWidget {
   }
 
   // Function to create a ListTile
-  Widget buildListTile(String title, String subtitle, IconData leadingIcon, BuildContext context, String route) {
+  Widget buildListTile(String title, String subtitle, IconData leadingIcon,
+      BuildContext context, String route) {
     return Container(
       margin: const EdgeInsets.only(
         top: 0,

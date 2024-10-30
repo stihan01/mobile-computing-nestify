@@ -21,7 +21,7 @@ class _SearchpageState extends State<SearchPage> {
     return Consumer<SearchModel>(
       builder: (context, searchModel, child) {
         return Scaffold(
-          appBar: AppBar(title: const Text('Search Screen')),
+          appBar: AppBar(title: const Text('Search')),
           body: Center(
             child: Column(
               children: [
@@ -40,6 +40,7 @@ class _SearchpageState extends State<SearchPage> {
   }
 
   Widget _SearchBar() {
+    var model = Provider.of<SearchModel>(context, listen: false);
     return SearchAnchor(
         searchController: controller,
         builder: (context, controller) {
@@ -55,7 +56,17 @@ class _SearchpageState extends State<SearchPage> {
             },
             leading: const Icon(Icons.search),
             trailing: [
-              IconButton(onPressed: show, icon: Icon(Icons.filter_alt)),
+              IconButton(
+                  onPressed: show,
+                  icon: model.filterNumber() == 0
+                      ? const Icon(Icons.filter_alt)
+                      : Badge(
+                          isLabelVisible: true,
+                          label: Text(model.filterNumber().toString()),
+                          offset: const Offset(8, 8),
+                          backgroundColor:
+                              Theme.of(context).colorScheme.secondary,
+                          child: const Icon(Icons.filter_alt))),
             ],
           );
         },

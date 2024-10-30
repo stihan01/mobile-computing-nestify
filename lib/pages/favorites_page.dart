@@ -11,7 +11,7 @@ class FavoritesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Favorites"),
+        title: const Text("Favourites"),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back), // Back icon
           onPressed: () => context.pop(), // Go back
@@ -30,7 +30,7 @@ class _ItemList extends StatefulWidget {
 class _ItemListState extends State<_ItemList> {
   @override
   Widget build(BuildContext context) {
-     return Consumer<Model>(builder: (context, model, child) {
+    return Consumer<Model>(builder: (context, model, child) {
       var posts = model.favorites;
       if (posts.isEmpty) {
         return const Center(child: Text('You do not have any favorites yet'));
