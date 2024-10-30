@@ -41,57 +41,60 @@ class _SearchpageState extends State<SearchPage> {
 
   Widget _SearchBar() {
     return SearchAnchor(
-      searchController: controller,
-      builder: (context, controller) {
-        return SearchBar(
-          elevation: WidgetStatePropertyAll(2),
-          focusNode: focusNode,
-          controller: controller,
-          onTap: () {
-            controller.openView();
-          },
-          onChanged: (_) {
-            controller.openView();
-          },
-          leading: const Icon(Icons.search),
-          trailing: [
-            IconButton(onPressed: show, icon: Icon(Icons.filter_alt)),
-          ],
-        );
-      },
-      suggestionsBuilder: (BuildContext context, SearchController controller) {
-        var model = Provider.of<SearchModel>(context, listen: false);
-        model.searchBlueprints(controller.text);
-        List<BlueprintPost> suggestions = model.searchList;
-        return suggestions.map((post) {
-          return ListTile(
-            title: Text(post.title ?? ''),
+        searchController: controller,
+        builder: (context, controller) {
+          return SearchBar(
+            elevation: WidgetStatePropertyAll(2),
+            focusNode: focusNode,
+            controller: controller,
             onTap: () {
-              controller.text = post.title ?? '';
-              Provider.of<SearchModel>(context, listen: false)
-                  .searchBlueprints(post.title ?? '');
-              controller.closeView(post.title ?? '');
+              controller.openView();
             },
+            onChanged: (_) {
+              controller.openView();
+            },
+            leading: const Icon(Icons.search),
+            trailing: [
+              IconButton(onPressed: show, icon: Icon(Icons.filter_alt)),
+            ],
           );
-        }).toList();
-      },
-      viewTrailing: [
-        IconButton(
-          onPressed: () {
-            Provider.of<SearchModel>(context, listen: false)
-                .searchBlueprints(controller.text);
-            controller.closeView(controller.text);
-            FocusScope.of(context).unfocus();
-          },
-          icon: Icon(Icons.search),
-        ),
-        IconButton(
+        },
+        suggestionsBuilder:
+            (BuildContext context, SearchController controller) {
+          var model = Provider.of<SearchModel>(context, listen: false);
+          model.searchBlueprints(controller.text);
+          List<BlueprintPost> suggestions = model.searchList;
+          return suggestions.map((post) {
+            return ListTile(
+              title: Text(post.title ?? ''),
+              onTap: () {
+                searchAndClose(controller, controller.text);
+              },
+            );
+          }).toList();
+        },
+        viewTrailing: [
+          IconButton(
             onPressed: () {
-              controller.clear();
+              searchAndClose(controller, controller.text);
             },
-            icon: Icon(Icons.clear))
-      ],
-    );
+            icon: Icon(Icons.search),
+          ),
+          IconButton(
+              onPressed: () {
+                controller.clear();
+              },
+              icon: Icon(Icons.clear))
+        ],
+        viewOnSubmitted: (query) {
+          searchAndClose(controller, query);
+        });
+  }
+
+  void searchAndClose(SearchController controller, String text) {
+    Provider.of<SearchModel>(context, listen: false).searchBlueprints(text);
+    controller.closeView(text);
+    FocusScope.of(context).unfocus();
   }
 
   /*
