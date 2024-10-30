@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'blueprint_post.dart';
+import '../models/blueprint_post.dart';
 import 'package:nestify/apis/firestore_db.dart';
 
 class Model extends ChangeNotifier {

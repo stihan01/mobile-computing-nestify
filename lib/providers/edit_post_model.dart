@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:nestify/apis/firestore_db.dart';
 import 'package:nestify/models/blueprint_post.dart';
-import 'package:nestify/providers/post_model.dart';
+import 'package:nestify/models/post_model.dart';
 
 class EditPostModel extends ChangeNotifier implements PostModel {
   BlueprintPost _post = BlueprintPost();

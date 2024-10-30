@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nestify/widgets/PreviewCard.dart';
 import 'package:provider/provider.dart';
-import '../models/model.dart';
+import '../providers/model.dart';
 
 class MybuildsPage extends StatelessWidget {
   const MybuildsPage({super.key});

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nestify/models/blueprint_post.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nestify/widgets/favorite_icon_button.dart';
-import 'package:nestify/models/model.dart';
+import 'package:nestify/providers/model.dart';
 import 'package:nestify/widgets/options_menu.dart';
 import 'package:provider/provider.dart';
 
@@ -40,8 +40,9 @@ class _PreviewCardState extends State<PreviewCard> {
           clipBehavior: Clip.hardEdge,
           child: InkWell(
             splashColor: Colors.blue.withAlpha(30),
-            onTap: () => context.go('${GoRouterState.of(context).uri.toString()}/details',
-                extra: {'post': widget.post, 'onEdit': ()=> null}),
+            onTap: () => context.go(
+                '${GoRouterState.of(context).uri.toString()}/details',
+                extra: {'post': widget.post, 'onEdit': () => null}),
             child: Column(children: [
               images.isEmpty
                   ? Image.asset(

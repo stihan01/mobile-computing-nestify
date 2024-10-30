@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nestify/providers/add_post_model.dart';
-import 'package:nestify/models/model.dart';
-import 'package:nestify/providers/post_model.dart';
+import 'package:nestify/providers/model.dart';
+import 'package:nestify/models/post_model.dart';
 import 'package:nestify/widgets/blueprint_form/widgets/image_box.dart';
 import 'package:nestify/widgets/blueprint_form/widgets/image_capture_button.dart';
 import 'package:nestify/widgets/custom_text_form_field.dart';
