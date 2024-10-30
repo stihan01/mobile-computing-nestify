@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nestify/models/comment.dart';
 
+// TODO Implement comments function
 class CommentSection extends StatelessWidget {
   final TextEditingController commentController;
 
@@ -23,7 +24,44 @@ class CommentSection extends StatelessWidget {
           children: [
             CommentText(
               comment: Comment(
-                  userId: "userId", postId: "postId", comment: "comment"),
+                  userId: "userId",
+                  username: "John",
+                  postId: "postId",
+                  comment:
+                      "I love how simple the instructions were! The birdhouse turned out great, and the birds seem to love it."),
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            CommentText(
+              comment: Comment(
+                  userId: "userId",
+                  username: "Emily",
+                  postId: "postId",
+                  comment:
+                      "I added a small perch in front of the birdhouse entrance, and it made a huge difference. Highly recommend this extra step!"),
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            CommentText(
+              comment: Comment(
+                  userId: "userId",
+                  username: "Michael",
+                  postId: "postId",
+                  comment:
+                      "Great project! I struggled a bit with the roof fitting perfectly, but a little sanding helped."),
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            CommentText(
+              comment: Comment(
+                  userId: "userId",
+                  username: "Sarah",
+                  postId: "postId",
+                  comment:
+                      "My kids enjoyed painting the birdhouse after building it. It’s been a fun family project!"),
             ),
           ],
         ),
@@ -106,7 +144,7 @@ class CommentText extends StatelessWidget {
     return Text.rich(
       TextSpan(children: [
         TextSpan(
-          text: 'John: ', // Username part
+          text: "${comment.username}: ", // Username part
           style: Theme.of(context)
               .textTheme
               .bodyLarge!
@@ -114,8 +152,7 @@ class CommentText extends StatelessWidget {
         ),
         TextSpan(
           style: Theme.of(context).textTheme.bodyLarge!,
-          text:
-              '"I love how simple the instructions were! The birdhouse turned out great, and the birds seem to love it."', // Comment part
+          text: '"${comment.comment}"', // Comment part
         ),
       ]),
     );
