@@ -9,7 +9,7 @@ class Model extends ChangeNotifier {
   List<BlueprintPost> _favorites = [];
   List<BlueprintPost> get favorites => _favorites;
 
-  List<BlueprintPost> _usersPosts = [];
+  final List<BlueprintPost> _usersPosts = [];
   List<BlueprintPost> get usersPosts => _usersPosts;
 
   Model() {
@@ -19,13 +19,19 @@ class Model extends ChangeNotifier {
   void _setup() async {
     await fetchBlueprints();
     await fetchFavorites();
-    await fetchUsersPosts();
+    //  await fetchUsersPosts();
   }
 
   Future<void> fetchBlueprints() async {
     await FirestoreDb.fetchBlueprints().then((posts) {
+      for (var post in posts) {
+        if (isUserPostOwner(post.owner)) {
+          _usersPosts.add(post);
+        }
+      }
       _blueprintList = posts;
     });
+
     notifyListeners();
   }
 
@@ -47,13 +53,14 @@ class Model extends ChangeNotifier {
     notifyListeners();
   }
 
+/*
   Future<void> fetchUsersPosts() async {
     await FirestoreDb.getCurrentUserBlueprints().then((posts) {
       _usersPosts = posts;
     });
     notifyListeners();
   }
-
+*/
   bool isUserPostOwner(String owner) {
     return FirestoreDb.userID == owner;
   }
@@ -63,6 +70,8 @@ class Model extends ChangeNotifier {
       debugPrint(onValue.toString());
       if (onValue) {
         _usersPosts.remove(post);
+        // Ugly fix, different object references in _userposts and _blueprintlist
+        // just refetch to update. TODO Should do it properly
         fetchBlueprints();
       }
     });

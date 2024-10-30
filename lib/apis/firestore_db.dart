@@ -95,6 +95,7 @@ class FirestoreDb {
     return posts;
   }
 
+/*
   static Future<List<BlueprintPost>> getCurrentUserBlueprints() async {
     List<BlueprintPost> posts = [];
     String user = userID;
@@ -114,7 +115,7 @@ class FirestoreDb {
     }
     return posts;
   }
-
+*/
   static Future<bool> deleteUserBlueprint(BlueprintPost post) async {
     try {
       await _db

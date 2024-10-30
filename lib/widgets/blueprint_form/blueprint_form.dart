@@ -174,7 +174,7 @@ class BlueprintFormState extends State<BlueprintForm> {
 
   FilledButton publishButton() {
     return FilledButton(
-      onPressed: () async {
+      onPressed: () {
         // Validate returns true if the form is valid, or false otherwise.
         if (_formKey.currentState!.validate()) {
           postModel.title = titleTextController.text;
@@ -185,14 +185,14 @@ class BlueprintFormState extends State<BlueprintForm> {
           for (var controller in controllers) {
             controller.clear();
           }
-          await postModel.uploadBlueprint();
+          postModel.uploadBlueprint();
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text("Uploading to firestore..."),
             ),
           );
           Provider.of<Model>(context, listen: false).fetchBlueprints();
-          Provider.of<Model>(context, listen: false).fetchUsersPosts();
+          // Provider.of<Model>(context, listen: false).fetchUsersPosts();
           setState(() {});
         }
       },
