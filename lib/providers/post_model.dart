@@ -18,7 +18,7 @@ class PostModel with ChangeNotifier {
     images = [];
     _imgUrls = [];
     if (post == null) {
-//      category = null;
+      // category = null;
       isEdit = false;
       _post = BlueprintPost();
       return;
@@ -26,8 +26,8 @@ class PostModel with ChangeNotifier {
 
     // Else we are editing
     _post = post;
-    category = _post.category;
     isEdit = true;
+    category = _post.category;
     _imgUrls = _post.imageUrls.keys.toList();
   }
 
@@ -41,18 +41,20 @@ class PostModel with ChangeNotifier {
 
   Future<void> updateBlueprint() async {
     await FirestoreDb.updateUserBlueprint(_post);
+    post = null;
     notifyListeners();
   }
 
-  void updatePostFields(
-      {String? title,
-      String? material,
-      String? instruction,
-      String? category}) {
+  void updatePostFields({
+    String? title,
+    String? material,
+    String? instruction,
+  }) {
+    debugPrint("Category is: $category");
     _post.title = title;
     _post.material = material;
     _post.instruction = instruction;
-    if (!(category == null)) post.category = category;
+    _post.category = category;
   }
 
   Future<void> uploadBlueprint() async {
