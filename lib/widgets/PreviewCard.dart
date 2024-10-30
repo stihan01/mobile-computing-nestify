@@ -53,47 +53,29 @@ class _PreviewCardState extends State<PreviewCard> {
                     )
                   : images[0],
               // Text and button
-              SizedBox(
-                height: 100,
-                width: MediaQuery.of(context).size.width,
-                child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              widget.post.title ?? 'Title',
-                              style: Theme.of(context).textTheme.titleMedium,
-                            ),
-                            Text(
-                              widget.post.category ?? 'Category',
-                              style: Theme.of(context).textTheme.bodyMedium,
-                            ),
-                          ],
-                        ),
-                        Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Provider.of<Model>(context, listen: false)
-                                      .isUserPostOwner(widget.post.owner)
-                                  ? OptionsMenu(
-                                      post: widget.post,
-                                      onEdit: () {
-                                        setState(() {});
-                                      },
-                                    )
-                                  : FavoriteIconButton(post: widget.post),
-                            ],
-                          ),
+
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: ListTile(
+                  title: Text(
+                    widget.post.title ?? 'Title',
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  subtitle: Text(
+                    widget.post.category ?? 'Category',
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                  trailing: Provider.of<Model>(context, listen: false)
+                          .isUserPostOwner(widget.post.owner)
+                      ? OptionsMenu(
+                          post: widget.post,
+                          onEdit: () {
+                            setState(() {});
+                          },
                         )
-                      ],
-                    )),
-              )
+                      : FavoriteIconButton(post: widget.post),
+                ),
+              ),
             ]),
           ),
         ),
