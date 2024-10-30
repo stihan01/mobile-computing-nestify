@@ -29,9 +29,16 @@ class _ItemListState extends State<_ItemList> {
       if (posts.isEmpty) {
         return const Center(child: Text('No posts available'));
       }
-      return ListView.builder(
-        itemBuilder: (context, index) => PreviewCard(post: posts[index]),
-        itemCount: posts.length,
+      return RefreshIndicator(
+        onRefresh: () async {
+          await model.fetchBlueprints().then((posts) {
+            posts = posts;
+          });
+        },
+        child: ListView.builder(
+          itemBuilder: (context, index) => PreviewCard(post: posts[index]),
+          itemCount: posts.length,
+        ),
       );
     });
   }
