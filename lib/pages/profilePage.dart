@@ -33,6 +33,10 @@ class ProfilePage extends StatelessWidget {
                             style: Theme.of(context).textTheme.titleLarge),
                         Text("Member since 2021-09-01",
                             style: Theme.of(context).textTheme.bodyMedium),
+                        TextButton.icon(
+                            onPressed: () {},
+                            icon: Icon(Icons.edit),
+                            label: Text("Edit Profile")),
                       ]),
                 ),
               ],
