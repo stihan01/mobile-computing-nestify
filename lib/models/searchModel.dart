@@ -117,7 +117,6 @@ class SearchModel with ChangeNotifier {
 
   // since the materials in a post is a freetext string, i must check if any of the selected materials are in the string
   bool containsMaterial(BlueprintPost post) {
-    debugPrint("material in a post" + post.material.toString());
     for (String filterMaterial in selectedMaterials) {
       if (post.material != null &&
           post.material!.toLowerCase().contains(filterMaterial.toLowerCase())) {

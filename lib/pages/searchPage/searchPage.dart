@@ -97,30 +97,6 @@ class _SearchpageState extends State<SearchPage> {
     FocusScope.of(context).unfocus();
   }
 
-  /*
-  Widget _SearchBar(){
-    return SearchAnchor.bar(suggestionsBuilder: (BuildContext context, SearchController controller) {
-      var model = Provider.of<SearchModel>(context, listen: false);
-      model.searchBlueprints(controller.text);
-      List<BlueprintPost> suggestions = model.searchList;
-      return suggestions.map((post) {
-        return ListTile(
-          title: Text(post.title ?? ''),
-          onTap: () {
-            controller.text = post.title ?? '';
-            Provider.of<SearchModel>(context, listen: false)
-                .searchBlueprints(post.title ?? '');
-            controller.closeView(post.title ?? '');
-          },
-        );
-      }).toList();
-    },
-    onSubmitted: Provider.of<SearchModel>(context, listen: false)
-                .searchBlueprints(controller.text);
-            controller.closeView(controller.text);,
-    );
-  }*/
-
   void show() {
     filterModalBottomsheet(context);
   }
