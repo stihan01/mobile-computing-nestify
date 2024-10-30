@@ -45,16 +45,17 @@ class TabBox extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const Text(
-                              "Description: ",
+                              "Material: ",
                               style: TextStyle(fontWeight: FontWeight.bold),
                             ),
-                            Text(post.instruction ?? "Instruction"),
+                            Text(post.material ?? "Material"),
                           ],
                         )),
-
+                        
                     // Spacing
                     const SizedBox(height: 16),
 
+                    
                     // Description
                     Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -62,10 +63,10 @@ class TabBox extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const Text(
-                              "Material: ",
+                              "Description: ",
                               style: TextStyle(fontWeight: FontWeight.bold),
                             ),
-                            Text(post.material ?? "Material"),
+                            Text(post.instruction ?? "Instruction"),
                           ],
                         )),
                   ],
