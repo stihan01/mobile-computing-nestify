@@ -50,10 +50,12 @@ final goRouter = GoRouter(
                 GoRoute(
                   path: '/edit',
                   builder: (context, state) {
-                    final post = state.extra
-                        as BlueprintPost; // Extracting the post from extra
+                    final map = state.extra as Map<String,
+                        dynamic>; // Extracting the post from extra
                     return EditBlueprintScreen(
-                        post: post, key: _shellNavigatorDetailKey);
+                        post: map['post'],
+                        onEdit: map['onEdit'],
+                        key: _shellNavigatorDetailKey);
                   },
                 ),
                 // child route
@@ -149,10 +151,12 @@ final goRouter = GoRouter(
                     GoRoute(
                       path: '/edit',
                       builder: (context, state) {
-                        final post = state.extra
-                            as BlueprintPost; // Extracting the post from extra
+                        final map = state.extra as Map<String,
+                            dynamic>; // Extracting the post from extra
                         return EditBlueprintScreen(
-                            post: post, key: _shellNavigatorDetailKey);
+                            post: map['post'],
+                            onEdit: map['onEdit'],
+                            key: _shellNavigatorDetailKey);
                       },
                     ),
                     // child route

@@ -9,7 +9,7 @@ class Model extends ChangeNotifier {
   List<BlueprintPost> _favorites = [];
   List<BlueprintPost> get favorites => _favorites;
 
-  final List<BlueprintPost> _usersPosts = [];
+  List<BlueprintPost> _usersPosts = [];
   List<BlueprintPost> get usersPosts => _usersPosts;
 
   Model() {
@@ -24,6 +24,8 @@ class Model extends ChangeNotifier {
 
   Future<void> fetchBlueprints() async {
     await FirestoreDb.fetchBlueprints().then((posts) {
+      _usersPosts = [];
+      notifyListeners();
       for (var post in posts) {
         if (isUserPostOwner(post.owner)) {
           _usersPosts.add(post);

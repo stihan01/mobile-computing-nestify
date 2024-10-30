@@ -5,16 +5,24 @@ import 'package:nestify/widgets/favorite_icon_button.dart';
 import 'package:nestify/providers/model.dart';
 import 'package:provider/provider.dart';
 
-class PreviewCard extends StatelessWidget {
+class PreviewCard extends StatefulWidget {
   final BlueprintPost post;
-  final String placeholderImage = 'assets/images/buzzhotel.jpg';
+
   const PreviewCard({required this.post, super.key});
 
   @override
+  State<PreviewCard> createState() => _PreviewCardState();
+}
+
+class _PreviewCardState extends State<PreviewCard> {
+  final String placeholderImage = 'assets/images/buzzhotel.jpg';
+
+  @override
   Widget build(BuildContext context) {
-    List<dynamic> images = post.imageUrls.keys.isEmpty
+    debugPrint("Rebuilding with: ${widget.post.title}");
+    List<dynamic> images = widget.post.imageUrls.keys.isEmpty
         ? []
-        : post.imageUrls.keys.map((url) {
+        : widget.post.imageUrls.keys.map((url) {
             return SizedBox(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height - 400,
@@ -33,17 +41,18 @@ class PreviewCard extends StatelessWidget {
             splashColor: Colors.blue.withAlpha(30),
             onTap: () => context.go(
                 '${GoRouterState.of(context).uri.toString()}/details',
-                extra: post),
+                extra: widget.post),
             child: Column(children: [
               images.isEmpty
                   ? Image.asset(
                       placeholderImage,
                       width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height - 400,
+                      height: MediaQuery.of(context).size.height - 500,
                       fit: BoxFit
                           .cover, // Optional: to cover the box size proportionally
                     )
                   : images[0],
+              // Text and button
               SizedBox(
                 height: 100,
                 width: MediaQuery.of(context).size.width,
@@ -56,11 +65,11 @@ class PreviewCard extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              post.title ?? 'Title',
+                              widget.post.title ?? 'Title',
                               style: Theme.of(context).textTheme.titleMedium,
                             ),
                             Text(
-                              post.category ?? 'Category',
+                              widget.post.category ?? 'Category',
                               style: Theme.of(context).textTheme.bodyMedium,
                             ),
                           ],
@@ -71,11 +80,14 @@ class PreviewCard extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
                               Provider.of<Model>(context, listen: false)
-                                      .isUserPostOwner(post.owner)
+                                      .isUserPostOwner(widget.post.owner)
                                   ? OptionsMenu(
-                                      post: post,
+                                      post: widget.post,
+                                      onEdit: () {
+                                        setState(() {});
+                                      },
                                     )
-                                  : FavoriteIconButton(post: post),
+                                  : FavoriteIconButton(post: widget.post),
                             ],
                           ),
                         )
@@ -91,10 +103,10 @@ class PreviewCard extends StatelessWidget {
 }
 
 class OptionsMenu extends StatefulWidget {
-  const OptionsMenu({super.key, required this.post});
+  const OptionsMenu({super.key, required this.post, required this.onEdit});
 
   final BlueprintPost post;
-
+  final Function() onEdit;
   @override
   State<OptionsMenu> createState() => _OptionsMenuState();
 }
@@ -117,7 +129,7 @@ class _OptionsMenuState extends State<OptionsMenu> {
         MenuItemButton(
           onPressed: () {
             context.go('${GoRouterState.of(context).uri.toString()}/edit',
-                extra: widget.post);
+                extra: {'post': widget.post, 'onEdit': widget.onEdit});
           },
           child: const Text('Edit'),
         ),

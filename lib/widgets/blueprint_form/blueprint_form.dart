@@ -10,11 +10,11 @@ import 'dart:io';
 import 'package:provider/provider.dart';
 
 class BlueprintForm extends StatefulWidget {
-  const BlueprintForm({super.key, this.post});
+  const BlueprintForm({super.key, this.post, this.onEdit});
 
   // If blueprint object is provided, the form changes to editing, else it creates a new object
   final BlueprintPost? post;
-
+  final Function()? onEdit;
   @override
   BlueprintFormState createState() {
     return BlueprintFormState();
@@ -179,26 +179,31 @@ class BlueprintFormState extends State<BlueprintForm> {
             instruction: instructionTextController.text,
           );
 
+          if (postModel.isEdit) {
+            if (widget.onEdit != null) {
+              widget.onEdit!(); // Reload previewCard
+            }
+            postModel.updateBlueprint();
+          } else {
+            postModel.uploadBlueprint();
+          }
+
           if (!postModel.isEdit) {
             for (var controller in controllers) {
               controller.clear();
             }
-            postModel.uploadBlueprint();
-          } else {
-            postModel.updateBlueprint();
+
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: postModel.isEdit
+                    ? const Text("Blueprint updated")
+                    : const Text("Blueprint created"),
+              ),
+            );
+            model.fetchBlueprints();
           }
 
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: postModel.isEdit
-                  ? const Text("Blueprint updated")
-                  : const Text("Blueprint created"),
-            ),
-          );
-          model.fetchBlueprints();
-
           // Provider.of<Model>(context, listen: false).fetchUsersPosts();
-          setState(() {});
         }
       },
       child: Text(postModel.isEdit ? "Update" : 'Publish'),

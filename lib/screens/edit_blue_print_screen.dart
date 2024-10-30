@@ -3,8 +3,10 @@ import 'package:nestify/models/blueprint_post.dart';
 import 'package:nestify/widgets/blueprint_form/blueprint_form.dart';
 
 class EditBlueprintScreen extends StatelessWidget {
-  const EditBlueprintScreen({super.key, required this.post});
+  const EditBlueprintScreen(
+      {super.key, required this.post, required this.onEdit});
   final BlueprintPost post;
+  final Function() onEdit;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -12,7 +14,10 @@ class EditBlueprintScreen extends StatelessWidget {
           appBar: AppBar(
             title: const Text("Editing blueprint"),
           ),
-          body: BlueprintForm(post: post)),
+          body: BlueprintForm(
+            post: post,
+            onEdit: onEdit,
+          )),
     );
   }
 }

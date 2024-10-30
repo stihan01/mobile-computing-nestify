@@ -18,9 +18,9 @@ class PostModel with ChangeNotifier {
     images = [];
     _imgUrls = [];
     if (post == null) {
-      category = null;
+//      category = null;
       isEdit = false;
-      _post = BlueprintPost(category);
+      _post = BlueprintPost();
       return;
     }
 
@@ -45,11 +45,14 @@ class PostModel with ChangeNotifier {
   }
 
   void updatePostFields(
-      {String? title, String? material, String? instruction}) {
+      {String? title,
+      String? material,
+      String? instruction,
+      String? category}) {
     _post.title = title;
     _post.material = material;
     _post.instruction = instruction;
-    _post.category = category;
+    if (!(category == null)) post.category = category;
   }
 
   Future<void> uploadBlueprint() async {
