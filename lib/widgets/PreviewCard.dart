@@ -26,10 +26,10 @@ class _PreviewCardState extends State<PreviewCard> {
         : widget.post.imageUrls.keys.map((url) {
             return SizedBox(
               width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height - 400,
+              height: 300,
               child: Image.network(
                 url,
-                fit: BoxFit.fill,
+                fit: BoxFit.cover,
               ),
             );
           }).toList();
@@ -48,7 +48,7 @@ class _PreviewCardState extends State<PreviewCard> {
                   ? Image.asset(
                       placeholderImage,
                       width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height - 500,
+                      height: 300,
                       fit: BoxFit
                           .cover, // Optional: to cover the box size proportionally
                     )
