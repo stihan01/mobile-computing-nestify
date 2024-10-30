@@ -1,4 +1,3 @@
-import 'package:nestify/pages/searchPage/searchPage.dart';
 import 'package:flutter/material.dart';
 import 'package:nestify/apis/firestore_db.dart';
 import 'package:nestify/models/blueprint_post.dart';

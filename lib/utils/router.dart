@@ -9,7 +9,6 @@ import '../pages/profilePage.dart';
 import '../pages/searchPage/searchPage.dart';
 import '../screens/add_blue_print_screen.dart';
 import '../auth_gate.dart';
-import 'package:nestify/models/blueprint_post.dart';
 import 'package:nestify/pages/favorites_page.dart';
 
 // private navigators
@@ -24,7 +23,7 @@ final _shellNavigatorAddKey = GlobalKey<NavigatorState>(debugLabel: 'Addpage');
 final _shellNavigatorProfileKey =
     GlobalKey<NavigatorState>(debugLabel: 'profilepage');
 final _shellNavigatorEditKey =
-GlobalKey<NavigatorState>(debugLabel: 'editpage');
+    GlobalKey<NavigatorState>(debugLabel: 'editpage');
 
 // the one and only GoRouter instance
 final goRouter = GoRouter(
@@ -64,25 +63,26 @@ final goRouter = GoRouter(
                 GoRoute(
                   path: '/details',
                   builder: (context, state) {
-                    final map = state.extra as Map<String,dynamic>; // Extracting the post from extra
-                      return DetailPage(
-                          post: map['post'],
-                          onEdit: map['onEdit'], 
-                          key: _shellNavigatorDetailKey);
+                    final map = state.extra as Map<String,
+                        dynamic>; // Extracting the post from extra
+                    return DetailPage(
+                        post: map['post'],
+                        onEdit: map['onEdit'],
+                        key: _shellNavigatorDetailKey);
                   },
                   routes: [
-                        GoRoute(
-                          path: '/edit',
-                          builder: (context, state) {
-                            final map = state.extra as Map<String,
-                                dynamic>; // Extracting the post from extra
-                            return EditBlueprintScreen(
-                                post: map['post'],
-                                onEdit: map['onEdit'],
-                                key: _shellNavigatorEditKey);
-                          },
-                        ),
-                      ],
+                    GoRoute(
+                      path: '/edit',
+                      builder: (context, state) {
+                        final map = state.extra as Map<String,
+                            dynamic>; // Extracting the post from extra
+                        return EditBlueprintScreen(
+                            post: map['post'],
+                            onEdit: map['onEdit'],
+                            key: _shellNavigatorEditKey);
+                      },
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -103,25 +103,26 @@ final goRouter = GoRouter(
                 GoRoute(
                   path: '/details',
                   builder: (context, state) {
-                    final map = state.extra as Map<String,dynamic>; // Extracting the post from extra
-                      return DetailPage(
-                          post: map['post'],
-                          onEdit: map['onEdit'], 
-                          key: _shellNavigatorDetailKey);
+                    final map = state.extra as Map<String,
+                        dynamic>; // Extracting the post from extra
+                    return DetailPage(
+                        post: map['post'],
+                        onEdit: map['onEdit'],
+                        key: _shellNavigatorDetailKey);
                   },
                   routes: [
-                        GoRoute(
-                          path: '/edit',
-                          builder: (context, state) {
-                            final map = state.extra as Map<String,
-                                dynamic>; // Extracting the post from extra
-                            return EditBlueprintScreen(
-                                post: map['post'],
-                                onEdit: map['onEdit'],
-                                key: _shellNavigatorEditKey);
-                          },
-                        ),
-                      ],
+                    GoRoute(
+                      path: '/edit',
+                      builder: (context, state) {
+                        final map = state.extra as Map<String,
+                            dynamic>; // Extracting the post from extra
+                        return EditBlueprintScreen(
+                            post: map['post'],
+                            onEdit: map['onEdit'],
+                            key: _shellNavigatorEditKey);
+                      },
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -166,12 +167,12 @@ final goRouter = GoRouter(
                     GoRoute(
                       path: '/details',
                       builder: (context, state) {
-                        final map = state.extra as Map<String,dynamic>; // Extracting the post from extra
+                        final map = state.extra as Map<String,
+                            dynamic>; // Extracting the post from extra
                         return DetailPage(
                             post: map['post'],
-                            onEdit: map['onEdit'], 
+                            onEdit: map['onEdit'],
                             key: _shellNavigatorDetailKey);
-                            
                       },
                       routes: [
                         GoRoute(
@@ -208,10 +209,11 @@ final goRouter = GoRouter(
                     GoRoute(
                       path: '/details',
                       builder: (context, state) {
-                        final map = state.extra as Map<String,dynamic>; // Extracting the post from extra
+                        final map = state.extra as Map<String,
+                            dynamic>; // Extracting the post from extra
                         return DetailPage(
                             post: map['post'],
-                            onEdit: map['onEdit'], 
+                            onEdit: map['onEdit'],
                             key: _shellNavigatorDetailKey);
                       },
                       routes: [

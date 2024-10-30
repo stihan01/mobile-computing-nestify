@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:nestify/models/blueprint_post.dart';
 import 'package:nestify/models/searchModel.dart';
 import 'package:provider/provider.dart';
