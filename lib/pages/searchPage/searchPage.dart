@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:nestify/models/blueprint_post.dart';
 import 'package:nestify/models/searchModel.dart';
 import 'package:provider/provider.dart';
 import 'package:nestify/pages/searchPage/filterModalBottomsheet.dart';
@@ -13,6 +14,8 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchpageState extends State<SearchPage> {
+  final SearchController controller = SearchController();
+  final FocusScopeNode focusNode = FocusScopeNode();
   @override
   Widget build(BuildContext context) {
     return Consumer<SearchModel>(
@@ -22,7 +25,11 @@ class _SearchpageState extends State<SearchPage> {
           body: Center(
             child: Column(
               children: [
-                _SearchBar(),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0, vertical: 8.0),
+                  child: _SearchBar(),
+                ),
                 Expanded(child: _SearchResults()),
               ],
             ),
@@ -34,35 +41,77 @@ class _SearchpageState extends State<SearchPage> {
 
   Widget _SearchBar() {
     return SearchAnchor(
-        builder: (BuildContext context, SearchController controller) {
-      return SearchBar(
-        elevation: WidgetStatePropertyAll(2),
-        controller: controller,
-        padding: const WidgetStatePropertyAll<EdgeInsets>(
-            EdgeInsets.symmetric(horizontal: 16.0)),
-        onTap: () {
-          controller.openView();
-        },
-        onChanged: (_) {
-          controller.openView();
-        },
-        leading: const Icon(Icons.search),
-        trailing: [IconButton(onPressed: show, icon: Icon(Icons.filter_alt))],
-      );
-    }, suggestionsBuilder: (BuildContext context, SearchController controller) {
-      return List<ListTile>.generate(5, (int index) {
-        final String item = 'item $index';
-        return ListTile(
-          title: Text(item),
+      searchController: controller,
+      builder: (context, controller) {
+        return SearchBar(
+          elevation: WidgetStatePropertyAll(2),
+          focusNode: focusNode,
+          controller: controller,
           onTap: () {
-            setState(() {
-              controller.closeView(item);
-            });
+            controller.openView();
+          },
+          onChanged: (_) {
+            controller.openView();
+          },
+          leading: const Icon(Icons.search),
+          trailing: [
+            IconButton(onPressed: show, icon: Icon(Icons.filter_alt)),
+          ],
+        );
+      },
+      suggestionsBuilder: (BuildContext context, SearchController controller) {
+        var model = Provider.of<SearchModel>(context, listen: false);
+        model.searchBlueprints(controller.text);
+        List<BlueprintPost> suggestions = model.searchList;
+        return suggestions.map((post) {
+          return ListTile(
+            title: Text(post.title ?? ''),
+            onTap: () {
+              controller.text = post.title ?? '';
+              Provider.of<SearchModel>(context, listen: false)
+                  .searchBlueprints(post.title ?? '');
+              controller.closeView(post.title ?? '');
+            },
+          );
+        }).toList();
+      },
+      viewTrailing: [
+        IconButton(
+          onPressed: () {
+            Provider.of<SearchModel>(context, listen: false)
+                .searchBlueprints(controller.text);
+            controller.closeView(controller.text);
+            FocusScope.of(context).unfocus();
+          },
+          icon: Icon(Icons.search),
+        )
+      ],
+    );
+  }
+
+  /*
+  Widget _SearchBar(){
+    return SearchAnchor.bar(suggestionsBuilder: (BuildContext context, SearchController controller) {
+      var model = Provider.of<SearchModel>(context, listen: false);
+      model.searchBlueprints(controller.text);
+      List<BlueprintPost> suggestions = model.searchList;
+      return suggestions.map((post) {
+        return ListTile(
+          title: Text(post.title ?? ''),
+          onTap: () {
+            controller.text = post.title ?? '';
+            Provider.of<SearchModel>(context, listen: false)
+                .searchBlueprints(post.title ?? '');
+            controller.closeView(post.title ?? '');
           },
         );
-      });
-    });
-  }
+      }).toList();
+    },
+    onSubmitted: Provider.of<SearchModel>(context, listen: false)
+                .searchBlueprints(controller.text);
+            controller.closeView(controller.text);,
+    );
+  }*/
 
   void show() {
     filterModalBottomsheet(context);
@@ -79,7 +128,7 @@ class _SearchResultsState extends State<_SearchResults> {
   Widget build(BuildContext context) {
     return Consumer<SearchModel>(
       builder: (context, model, child) {
-        var posts = model.filteredList;
+        var posts = model.searchList;
         if (posts.isEmpty) {
           return Center(child: Text('No posts matches your search'));
         }
