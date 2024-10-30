@@ -115,7 +115,10 @@ class _OptionsMenuState extends State<OptionsMenu> {
       childFocusNode: _buttonFocusNode,
       menuChildren: <Widget>[
         MenuItemButton(
-          onPressed: () {},
+          onPressed: () {
+            context.go('${GoRouterState.of(context).uri.toString()}/edit',
+                extra: widget.post);
+          },
           child: const Text('Edit'),
         ),
         MenuItemButton(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:firebase_auth/firebase_auth.dart' hide EmailAuthProvider;
 import 'package:nestify/pages/mybuilds_page.dart';
+import 'package:nestify/screens/edit_blue_print_screen.dart';
 import '../pages/homePage.dart';
 import '../pages/detail_page/detailPage.dart';
 import '../pages/profilePage.dart';
@@ -118,37 +119,44 @@ final goRouter = GoRouter(
                 // child route
                 GoRoute(
                   path: 'favorites',
-                  builder: (context, state) =>
-                      const FavoritesPage(),
+                  builder: (context, state) => const FavoritesPage(),
                   routes: [
-                      // child route
-                      GoRoute(
-                        path: '/details',
-                        builder: (context, state) {
-                          final post = state.extra
-                              as BlueprintPost; // Extracting the post from extra
-                          return DetailPage(
-                              post: post, key: _shellNavigatorDetailKey);
-                        },
-                      ),
-                    ],
+                    // child route
+                    GoRoute(
+                      path: '/details',
+                      builder: (context, state) {
+                        final post = state.extra
+                            as BlueprintPost; // Extracting the post from extra
+                        return DetailPage(
+                            post: post, key: _shellNavigatorDetailKey);
+                      },
+                    ),
+                  ],
                 ),
                 GoRoute(
                   path: 'mybuilds',
-                  builder: (context, state) =>
-                      const MybuildsPage(),
-                      routes: [
-                      // child route
-                      GoRoute(
-                        path: '/details',
-                        builder: (context, state) {
-                          final post = state.extra
-                              as BlueprintPost; // Extracting the post from extra
-                          return DetailPage(
-                              post: post, key: _shellNavigatorDetailKey);
-                        },
-                      ),
-                    ],
+                  builder: (context, state) => const MybuildsPage(),
+                  routes: [
+                    GoRoute(
+                      path: '/edit',
+                      builder: (context, state) {
+                        final post = state.extra
+                            as BlueprintPost; // Extracting the post from extra
+                        return EditBlueprintScreen(
+                            post: post, key: _shellNavigatorDetailKey);
+                      },
+                    ),
+                    // child route
+                    GoRoute(
+                      path: '/details',
+                      builder: (context, state) {
+                        final post = state.extra
+                            as BlueprintPost; // Extracting the post from extra
+                        return DetailPage(
+                            post: post, key: _shellNavigatorDetailKey);
+                      },
+                    ),
+                  ],
                 ),
               ],
             ),
