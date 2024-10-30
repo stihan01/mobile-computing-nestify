@@ -1,0 +1,131 @@
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:nestify/models/blueprint_post.dart';
+import 'package:nestify/models/searchModel.dart';
+import 'package:provider/provider.dart';
+import 'package:nestify/pages/searchPage/filterModalBottomsheet.dart';
+import 'package:nestify/widgets/PreviewCard.dart';
+
+class SearchPage extends StatefulWidget {
+  const SearchPage({super.key});
+
+  @override
+  State<SearchPage> createState() => _SearchpageState();
+}
+
+class _SearchpageState extends State<SearchPage> {
+  final SearchController controller = SearchController();
+  final FocusScopeNode focusNode = FocusScopeNode();
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<SearchModel>(
+      builder: (context, searchModel, child) {
+        return Scaffold(
+          appBar: AppBar(title: const Text('Search Screen')),
+          body: Center(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0, vertical: 8.0),
+                  child: _SearchBar(),
+                ),
+                Expanded(child: _SearchResults()),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _SearchBar() {
+    return SearchAnchor(
+        searchController: controller,
+        builder: (context, controller) {
+          return SearchBar(
+            elevation: WidgetStatePropertyAll(2),
+            focusNode: focusNode,
+            controller: controller,
+            onTap: () {
+              controller.openView();
+            },
+            onChanged: (_) {
+              controller.openView();
+            },
+            leading: const Icon(Icons.search),
+            trailing: [
+              IconButton(onPressed: show, icon: Icon(Icons.filter_alt)),
+            ],
+          );
+        },
+        suggestionsBuilder:
+            (BuildContext context, SearchController controller) {
+          var model = Provider.of<SearchModel>(context, listen: false);
+          model.searchBlueprints(controller.text);
+          List<BlueprintPost> suggestions = model.searchList;
+          return suggestions.map((post) {
+            return ListTile(
+              title: Text(post.title ?? ''),
+              onTap: () {
+                searchAndClose(controller, post.title ?? '');
+              },
+            );
+          }).toList();
+        },
+        viewTrailing: [
+          IconButton(
+            onPressed: () {
+              searchAndClose(controller, controller.text);
+            },
+            icon: Icon(Icons.search),
+          ),
+          IconButton(
+              onPressed: () {
+                controller.clear();
+              },
+              icon: Icon(Icons.clear))
+        ],
+        viewOnSubmitted: (query) {
+          searchAndClose(controller, query);
+        });
+  }
+
+  void searchAndClose(SearchController controller, String text) {
+    Provider.of<SearchModel>(context, listen: false).searchBlueprints(text);
+    controller.closeView(text);
+    FocusScope.of(context).unfocus();
+  }
+
+  void show() {
+    filterModalBottomsheet(context);
+  }
+}
+
+class _SearchResults extends StatefulWidget {
+  @override
+  State<_SearchResults> createState() => _SearchResultsState();
+}
+
+class _SearchResultsState extends State<_SearchResults> {
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<SearchModel>(
+      builder: (context, model, child) {
+        var posts = model.searchList;
+        if (posts.isEmpty) {
+          return Center(child: Text('No posts matches your search'));
+        }
+        return ListView.builder(
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          itemBuilder: (context, index) => Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: PreviewCard(post: posts[index]),
+          ),
+          itemCount: posts.length,
+        );
+      },
+    );
+  }
+}

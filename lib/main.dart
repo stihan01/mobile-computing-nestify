@@ -3,6 +3,7 @@ import 'package:nestify/providers/post_model.dart';
 import 'utils/router.dart';
 import 'package:provider/provider.dart';
 import 'providers/model.dart';
+import 'models/searchModel.dart';
 // firebase imports
 import 'package:firebase_core/firebase_core.dart';
 import 'package:nestify/firebase_options.dart';
@@ -17,7 +18,8 @@ Future<void> main() async {
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (context) => Model()),
-      ChangeNotifierProvider(create: (context) => PostModel())
+      ChangeNotifierProvider(create: (context) => PostModel()),
+      ChangeNotifierProvider(create: (context) => SearchModel())
     ],
     child: const MainApp(),
   ));
