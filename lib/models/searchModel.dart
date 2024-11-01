@@ -6,23 +6,12 @@ class SearchModel with ChangeNotifier {
   Set<String> selectedCategories = {};
   Set<String> selectedMaterials = {};
 
-  List<String> categories = ['Bird house', 'Insect hotel', 'Birdfeeder'];
-  List<String> materials = ['Wood', 'Plastic', 'Metal', 'Paper', 'Cardboard'];
-
   List<BlueprintPost> _blueprintList = [];
-  List<BlueprintPost> get blueprintList => _blueprintList;
 
   List<BlueprintPost> _searchList = [];
   List<BlueprintPost> get searchList => _searchList;
 
   List<BlueprintPost> _searchBeforeFilterList = [];
-
-//Categories and materials selected by the filterchips in the searchpage
-  Set<String> get getSelectedCategories => selectedCategories;
-  Set<String> get getSelectedMaterials => selectedMaterials;
-
-  List<String> get getCategories => categories;
-  List<String> get getMaterials => materials;
 
   SearchModel() {
     _setup();

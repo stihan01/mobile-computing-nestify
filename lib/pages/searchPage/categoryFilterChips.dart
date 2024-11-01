@@ -10,11 +10,19 @@ class CategoryFilterChips extends StatefulWidget {
 }
 
 class _CategoryFilterChipsState extends State<CategoryFilterChips> {
+  late List<String> categories;
+
+  @override
+  void initState() {
+    categories = ['Bird house', 'Insect hotel', 'Birdfeeder'];
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<SearchModel>(
       builder: (context, model, child) {
-        Set<String> selectedCategories = model.getSelectedCategories;
+        Set<String> selectedCategories = model.selectedCategories;
         return Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -22,7 +30,7 @@ class _CategoryFilterChipsState extends State<CategoryFilterChips> {
             Text('Category:', style: Theme.of(context).textTheme.labelLarge),
             Wrap(
                 spacing: 8.0,
-                children: model.categories.map((String category) {
+                children: categories.map((String category) {
                   return FilterChip(
                     label: Text(category),
                     selected: selectedCategories.contains(category),

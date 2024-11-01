@@ -10,10 +10,18 @@ class MaterialFilterChips extends StatefulWidget {
 }
 
 class _MaterialFilterChipsState extends State<MaterialFilterChips> {
+  late List<String> materials;
+
+  @override
+  void initState() {
+    materials = ['Wood', 'Plastic', 'Metal', 'Paper', 'Cardboard'];
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<SearchModel>(builder: (context, model, child) {
-      Set<String> selectedMaterials = model.getSelectedMaterials;
+      Set<String> selectedMaterials = model.selectedMaterials;
       return Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -21,7 +29,7 @@ class _MaterialFilterChipsState extends State<MaterialFilterChips> {
           Text('Materials:', style: Theme.of(context).textTheme.labelLarge),
           Wrap(
               spacing: 8.0,
-              children: model.materials.map((String material) {
+              children: materials.map((String material) {
                 return FilterChip(
                   label: Text(material),
                   selected: selectedMaterials.contains(material),
