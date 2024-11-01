@@ -1,33 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:nestify/apis/firestore_db.dart';
 import 'package:nestify/models/blueprint_post.dart';
 
 class SearchModel with ChangeNotifier {
   Set<String> selectedCategories = {};
   Set<String> selectedMaterials = {};
-
-  List<BlueprintPost> _blueprintList = [];
-
-  List<BlueprintPost> _searchList = [];
-  List<BlueprintPost> get searchList => _searchList;
-
+  List<BlueprintPost> blueprintList = [];
+  List<BlueprintPost> searchList = [];
   List<BlueprintPost> _searchBeforeFilterList = [];
 
-  SearchModel() {
-    _setup();
-  }
-
-  _setup() async {
-    await fetchBlueprints();
-    _searchList = _blueprintList;
-  }
-
-  Future<void> fetchBlueprints() async {
-    await FirestoreDb.fetchBlueprints().then((posts) {
-      _blueprintList = posts;
-    });
-    notifyListeners();
-  }
+  SearchModel();
 
   void reset() {
     selectedCategories = {};
@@ -39,7 +20,7 @@ class SearchModel with ChangeNotifier {
     List<BlueprintPost> tempFilteredList = [];
     //if query is not empty -> search though blueprintlist and see what matches the query
     if (query.isNotEmpty) {
-      for (BlueprintPost post in _blueprintList) {
+      for (BlueprintPost post in blueprintList) {
         if (post.title != null &&
             post.title!.toLowerCase().contains(query.toLowerCase())) {
           tempFilteredList.add(post);
@@ -47,11 +28,11 @@ class SearchModel with ChangeNotifier {
       }
       //if query is empty -> show all blueprints
     } else {
-      tempFilteredList = _blueprintList;
+      tempFilteredList = blueprintList;
     }
 
     _searchBeforeFilterList = tempFilteredList;
-    _searchList = tempFilteredList;
+    searchList = tempFilteredList;
     //filters blueprints, makes sure that only the selected categories are shown
     filterBlueprints();
 
@@ -62,7 +43,7 @@ class SearchModel with ChangeNotifier {
     List<BlueprintPost> tempFilteredList = [];
     //if no categories or materials are selected, show all blueprints
     if (selectedCategories.isEmpty && selectedMaterials.isEmpty) {
-      _searchList = _searchBeforeFilterList;
+      searchList = _searchBeforeFilterList;
       notifyListeners();
       return;
     }
@@ -73,7 +54,7 @@ class SearchModel with ChangeNotifier {
           tempFilteredList.add(post);
         }
       }
-      _searchList = tempFilteredList;
+      searchList = tempFilteredList;
       notifyListeners();
       return;
     }
@@ -85,7 +66,7 @@ class SearchModel with ChangeNotifier {
           tempFilteredList.add(post);
         }
       }
-      _searchList = tempFilteredList;
+      searchList = tempFilteredList;
       notifyListeners();
       return;
     }
@@ -97,7 +78,7 @@ class SearchModel with ChangeNotifier {
           tempFilteredList.add(post);
         }
       }
-      _searchList = tempFilteredList;
+      searchList = tempFilteredList;
       notifyListeners();
       return;
     }
