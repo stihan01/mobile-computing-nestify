@@ -1,34 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:firebase_auth/firebase_auth.dart' hide EmailAuthProvider;
-import 'package:nestify/screens/mybuilds_screen.dart';
-import 'package:nestify/screens/upsert_screens/edit_blue_print_screen.dart';
-import '../screens/home_screen.dart';
-import '../screens/detail_screen/detail_screen.dart';
-import '../screens/profile_screen.dart';
-import '../screens/search_screen/search_screen.dart';
-import '../screens/upsert_screens/add_blue_print_screen.dart';
-import '../auth_gate.dart';
-import 'package:nestify/screens/favorites_screen.dart';
 
-// private navigators
-final _rootNavigatorKey = GlobalKey<NavigatorState>();
-final _shellNavigatorHomeKey =
-    GlobalKey<NavigatorState>(debugLabel: 'homepage');
-final _shellNavigatorDetailKey =
-    GlobalKey<NavigatorState>(debugLabel: 'detailpage');
-final _shellNavigatorSearchKey =
-    GlobalKey<NavigatorState>(debugLabel: 'searchpage');
-final _shellNavigatorAddKey = GlobalKey<NavigatorState>(debugLabel: 'Addpage');
-final _shellNavigatorProfileKey =
-    GlobalKey<NavigatorState>(debugLabel: 'profilepage');
-final _shellNavigatorEditKey =
-    GlobalKey<NavigatorState>(debugLabel: 'editpage');
+import 'package:nestify/utils/branches/add_branch.dart';
+import 'package:nestify/utils/branches/home_branch.dart';
+import 'package:nestify/utils/branches/profile_branch.dart';
+import 'package:nestify/utils/branches/search_branch.dart';
+
+import '../auth_gate.dart';
 
 // the one and only GoRouter instance
 final goRouter = GoRouter(
   initialLocation: '/login',
-  navigatorKey: _rootNavigatorKey,
+  navigatorKey: GlobalKey<NavigatorState>(), // Root navigator key
   routes: [
     // Stateful nested navigation based on:
     StatefulShellRoute.indexedStack(
@@ -37,215 +21,10 @@ final goRouter = GoRouter(
         return ScaffoldWithNestedNavigation(navigationShell: navigationShell);
       },
       branches: [
-        // first branch Home
-        StatefulShellBranch(
-          navigatorKey: _shellNavigatorHomeKey,
-          routes: [
-            // top route inside branch
-            GoRoute(
-              path: '/home',
-              pageBuilder: (context, state) => const NoTransitionPage(
-                child: HomeScreen(),
-              ),
-              routes: [
-                GoRoute(
-                  path: '/edit',
-                  builder: (context, state) {
-                    final map = state.extra as Map<String,
-                        dynamic>; // Extracting the post from extra
-                    return EditBlueprintScreen(
-                        post: map['post'],
-                        onEdit: map['onEdit'],
-                        key: _shellNavigatorEditKey);
-                  },
-                ),
-                // child route
-                GoRoute(
-                  path: '/details',
-                  builder: (context, state) {
-                    final map = state.extra as Map<String,
-                        dynamic>; // Extracting the post from extra
-                    return DetailScreen(
-                        post: map['post'],
-                        onEdit: map['onEdit'],
-                        key: _shellNavigatorDetailKey);
-                  },
-                  routes: [
-                    GoRoute(
-                      path: '/edit',
-                      builder: (context, state) {
-                        final map = state.extra as Map<String,
-                            dynamic>; // Extracting the post from extra
-                        return EditBlueprintScreen(
-                            post: map['post'],
-                            onEdit: map['onEdit'],
-                            key: _shellNavigatorEditKey);
-                      },
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ],
-        ),
-        // second branch Search
-        StatefulShellBranch(
-          navigatorKey: _shellNavigatorSearchKey,
-          routes: [
-            // top route inside branch
-            GoRoute(
-              path: '/search',
-              pageBuilder: (context, state) => const NoTransitionPage(
-                child: SearchScreen(),
-              ),
-              routes: [
-                GoRoute(
-                    path: '/edit',
-                    builder: (context, state) {
-                      final map = state.extra as Map<String,
-                          dynamic>; // Extracting the post from extra
-                      return EditBlueprintScreen(
-                          post: map['post'],
-                          onEdit: map['onEdit'],
-                          key: _shellNavigatorEditKey);
-                    }),
-                // child route
-                GoRoute(
-                  path: '/details',
-                  builder: (context, state) {
-                    final map = state.extra as Map<String,
-                        dynamic>; // Extracting the post from extra
-                    return DetailScreen(
-                        post: map['post'],
-                        onEdit: map['onEdit'],
-                        key: _shellNavigatorDetailKey);
-                  },
-                  routes: [
-                    GoRoute(
-                      path: '/edit',
-                      builder: (context, state) {
-                        final map = state.extra as Map<String,
-                            dynamic>; // Extracting the post from extra
-                        return EditBlueprintScreen(
-                            post: map['post'],
-                            onEdit: map['onEdit'],
-                            key: _shellNavigatorEditKey);
-                      },
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ],
-        ),
-        StatefulShellBranch(
-          navigatorKey: _shellNavigatorAddKey,
-          routes: [
-            // top route inside branch
-            GoRoute(
-              path: '/add',
-              pageBuilder: (context, state) => const NoTransitionPage(
-                child: AddBlueprintScreen(),
-              ),
-              // routes: [
-              //   // child route
-              //   GoRoute(
-              //     path: 'details',
-              //     builder: (context, state) =>
-              //         const DetailsScreen(label: 'B'),
-              //   ),
-              // ],
-            ),
-          ],
-        ),
-        StatefulShellBranch(
-          navigatorKey: _shellNavigatorProfileKey,
-          routes: [
-            // top route inside branch
-            GoRoute(
-              path: '/profile',
-              pageBuilder: (context, state) => const NoTransitionPage(
-                child: ProfileScreen(),
-              ),
-              routes: [
-                // child route
-                GoRoute(
-                  path: 'favorites',
-                  builder: (context, state) => const FavoritesScreen(),
-                  routes: [
-                    // child route
-                    GoRoute(
-                      path: '/details',
-                      builder: (context, state) {
-                        final map = state.extra as Map<String,
-                            dynamic>; // Extracting the post from extra
-                        return DetailScreen(
-                            post: map['post'],
-                            onEdit: map['onEdit'],
-                            key: _shellNavigatorDetailKey);
-                      },
-                      routes: [
-                        GoRoute(
-                          path: '/edit',
-                          builder: (context, state) {
-                            final map = state.extra as Map<String,
-                                dynamic>; // Extracting the post from extra
-                            return EditBlueprintScreen(
-                                post: map['post'],
-                                onEdit: map['onEdit'],
-                                key: _shellNavigatorEditKey);
-                          },
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                GoRoute(
-                  path: 'mybuilds',
-                  builder: (context, state) => const MybuildsScreen(),
-                  routes: [
-                    GoRoute(
-                      path: '/edit',
-                      builder: (context, state) {
-                        final map = state.extra as Map<String,
-                            dynamic>; // Extracting the post from extra
-                        return EditBlueprintScreen(
-                            post: map['post'],
-                            onEdit: map['onEdit'],
-                            key: _shellNavigatorEditKey);
-                      },
-                    ),
-                    // child route
-                    GoRoute(
-                      path: '/details',
-                      builder: (context, state) {
-                        final map = state.extra as Map<String,
-                            dynamic>; // Extracting the post from extra
-                        return DetailScreen(
-                            post: map['post'],
-                            onEdit: map['onEdit'],
-                            key: _shellNavigatorDetailKey);
-                      },
-                      routes: [
-                        GoRoute(
-                          path: '/edit',
-                          builder: (context, state) {
-                            final map = state.extra as Map<String,
-                                dynamic>; // Extracting the post from extra
-                            return EditBlueprintScreen(
-                                post: map['post'],
-                                onEdit: map['onEdit'],
-                                key: _shellNavigatorEditKey);
-                          },
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ],
-        ),
+        homeBranch(),
+        searchBranch(),
+        addBranch(),
+        profileBranch(),
       ],
     ),
     GoRoute(

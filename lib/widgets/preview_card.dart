@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 class PreviewCard extends StatefulWidget {
   final BlueprintPost post;
 
-  const PreviewCard({required this.post, super.key});
+  const PreviewCard({super.key, required this.post});
 
   @override
   State<PreviewCard> createState() => _PreviewCardState();

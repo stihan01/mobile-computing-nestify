@@ -77,3 +77,9 @@ class EditPostModel extends ChangeNotifier implements PostModel {
     _post.category = category;
   }
 }
+
+class HomeEditPostModel extends EditPostModel {}
+
+class SearchEditPostModel extends EditPostModel {}
+
+class ProfileEditPostModel extends EditPostModel {}

@@ -20,7 +20,10 @@ Future<void> main() async {
     providers: [
       ChangeNotifierProvider(create: (context) => Model()),
       ChangeNotifierProvider(create: (context) => AddPostModel()),
-      ChangeNotifierProvider(create: (context) => EditPostModel()),
+      // ChangeNotifierProvider(create: (context) => EditPostModel()),
+      ChangeNotifierProvider(create: (context) => SearchEditPostModel()),
+      ChangeNotifierProvider(create: (context) => HomeEditPostModel()),
+      ChangeNotifierProvider(create: (context) => ProfileEditPostModel()),
       ChangeNotifierProvider(create: (context) => SearchModel())
     ],
     child: const MainApp(),

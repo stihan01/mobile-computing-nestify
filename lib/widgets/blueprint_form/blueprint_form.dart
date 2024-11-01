@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:nestify/providers/add_post_model.dart';
 import 'package:nestify/providers/model.dart';
 import 'package:nestify/models/post_model.dart';
 import 'package:nestify/widgets/blueprint_form/widgets/image_box.dart';
@@ -75,7 +74,7 @@ class BlueprintFormState extends State<BlueprintForm> {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<AddPostModel>();
+    // context.watch<AddPostModel>();
     final formContent = [
       imageGrid(),
       cameraButton(),
