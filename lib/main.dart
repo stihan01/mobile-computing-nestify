@@ -4,7 +4,7 @@ import 'package:nestify/providers/edit_post_model.dart';
 import 'utils/router.dart';
 import 'package:provider/provider.dart';
 import 'providers/model.dart';
-import 'models/searchModel.dart';
+import 'models/search_model.dart';
 // firebase imports
 import 'package:firebase_core/firebase_core.dart';
 import 'package:nestify/firebase_options.dart';

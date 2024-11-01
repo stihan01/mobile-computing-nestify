@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:nestify/models/blueprint_post.dart';
-import 'package:nestify/models/searchModel.dart';
+import 'package:nestify/models/search_model.dart';
 import 'package:nestify/providers/model.dart';
 import 'package:provider/provider.dart';
-import 'package:nestify/pages/searchPage/filterModalBottomsheet.dart';
+import 'package:nestify/pages/searchPage/filter_modal_bottomsheet.dart';
 import 'package:nestify/widgets/PreviewCard.dart';
 
 class SearchPage extends StatefulWidget {
