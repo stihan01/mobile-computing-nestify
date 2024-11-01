@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:firebase_auth/firebase_auth.dart' hide EmailAuthProvider;
-import 'package:nestify/pages/mybuilds_page.dart';
+import 'package:nestify/screens/mybuilds_screen.dart';
 import 'package:nestify/screens/edit_blue_print_screen.dart';
-import '../pages/homePage.dart';
-import '../pages/detail_page/detailPage.dart';
-import '../pages/profilePage.dart';
-import '../pages/searchPage/searchPage.dart';
+import '../screens/home_screen.dart';
+import '../screens/detail_screen/detail_screen.dart';
+import '../screens/profile_screen.dart';
+import '../screens/search_screen/search_screen.dart';
 import '../screens/add_blue_print_screen.dart';
 import '../auth_gate.dart';
-import 'package:nestify/pages/favorites_page.dart';
+import 'package:nestify/screens/favorites_screen.dart';
 
 // private navigators
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -45,7 +45,7 @@ final goRouter = GoRouter(
             GoRoute(
               path: '/home',
               pageBuilder: (context, state) => const NoTransitionPage(
-                child: HomePage(),
+                child: HomeScreen(),
               ),
               routes: [
                 GoRoute(
@@ -65,7 +65,7 @@ final goRouter = GoRouter(
                   builder: (context, state) {
                     final map = state.extra as Map<String,
                         dynamic>; // Extracting the post from extra
-                    return DetailPage(
+                    return DetailScreen(
                         post: map['post'],
                         onEdit: map['onEdit'],
                         key: _shellNavigatorDetailKey);
@@ -96,7 +96,7 @@ final goRouter = GoRouter(
             GoRoute(
               path: '/search',
               pageBuilder: (context, state) => const NoTransitionPage(
-                child: SearchPage(),
+                child: SearchScreen(),
               ),
               routes: [
                 GoRoute(
@@ -115,7 +115,7 @@ final goRouter = GoRouter(
                   builder: (context, state) {
                     final map = state.extra as Map<String,
                         dynamic>; // Extracting the post from extra
-                    return DetailPage(
+                    return DetailScreen(
                         post: map['post'],
                         onEdit: map['onEdit'],
                         key: _shellNavigatorDetailKey);
@@ -165,13 +165,13 @@ final goRouter = GoRouter(
             GoRoute(
               path: '/profile',
               pageBuilder: (context, state) => const NoTransitionPage(
-                child: ProfilePage(),
+                child: ProfileScreen(),
               ),
               routes: [
                 // child route
                 GoRoute(
                   path: 'favorites',
-                  builder: (context, state) => const FavoritesPage(),
+                  builder: (context, state) => const FavoritesScreen(),
                   routes: [
                     // child route
                     GoRoute(
@@ -179,7 +179,7 @@ final goRouter = GoRouter(
                       builder: (context, state) {
                         final map = state.extra as Map<String,
                             dynamic>; // Extracting the post from extra
-                        return DetailPage(
+                        return DetailScreen(
                             post: map['post'],
                             onEdit: map['onEdit'],
                             key: _shellNavigatorDetailKey);
@@ -202,7 +202,7 @@ final goRouter = GoRouter(
                 ),
                 GoRoute(
                   path: 'mybuilds',
-                  builder: (context, state) => const MybuildsPage(),
+                  builder: (context, state) => const MybuildsScreen(),
                   routes: [
                     GoRoute(
                       path: '/edit',
@@ -221,7 +221,7 @@ final goRouter = GoRouter(
                       builder: (context, state) {
                         final map = state.extra as Map<String,
                             dynamic>; // Extracting the post from extra
-                        return DetailPage(
+                        return DetailScreen(
                             post: map['post'],
                             onEdit: map['onEdit'],
                             key: _shellNavigatorDetailKey);

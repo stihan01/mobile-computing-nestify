@@ -16,7 +16,7 @@ class _CategoryDropdownMenuState extends State<CategoryDropdownMenu> {
   @override
   void initState() {
     super.initState();
-    // TODO fix proper categories
+    // TODO Fix enums
     categories = <String>['Bird house', 'Insect hotel', 'Birdfeeder'];
     dropdownValue = widget.category;
   }

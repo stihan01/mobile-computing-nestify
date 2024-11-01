@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:nestify/models/search_model.dart';
-import 'package:nestify/pages/searchPage/category_filter_chips.dart';
-import 'package:nestify/pages/searchPage/material_filter_chips.dart';
+import 'package:nestify/providers/search_model.dart';
+import 'package:nestify/screens/search_screen/widgets/category_filter_chips.dart';
+import 'package:nestify/screens/search_screen/widgets/material_filter_chips.dart';
 import 'package:go_router/go_router.dart';
 
 void filterModalBottomsheet(BuildContext context) {
@@ -29,7 +29,7 @@ void filterModalBottomsheet(BuildContext context) {
                             Provider.of<SearchModel>(context, listen: false);
                         model.reset();
                       },
-                      child: Text("Reset"))
+                      child: const Text("Reset"))
                 ],
               ),
               const Padding(

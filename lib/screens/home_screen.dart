@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:nestify/widgets/PreviewCard.dart';
+import 'package:nestify/widgets/preview_card.dart';
 import 'package:provider/provider.dart';
 import '../providers/model.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

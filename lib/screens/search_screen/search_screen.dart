@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:nestify/models/blueprint_post.dart';
-import 'package:nestify/models/search_model.dart';
+import 'package:nestify/providers/search_model.dart';
 import 'package:nestify/providers/model.dart';
 import 'package:provider/provider.dart';
-import 'package:nestify/pages/searchPage/filter_modal_bottomsheet.dart';
-import 'package:nestify/widgets/PreviewCard.dart';
+import 'package:nestify/screens/search_screen/widgets/filter_modal_bottomsheet.dart';
+import 'package:nestify/widgets/preview_card.dart';
 
-class SearchPage extends StatefulWidget {
-  const SearchPage({super.key});
+class SearchScreen extends StatefulWidget {
+  const SearchScreen({super.key});
 
   @override
-  State<SearchPage> createState() => _SearchpageState();
+  State<SearchScreen> createState() => _SearchpageState();
 }
 
-class _SearchpageState extends State<SearchPage> {
+class _SearchpageState extends State<SearchScreen> {
   final SearchController controller = SearchController();
   final FocusScopeNode focusNode = FocusScopeNode();
 

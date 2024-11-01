@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:nestify/models/search_model.dart';
+import 'package:nestify/providers/search_model.dart';
 
 class MaterialFilterChips extends StatefulWidget {
   const MaterialFilterChips({super.key});
