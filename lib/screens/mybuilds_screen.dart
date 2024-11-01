@@ -36,7 +36,8 @@ class _ItemListState extends State<_ItemList> {
         return const Center(child: Text('You have not posted any builds yet'));
       }
       return ListView.builder(
-        itemBuilder: (context, index) => PreviewCard(post: posts[index]),
+        itemBuilder: (context, index) =>
+            PreviewCard(post: posts[(posts.length - 1) - index]),
         itemCount: posts.length,
       );
     });

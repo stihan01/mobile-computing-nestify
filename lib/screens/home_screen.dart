@@ -36,7 +36,8 @@ class _ItemListState extends State<_ItemList> {
           });
         },
         child: ListView.builder(
-          itemBuilder: (context, index) => PreviewCard(post: posts[index]),
+          itemBuilder: (context, index) =>
+              PreviewCard(post: posts[(posts.length - 1) - index]),
           itemCount: posts.length,
         ),
       );

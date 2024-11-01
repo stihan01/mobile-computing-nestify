@@ -136,7 +136,7 @@ class _SearchResultsState extends State<_SearchResults> {
           shrinkWrap: true,
           itemBuilder: (context, index) => Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: PreviewCard(post: posts[index]),
+            child: PreviewCard(post: posts[(posts.length - 1) - index]),
           ),
           itemCount: posts.length,
         );
