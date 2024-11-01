@@ -43,13 +43,6 @@ class ProfileScreen extends StatelessWidget {
               ],
             ),
           ),
-
-          // A Button for Home Screen
-          // ElevatedButton(
-          //   onPressed: () => context.go('/'),
-          //   child: const Text('Go back to the Home screen'),
-          // ),
-
           Expanded(
             child: Container(
               margin: const EdgeInsets.only(

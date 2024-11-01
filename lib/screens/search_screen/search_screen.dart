@@ -10,10 +10,10 @@ class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
 
   @override
-  State<SearchScreen> createState() => _SearchpageState();
+  State<SearchScreen> createState() => _SearchScreenState();
 }
 
-class _SearchpageState extends State<SearchScreen> {
+class _SearchScreenState extends State<SearchScreen> {
   final SearchController controller = SearchController();
   final FocusScopeNode focusNode = FocusScopeNode();
 
