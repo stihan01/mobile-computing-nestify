@@ -35,7 +35,12 @@ class ProfileScreen extends StatelessWidget {
                         Text("Member since 2021-09-01",
                             style: Theme.of(context).textTheme.bodyMedium),
                         TextButton.icon(
-                            onPressed: () {},
+                            onPressed: () {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text("Not implemented")),
+                              );
+                            },
                             icon: const Icon(Icons.edit),
                             label: const Text("Edit Profile")),
                       ]),
