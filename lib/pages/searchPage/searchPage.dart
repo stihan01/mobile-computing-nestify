@@ -20,7 +20,7 @@ class _SearchpageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     List<BlueprintPost> posts =
-        Provider.of<Model>(context, listen: true).blueprintList;
+        context.select((Model model) => model.blueprintList);
     return Consumer<SearchModel>(
       builder: (context, searchModel, child) {
         searchModel.blueprintList = posts;
