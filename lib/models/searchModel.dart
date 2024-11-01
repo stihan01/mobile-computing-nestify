@@ -5,8 +5,24 @@ class SearchModel with ChangeNotifier {
   Set<String> selectedCategories = {};
   Set<String> selectedMaterials = {};
   List<BlueprintPost> blueprintList = [];
-  List<BlueprintPost> searchList = [];
+  List<BlueprintPost> _searchList = [];
   List<BlueprintPost> _searchBeforeFilterList = [];
+
+  List<BlueprintPost> get searchList {
+    List<BlueprintPost> posts = [];
+
+    // Ugly bug fix. Fine for a small amount of users.
+    for (BlueprintPost searchPost in _searchList) {
+      // Check post id  instad of obj ref
+      for (BlueprintPost post in blueprintList) {
+        if (searchPost.id == post.id) {
+          posts.add(post);
+        }
+      }
+    }
+
+    return posts;
+  }
 
   SearchModel();
 
@@ -32,7 +48,7 @@ class SearchModel with ChangeNotifier {
     }
 
     _searchBeforeFilterList = tempFilteredList;
-    searchList = tempFilteredList;
+    _searchList = tempFilteredList;
     //filters blueprints, makes sure that only the selected categories are shown
     filterBlueprints();
   }
@@ -41,7 +57,7 @@ class SearchModel with ChangeNotifier {
     List<BlueprintPost> tempFilteredList = [];
     //if no categories or materials are selected, show all blueprints
     if (selectedCategories.isEmpty && selectedMaterials.isEmpty) {
-      searchList = _searchBeforeFilterList;
+      _searchList = _searchBeforeFilterList;
     }
     //if only categories are selected, show only blueprints that have the selected categories
     else if (selectedCategories.isEmpty && selectedMaterials.isNotEmpty) {
@@ -50,7 +66,7 @@ class SearchModel with ChangeNotifier {
           tempFilteredList.add(post);
         }
       }
-      searchList = tempFilteredList;
+      _searchList = tempFilteredList;
     }
 
 //if only materials are selected, show only blueprints that have the selected materials
@@ -60,7 +76,7 @@ class SearchModel with ChangeNotifier {
           tempFilteredList.add(post);
         }
       }
-      searchList = tempFilteredList;
+      _searchList = tempFilteredList;
     }
 //if both categories and materials are selected, show only blueprints that have the selected categories and materials
     else {
@@ -70,7 +86,7 @@ class SearchModel with ChangeNotifier {
           tempFilteredList.add(post);
         }
       }
-      searchList = tempFilteredList;
+      _searchList = tempFilteredList;
     }
     notifyListeners();
   }
