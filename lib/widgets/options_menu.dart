@@ -43,6 +43,7 @@ class _OptionsMenuState extends State<OptionsMenu> {
         ),
         MenuItemButton(
           onPressed: () async {
+            FocusScope.of(context).unfocus();
             await deletionDialog(context).then(
               (onValue) {
                 if (onValue == null || !onValue) {

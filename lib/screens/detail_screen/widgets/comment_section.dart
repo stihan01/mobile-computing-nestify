@@ -119,6 +119,9 @@ class CommentTextField extends StatelessWidget {
           children: [
             ElevatedButton(
               onPressed: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("Not implemented")),
+                );
                 // Currently does nothing when pressed
                 // You can later implement functionality here
                 commentController.clear();

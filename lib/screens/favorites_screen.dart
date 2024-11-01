@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:nestify/widgets/PreviewCard.dart';
+import 'package:nestify/widgets/preview_card.dart';
 import 'package:provider/provider.dart';
 import '../providers/model.dart';
 
-class MybuildsPage extends StatelessWidget {
-  const MybuildsPage({super.key});
+class FavoritesScreen extends StatelessWidget {
+  const FavoritesScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("My Builds"),
+        title: const Text("Favourites"),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back), // Back icon
           onPressed: () => context.pop(), // Go back
@@ -31,9 +31,9 @@ class _ItemListState extends State<_ItemList> {
   @override
   Widget build(BuildContext context) {
     return Consumer<Model>(builder: (context, model, child) {
-      var posts = model.usersPosts;
+      var posts = model.favorites;
       if (posts.isEmpty) {
-        return const Center(child: Text('You have not posted any builds yet'));
+        return const Center(child: Text('You do not have any favorites yet'));
       }
       return ListView.builder(
         itemBuilder: (context, index) => PreviewCard(post: posts[index]),

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart' as firebase_ui;
 import 'package:go_router/go_router.dart';
 
-class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key});
+class ProfileScreen extends StatelessWidget {
+  const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,11 +13,11 @@ class ProfilePage extends StatelessWidget {
           child: Column(
         children: [
           Padding(
-            padding: EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16.0),
             child: Row(
               children: [
                 // Profile Picture
-                CircleAvatar(
+                const CircleAvatar(
                   radius: 50, // Adjust size by changing the radius
                   backgroundImage: AssetImage(
                       'assets/images/profilepic.jpg'), // Set image path
@@ -25,7 +25,8 @@ class ProfilePage extends StatelessWidget {
 
                 // Column med textrader som är aligned till vänster
                 Padding(
-                  padding: EdgeInsets.only(left: 16.0), // Set left padding
+                  padding:
+                      const EdgeInsets.only(left: 16.0), // Set left padding
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -34,21 +35,19 @@ class ProfilePage extends StatelessWidget {
                         Text("Member since 2021-09-01",
                             style: Theme.of(context).textTheme.bodyMedium),
                         TextButton.icon(
-                            onPressed: () {},
-                            icon: Icon(Icons.edit),
-                            label: Text("Edit Profile")),
+                            onPressed: () {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text("Not implemented")),
+                              );
+                            },
+                            icon: const Icon(Icons.edit),
+                            label: const Text("Edit Profile")),
                       ]),
                 ),
               ],
             ),
           ),
-
-          // A Button for Home Screen
-          // ElevatedButton(
-          //   onPressed: () => context.go('/'),
-          //   child: const Text('Go back to the Home screen'),
-          // ),
-
           Expanded(
             child: Container(
               margin: const EdgeInsets.only(

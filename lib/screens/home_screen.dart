@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:nestify/widgets/PreviewCard.dart';
+import 'package:nestify/widgets/preview_card.dart';
 import 'package:provider/provider.dart';
 import '../providers/model.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +36,8 @@ class _ItemListState extends State<_ItemList> {
           });
         },
         child: ListView.builder(
-          itemBuilder: (context, index) => PreviewCard(post: posts[index]),
+          itemBuilder: (context, index) =>
+              PreviewCard(post: posts[(posts.length - 1) - index]),
           itemCount: posts.length,
         ),
       );

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:nestify/pages/detail_page/widgets/tabBox.dart';
-import 'package:nestify/pages/detail_page/widgets/commentSection.dart';
+import 'package:nestify/screens/detail_screen/widgets/tab_box.dart';
+import 'package:nestify/screens/detail_screen/widgets/comment_section.dart';
 import 'package:nestify/models/blueprint_post.dart';
 import 'package:nestify/widgets/favorite_icon_button.dart';
 import 'package:go_router/go_router.dart';
@@ -9,17 +9,17 @@ import 'package:nestify/providers/model.dart';
 import 'package:nestify/widgets/options_menu.dart';
 import 'package:provider/provider.dart';
 
-class DetailPage extends StatefulWidget {
+class DetailScreen extends StatefulWidget {
   final BlueprintPost post;
   final Function() onEdit;
 
-  const DetailPage({required this.post, required this.onEdit, super.key});
+  const DetailScreen({required this.post, required this.onEdit, super.key});
 
   @override
-  State<DetailPage> createState() => _DetailPageState();
+  State<DetailScreen> createState() => _DetailScreenState();
 }
 
-class _DetailPageState extends State<DetailPage> {
+class _DetailScreenState extends State<DetailScreen> {
   final String placeholderImage = 'assets/images/buzzhotel.jpg';
 
   @override
@@ -32,7 +32,8 @@ class _DetailPageState extends State<DetailPage> {
               url,
               height: 400,
               width: 100,
-              fit: BoxFit.scaleDown, // Optional: to cover the box size proportionally
+              fit: BoxFit
+                  .scaleDown, // Optional: to cover the box size proportionally
             );
           }).toList();
 
@@ -40,22 +41,25 @@ class _DetailPageState extends State<DetailPage> {
       length: 2, // We have 2 tabs
       child: Scaffold(
         appBar: AppBar(
-            title: Text(widget.post.title!),
-            actions: [Provider.of<Model>(context, listen: false)
-                          .isUserPostOwner(widget.post.owner)
-                      ? OptionsMenu(
-                          post: widget.post,
-                          onEdit: () {
-                            setState(() {});
-                          },
-                          onDelete: () {
-                            context.pop();
-                          },
-                        )
-                      : FavoriteIconButton(post: widget.post)],
-            leading: IconButton(
-          icon: const Icon(Icons.arrow_back), // Back icon
-          onPressed: () => context.pop(), ),// Go back
+          title: Text(widget.post.title!),
+          actions: [
+            Provider.of<Model>(context, listen: false)
+                    .isUserPostOwner(widget.post.owner)
+                ? OptionsMenu(
+                    post: widget.post,
+                    onEdit: () {
+                      setState(() {});
+                    },
+                    onDelete: () {
+                      context.pop();
+                    },
+                  )
+                : FavoriteIconButton(post: widget.post)
+          ],
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back), // Back icon
+            onPressed: () => context.pop(),
+          ), // Go back
         ),
         body: ListView(
           // Wrap everything in ListView for overall scrollability
@@ -66,16 +70,18 @@ class _DetailPageState extends State<DetailPage> {
               height: 400,
               width: 100,
               children: images.isEmpty
-                ? [Image.asset(
-                    placeholderImage,
-                    height: 400,
-                    width: 100,
-                    fit: BoxFit
-                        .cover, // Optional: to cover the box size proportionally
-                  )]
-                : images,              
+                  ? [
+                      Image.asset(
+                        placeholderImage,
+                        height: 400,
+                        width: 100,
+                        fit: BoxFit
+                            .cover, // Optional: to cover the box size proportionally
+                      )
+                    ]
+                  : images,
             ),
-            
+
             // Spacing
             const SizedBox(height: 16),
 

@@ -1,44 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:nestify/apis/firestore_db.dart';
 import 'package:nestify/models/blueprint_post.dart';
 
 class SearchModel with ChangeNotifier {
   Set<String> selectedCategories = {};
   Set<String> selectedMaterials = {};
-
-  List<String> categories = ['Bird house', 'Insect hotel', 'Birdfeeder'];
-  List<String> materials = ['Wood', 'Plastic', 'Metal', 'Paper', 'Cardboard'];
-
-  List<BlueprintPost> _blueprintList = [];
-  List<BlueprintPost> get blueprintList => _blueprintList;
-
+  List<BlueprintPost> blueprintList = [];
   List<BlueprintPost> _searchList = [];
-  List<BlueprintPost> get searchList => _searchList;
-
   List<BlueprintPost> _searchBeforeFilterList = [];
 
-//Categories and materials selected by the filterchips in the searchpage
-  Set<String> get getSelectedCategories => selectedCategories;
-  Set<String> get getSelectedMaterials => selectedMaterials;
+  List<BlueprintPost> get searchList {
+    List<BlueprintPost> posts = [];
 
-  List<String> get getCategories => categories;
-  List<String> get getMaterials => materials;
+    // Ugly bug fix. Fine for a small amount of users.
+    for (BlueprintPost searchPost in _searchList) {
+      // Check post id  instad of obj ref
+      for (BlueprintPost post in blueprintList) {
+        if (searchPost.id == post.id) {
+          posts.add(post);
+        }
+      }
+    }
 
-  SearchModel() {
-    _setup();
+    return posts;
   }
 
-  _setup() async {
-    await fetchBlueprints();
-    _searchList = _blueprintList;
-  }
-
-  Future<void> fetchBlueprints() async {
-    await FirestoreDb.fetchBlueprints().then((posts) {
-      _blueprintList = posts;
-    });
-    notifyListeners();
-  }
+  SearchModel();
 
   void reset() {
     selectedCategories = {};
@@ -50,7 +36,7 @@ class SearchModel with ChangeNotifier {
     List<BlueprintPost> tempFilteredList = [];
     //if query is not empty -> search though blueprintlist and see what matches the query
     if (query.isNotEmpty) {
-      for (BlueprintPost post in _blueprintList) {
+      for (BlueprintPost post in blueprintList) {
         if (post.title != null &&
             post.title!.toLowerCase().contains(query.toLowerCase())) {
           tempFilteredList.add(post);
@@ -58,15 +44,13 @@ class SearchModel with ChangeNotifier {
       }
       //if query is empty -> show all blueprints
     } else {
-      tempFilteredList = _blueprintList;
+      tempFilteredList = blueprintList;
     }
 
     _searchBeforeFilterList = tempFilteredList;
     _searchList = tempFilteredList;
     //filters blueprints, makes sure that only the selected categories are shown
     filterBlueprints();
-
-    notifyListeners();
   }
 
   void filterBlueprints() {
@@ -74,19 +58,15 @@ class SearchModel with ChangeNotifier {
     //if no categories or materials are selected, show all blueprints
     if (selectedCategories.isEmpty && selectedMaterials.isEmpty) {
       _searchList = _searchBeforeFilterList;
-      notifyListeners();
-      return;
     }
     //if only categories are selected, show only blueprints that have the selected categories
     else if (selectedCategories.isEmpty && selectedMaterials.isNotEmpty) {
       for (BlueprintPost post in _searchBeforeFilterList) {
-        if (containsMaterial(post)) {
+        if (_containsMaterial(post)) {
           tempFilteredList.add(post);
         }
       }
       _searchList = tempFilteredList;
-      notifyListeners();
-      return;
     }
 
 //if only materials are selected, show only blueprints that have the selected materials
@@ -97,25 +77,22 @@ class SearchModel with ChangeNotifier {
         }
       }
       _searchList = tempFilteredList;
-      notifyListeners();
-      return;
     }
 //if both categories and materials are selected, show only blueprints that have the selected categories and materials
     else {
       for (BlueprintPost post in _searchBeforeFilterList) {
         if (selectedCategories.contains(post.category) &&
-            containsMaterial(post)) {
+            _containsMaterial(post)) {
           tempFilteredList.add(post);
         }
       }
       _searchList = tempFilteredList;
-      notifyListeners();
-      return;
     }
+    notifyListeners();
   }
 
   // since the materials in a post is a freetext string, i must check if any of the selected materials are in the string
-  bool containsMaterial(BlueprintPost post) {
+  bool _containsMaterial(BlueprintPost post) {
     for (String filterMaterial in selectedMaterials) {
       if (post.material != null &&
           post.material!.toLowerCase().contains(filterMaterial.toLowerCase())) {

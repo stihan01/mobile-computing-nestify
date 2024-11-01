@@ -51,11 +51,10 @@ class TabBox extends StatelessWidget {
                             Text(post.material ?? "Material"),
                           ],
                         )),
-                        
+
                     // Spacing
                     const SizedBox(height: 16),
 
-                    
                     // Description
                     Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -88,7 +87,8 @@ class TabBox extends StatelessWidget {
                           height: 100,
                           width: 100,
                         ),
-                        SizedBox(height: 8), // Space between image and text
+                        const SizedBox(
+                            height: 8), // Space between image and text
                         Text('Remake ${index + 1}'),
                       ],
                     );

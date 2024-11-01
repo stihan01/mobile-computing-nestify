@@ -1,24 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:nestify/models/blueprint_post.dart';
-import 'package:nestify/models/searchModel.dart';
+import 'package:nestify/providers/search_model.dart';
+import 'package:nestify/providers/model.dart';
 import 'package:provider/provider.dart';
-import 'package:nestify/pages/searchPage/filterModalBottomsheet.dart';
-import 'package:nestify/widgets/PreviewCard.dart';
+import 'package:nestify/screens/search_screen/widgets/filter_modal_bottomsheet.dart';
+import 'package:nestify/widgets/preview_card.dart';
 
-class SearchPage extends StatefulWidget {
-  const SearchPage({super.key});
+class SearchScreen extends StatefulWidget {
+  const SearchScreen({super.key});
 
   @override
-  State<SearchPage> createState() => _SearchpageState();
+  State<SearchScreen> createState() => _SearchScreenState();
 }
 
-class _SearchpageState extends State<SearchPage> {
+class _SearchScreenState extends State<SearchScreen> {
   final SearchController controller = SearchController();
   final FocusScopeNode focusNode = FocusScopeNode();
+
   @override
   Widget build(BuildContext context) {
+    List<BlueprintPost> posts =
+        context.select((Model model) => model.blueprintList);
     return Consumer<SearchModel>(
       builder: (context, searchModel, child) {
+        searchModel.blueprintList = posts;
         return Scaffold(
           appBar: AppBar(title: const Text('Search')),
           body: Center(
@@ -27,7 +32,7 @@ class _SearchpageState extends State<SearchPage> {
                 Padding(
                   padding: const EdgeInsets.symmetric(
                       horizontal: 16.0, vertical: 8.0),
-                  child: _SearchBar(),
+                  child: _searchBar(),
                 ),
                 Expanded(child: _SearchResults()),
               ],
@@ -38,13 +43,13 @@ class _SearchpageState extends State<SearchPage> {
     );
   }
 
-  Widget _SearchBar() {
+  Widget _searchBar() {
     var model = Provider.of<SearchModel>(context, listen: false);
     return SearchAnchor(
         searchController: controller,
         builder: (context, controller) {
           return SearchBar(
-            elevation: WidgetStatePropertyAll(2),
+            elevation: const WidgetStatePropertyAll(2),
             focusNode: focusNode,
             controller: controller,
             onTap: () {
@@ -73,7 +78,7 @@ class _SearchpageState extends State<SearchPage> {
             (BuildContext context, SearchController controller) {
           var model = Provider.of<SearchModel>(context, listen: false);
           model.searchBlueprints(controller.text);
-          List<BlueprintPost> suggestions = model.searchList;
+          List<BlueprintPost> suggestions = model.blueprintList;
           return suggestions.map((post) {
             return ListTile(
               title: Text(post.title ?? ''),
@@ -88,13 +93,13 @@ class _SearchpageState extends State<SearchPage> {
             onPressed: () {
               searchAndClose(controller, controller.text);
             },
-            icon: Icon(Icons.search),
+            icon: const Icon(Icons.search),
           ),
           IconButton(
               onPressed: () {
                 controller.clear();
               },
-              icon: Icon(Icons.clear))
+              icon: const Icon(Icons.clear))
         ],
         viewOnSubmitted: (query) {
           searchAndClose(controller, query);
@@ -124,14 +129,14 @@ class _SearchResultsState extends State<_SearchResults> {
       builder: (context, model, child) {
         var posts = model.searchList;
         if (posts.isEmpty) {
-          return Center(child: Text('No posts matches your search'));
+          return const Center(child: Text('No posts matches your search'));
         }
         return ListView.builder(
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
           itemBuilder: (context, index) => Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: PreviewCard(post: posts[index]),
+            child: PreviewCard(post: posts[(posts.length - 1) - index]),
           ),
           itemCount: posts.length,
         );

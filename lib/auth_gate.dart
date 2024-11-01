@@ -21,7 +21,6 @@ class AuthGate extends StatelessWidget {
             headerBuilder: (context, constraints, shrinkOffset) {
               return const Padding(
                 padding: EdgeInsets.all(20),
-                // TODO Add a picture if we want a "logo". Uncomment and replace path
                 /* child: AspectRatio(
                   aspectRatio: 1,
                   //    child: Image.asset('assets/flutterfire_300x.png'),
