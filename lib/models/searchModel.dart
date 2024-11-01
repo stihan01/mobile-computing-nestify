@@ -35,8 +35,6 @@ class SearchModel with ChangeNotifier {
     searchList = tempFilteredList;
     //filters blueprints, makes sure that only the selected categories are shown
     filterBlueprints();
-
-    notifyListeners();
   }
 
   void filterBlueprints() {
@@ -44,19 +42,15 @@ class SearchModel with ChangeNotifier {
     //if no categories or materials are selected, show all blueprints
     if (selectedCategories.isEmpty && selectedMaterials.isEmpty) {
       searchList = _searchBeforeFilterList;
-      notifyListeners();
-      return;
     }
     //if only categories are selected, show only blueprints that have the selected categories
     else if (selectedCategories.isEmpty && selectedMaterials.isNotEmpty) {
       for (BlueprintPost post in _searchBeforeFilterList) {
-        if (containsMaterial(post)) {
+        if (_containsMaterial(post)) {
           tempFilteredList.add(post);
         }
       }
       searchList = tempFilteredList;
-      notifyListeners();
-      return;
     }
 
 //if only materials are selected, show only blueprints that have the selected materials
@@ -67,25 +61,22 @@ class SearchModel with ChangeNotifier {
         }
       }
       searchList = tempFilteredList;
-      notifyListeners();
-      return;
     }
 //if both categories and materials are selected, show only blueprints that have the selected categories and materials
     else {
       for (BlueprintPost post in _searchBeforeFilterList) {
         if (selectedCategories.contains(post.category) &&
-            containsMaterial(post)) {
+            _containsMaterial(post)) {
           tempFilteredList.add(post);
         }
       }
       searchList = tempFilteredList;
-      notifyListeners();
-      return;
     }
+    notifyListeners();
   }
 
   // since the materials in a post is a freetext string, i must check if any of the selected materials are in the string
-  bool containsMaterial(BlueprintPost post) {
+  bool _containsMaterial(BlueprintPost post) {
     for (String filterMaterial in selectedMaterials) {
       if (post.material != null &&
           post.material!.toLowerCase().contains(filterMaterial.toLowerCase())) {
