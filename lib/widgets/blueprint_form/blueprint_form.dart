@@ -191,16 +191,17 @@ class BlueprintFormState extends State<BlueprintForm> {
           );
 
           if (widget.postModel.isEdit) {
-            if (widget.onEdit != null) {
-              widget.onEdit!(); // Reload previewCard
-              context.pop();
-            }
+            context.pop();
           }
 
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(widget.snackBarMessage)),
           );
-          await widget.postModel.updateBlueprint();
+          await widget.postModel.updateBlueprint().then((_) {
+            if (widget.onEdit != null) {
+              widget.onEdit!(); // Reload previewCard
+            }
+          });
 
           if (!widget.postModel.isEdit) {
             for (var controller in controllers) {
