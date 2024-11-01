@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:firebase_auth/firebase_auth.dart' hide EmailAuthProvider;
 import 'package:nestify/screens/mybuilds_screen.dart';
-import 'package:nestify/screens/edit_blue_print_screen.dart';
+import 'package:nestify/screens/upsert_screens/edit_blue_print_screen.dart';
 import '../screens/home_screen.dart';
 import '../screens/detail_screen/detail_screen.dart';
 import '../screens/profile_screen.dart';
 import '../screens/search_screen/search_screen.dart';
-import '../screens/add_blue_print_screen.dart';
+import '../screens/upsert_screens/add_blue_print_screen.dart';
 import '../auth_gate.dart';
 import 'package:nestify/screens/favorites_screen.dart';
 
