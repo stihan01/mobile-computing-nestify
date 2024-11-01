@@ -30,7 +30,7 @@ class Model extends ChangeNotifier {
         }
         if (post.isFavorite) _favorites.add(post);
       }
-      _blueprintList = posts;
+      _blueprintList = posts.reversed.toList();
     });
 
     notifyListeners();
