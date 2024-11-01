@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nestify/providers/add_post_model.dart';
 import 'package:nestify/providers/model.dart';
 import 'package:nestify/models/post_model.dart';
 import 'package:nestify/widgets/blueprint_form/widgets/image_box.dart';
@@ -74,7 +75,9 @@ class BlueprintFormState extends State<BlueprintForm> {
 
   @override
   Widget build(BuildContext context) {
-    // context.watch<AddPostModel>();
+    if (!widget.postModel.isEdit) {
+      context.watch<AddPostModel>();
+    }
     final formContent = [
       imageGrid(),
       cameraButton(),
@@ -124,6 +127,7 @@ class BlueprintFormState extends State<BlueprintForm> {
 
   GridView imageGrid() {
     List<ImageBox> fromUrl = [];
+
     List<ImageBox> fromImages = widget.postModel.images
         .map(
           (value) => ImageBox(
@@ -140,18 +144,22 @@ class BlueprintFormState extends State<BlueprintForm> {
         )
         .toList();
 
-    for (String url in widget.postModel.imgUrls) {
-      fromUrl.add(ImageBox(
-        image: Image.network(
-          url,
-          fit: BoxFit.cover,
-        ),
-        onDelete: () {
-          setState(() {
-            widget.postModel.removeImgUrl(url);
-          });
-        },
-      ));
+    try {
+      for (String url in widget.postModel.imgUrls) {
+        fromUrl.add(ImageBox(
+          image: Image.network(
+            url,
+            fit: BoxFit.cover,
+          ),
+          onDelete: () {
+            setState(() {
+              widget.postModel.removeImgUrl(url);
+            });
+          },
+        ));
+      }
+    } catch (error) {
+      debugPrint("Blueprint_form: displaying url went wrong: $error");
     }
 
     debugPrint(fromUrl.toString());

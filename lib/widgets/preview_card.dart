@@ -21,18 +21,24 @@ class _PreviewCardState extends State<PreviewCard> {
   @override
   Widget build(BuildContext context) {
     Provider.of<Model>(context);
-    List<dynamic> images = widget.post.imageUrls.keys.isEmpty
-        ? []
-        : widget.post.imageUrls.keys.map((url) {
-            return SizedBox(
-              width: MediaQuery.of(context).size.width,
-              height: 300,
-              child: Image.network(
-                url,
-                fit: BoxFit.cover,
-              ),
-            );
-          }).toList();
+    List<dynamic> images = [];
+    try {
+      images = widget.post.imageUrls.keys.isEmpty
+          ? []
+          : widget.post.imageUrls.keys.map((url) {
+              return SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: 300,
+                child: Image.network(
+                  url,
+                  fit: BoxFit.cover,
+                ),
+              );
+            }).toList();
+    } catch (error) {
+      debugPrint("Displaying network image failed: $error");
+    }
+
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16, bottom: 4, top: 4),
       child: SizedBox(

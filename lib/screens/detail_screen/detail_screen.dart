@@ -25,23 +25,28 @@ class _DetailScreenState extends State<DetailScreen> {
   @override
   Widget build(BuildContext context) {
     TextEditingController commentController = TextEditingController();
-    List<Image> images = widget.post.imageUrls.keys.isEmpty
-        ? []
-        : widget.post.imageUrls.keys.map((url) {
-            return Image.network(
-              url,
-              height: 400,
-              width: 100,
-              fit: BoxFit
-                  .scaleDown, // Optional: to cover the box size proportionally
-            );
-          }).toList();
+    List<Image> images = [];
+    try {
+      images = widget.post.imageUrls.keys.isEmpty
+          ? []
+          : widget.post.imageUrls.keys.map((url) {
+              return Image.network(
+                url,
+                height: 400,
+                width: 100,
+                fit: BoxFit
+                    .scaleDown, // Optional: to cover the box size proportionally
+              );
+            }).toList();
+    } catch (error) {
+      debugPrint("Displaying network url went wrong: $error");
+    }
 
     return DefaultTabController(
       length: 2, // We have 2 tabs
       child: Scaffold(
         appBar: AppBar(
-          title: Text(widget.post.title!),
+          title: Text(widget.post.title ?? "missing title"),
           actions: [
             Provider.of<Model>(context, listen: false)
                     .isUserPostOwner(widget.post.owner)

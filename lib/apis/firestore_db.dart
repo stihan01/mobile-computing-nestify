@@ -75,6 +75,7 @@ class FirestoreDb {
   }
 
   static Future<bool> deleteUserBlueprint(BlueprintPost post) async {
+    List<dynamic> filePaths = [];
     try {
       await _db
           .collection(blueprintCollection)
@@ -84,6 +85,8 @@ class FirestoreDb {
           .then((query) {
         return query.docs.map((docSnapShot) {
           debugPrint(docSnapShot.data().toString());
+          filePaths = docSnapShot.data()['imageUrls'].values.toList();
+
           docSnapShot.reference.delete();
         }).toList();
       });
@@ -91,6 +94,12 @@ class FirestoreDb {
     } catch (error) {
       debugPrint("Failed to delete post: $error");
       return false;
+    } finally {
+      debugPrint("File paths are: $filePaths ");
+
+      for (var path in filePaths) {
+        deleteImage(path);
+      }
     }
   }
 
@@ -142,12 +151,17 @@ class FirestoreDb {
 
   static Future<Map<String, String>> uploadImage(
       File file, String postID) async {
-    String user = userID;
-    String filePath =
-        "$user()/$blueprintCollection/$postID/${DateTime.now()}.png";
-    await _storageRef.child(filePath).putFile(file);
-    String downloadURL = await _storageRef.child(filePath).getDownloadURL();
-    return {downloadURL: filePath};
+    try {
+      String user = userID;
+      String filePath =
+          "$user()/$blueprintCollection/$postID/${DateTime.now()}.png";
+      await _storageRef.child(filePath).putFile(file);
+      String downloadURL = await _storageRef.child(filePath).getDownloadURL();
+      return {downloadURL: filePath};
+    } catch (error) {
+      debugPrint("Uploading image went wrong: $error");
+    }
+    return {};
   }
 
   static Future<void> deleteImage(String filePath) async {
