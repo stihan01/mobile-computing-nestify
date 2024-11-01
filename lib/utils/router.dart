@@ -99,6 +99,16 @@ final goRouter = GoRouter(
                 child: SearchPage(),
               ),
               routes: [
+                GoRoute(
+                    path: '/edit',
+                    builder: (context, state) {
+                      final map = state.extra as Map<String,
+                          dynamic>; // Extracting the post from extra
+                      return EditBlueprintScreen(
+                          post: map['post'],
+                          onEdit: map['onEdit'],
+                          key: _shellNavigatorEditKey);
+                    }),
                 // child route
                 GoRoute(
                   path: '/details',
